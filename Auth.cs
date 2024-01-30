@@ -14,16 +14,15 @@ namespace PersonsInfoV2Api
 
     public class Auth : IJwtAuth
     {
+        private readonly PersonsInfoV3NewContext context;
         private readonly string key;
-        public Auth(string key)
+        public Auth(PersonsInfoV3NewContext context, string key)
         {
+            this.context = context;
             this.key = key;
         }
         public AuthenticatedResponse Authentication(string username, string password)
         {
-
-            PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
-           // var dataList = context.Users.ToList();
             var data = context.Users.Where(u => u.Username == username && u.Password == password).FirstOrDefault();
 
             if (data == null)

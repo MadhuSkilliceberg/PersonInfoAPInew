@@ -105,8 +105,11 @@ namespace PersonsInfoV2Api
             });
 
             #region Dependency Injection
-            services.AddSingleton<IJwtAuth>(new Auth(key));
-
+            services.AddScoped<IJwtAuth>(provider =>
+            {
+                var context = provider.GetRequiredService<PersonsInfoV3NewContext>();
+                return new Auth(context, key);
+            });
 
             services.AddTransient<PersonsInfoV3NewContext, PersonsInfoV3NewContext>();
 
