@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonsInfoV2Api.IBussinessLogic
+namespace PersonsInfoV2Api.IRepository
 {
-  public  interface ICompanyEmailBussinessLogic
+    public interface ICompanyEmailRepository
     {
         public Task<List<CompanyEmail>> GetCompanyEmails();
         public Task<CompanyEmail> GetCompanyEmailById(int id);
@@ -15,8 +15,9 @@ namespace PersonsInfoV2Api.IBussinessLogic
         public Task<int> UpdateCompanyEmail(CompanyEmail companyEmail);
         public Task<int> UpdateRangeCompanyEmail(List<CompanyEmail> companyEmails);
         public Task<int> DeleteCompanyEmail(int id);
-        public Task<int> DeleteRangeCompanyEmail(List<int> ids);
+        public Task<int> DeleteRangeCompanyEmail(List<int> ids);       
         public Task<List<CompanyEmail>> GetCompanyEmailByCompanyAddressId(int companyaddressId);
+
 
     }
 }

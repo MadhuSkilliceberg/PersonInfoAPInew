@@ -20,8 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Session;
+using PersonsInfoV2Api.Filters;
 
 namespace PersonsInfoV2Api
 {
@@ -81,6 +81,17 @@ namespace PersonsInfoV2Api
             services.AddDbContext<PersonsInfoV3NewContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("PersonsInfo1Connection")));
 
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole();  // Add Console logger
+                builder.AddDebug();    // Add Debug logger
+            });
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+            });
+
+
             services.AddControllers().AddJsonOptions(o => { o.JsonSerializerOptions.PropertyNamingPolicy = null; });
             services.AddCors(options => options.AddDefaultPolicy(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
@@ -111,6 +122,13 @@ namespace PersonsInfoV2Api
                 return new Auth(context, key);
             });
 
+         
+
+            //services.AddControllers(options =>
+            //{
+            //    options.Filters.Add<GlobalExceptionFilter>();
+            //});
+
             services.AddTransient<PersonsInfoV3NewContext, PersonsInfoV3NewContext>();
 
             services.AddScoped<IUserRepository, UserRepository>();
@@ -138,7 +156,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IInstitutionBussinessLogic, InstitutionBussinessLogic>();
 
 
-            services.AddScoped<ICompanyRepo, CompanyRepo>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyBussinessLogic, CompanyBussinessLogic>();
 
 
@@ -148,13 +166,13 @@ namespace PersonsInfoV2Api
             services.AddScoped<IInstitutionContactRepo, InstitutionContactRepo>();
             services.AddScoped<IInstitutionContactBussinessLogic, InstitutionContactBussinessLogic>();
 
-            services.AddScoped<ICompanyEmailRepo, CompanyEmailRepo>();
+            services.AddScoped<ICompanyEmailRepository, CompanyEmailRepository>();
             services.AddScoped<ICompanyEmailBussinessLogic, CompanyEmailBussinessLogic>();
 
-            services.AddScoped<ICompanyContactRepo, CompanyContactRepo>();
+            services.AddScoped<ICompanyContactRepository, CompanyContactRepo>();
             services.AddScoped<ICompanyContactBussinessLogic, CompanyContactBussinessLogic>();
 
-            services.AddScoped<ICompanyAddressRepo, CompanyAddressRepo>();
+            services.AddScoped<ICompanyAddressRepository, CompanyAddressRepo>();
             services.AddScoped<ICompanyAddressBussinessLogic, CompanyAddressBussinessLogic>();
 
             services.AddScoped<ICoutryStateRepo, CoutryStateRepository>();
@@ -260,7 +278,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IVacancyRepo, VacancyRepository>();
             services.AddScoped<IVacancyBusinessLogic, VacancyBusinessLogic>();
 
-            services.AddScoped<ICompanyReviewRepo, CompanyReviewRepo>();
+            services.AddScoped<ICompanyReviewRepository, CompanyReviewRepository>();
             services.AddScoped<ICompanyReviewBusinessLogic, CompanyReviewBusinessLogic>();
 
             services.AddScoped<IMenuRepo, MenuRepository>();

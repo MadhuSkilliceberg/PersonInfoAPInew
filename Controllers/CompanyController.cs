@@ -18,65 +18,84 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        ICompanyBussinessLogic companyRepo;
-        public CompanyController(ICompanyBussinessLogic Repo)
-        {
-            companyRepo = Repo;
-        }
+        private readonly ICompanyBussinessLogic companyBussinessLogic;
 
+        public CompanyController(ICompanyBussinessLogic companyBussinessLogic)
+        {
+            this.companyBussinessLogic = companyBussinessLogic;
+        }
 
         [Route("DeleteCompany/{id}")]
         [HttpDelete]
-        public int DeleteCompany(int id)
+        public async Task<bool> DeleteCompany(int id)
         {
-            return companyRepo.DeleteCompany(id);
+            return await companyBussinessLogic.DeleteCompany(id);
         }
 
-        [Route("GetByCompanyId/{id}")]
+
+        [Route("DeleteRangeCompany")]
+        [HttpDelete]
+        public async Task<bool> DeleteRangeCompany(List<int> ids)
+        {
+            return await companyBussinessLogic.DeleteRangeCompany(ids);
+        }
+
+        [Route("GetCompanyById/{id}")]
         [HttpGet]
-        public Company GetByCompanyId(int id)
+        public async Task<Company> GetCompanyById(int id)
         {
-            return companyRepo.GetByCompanyId(id);
+            return await companyBussinessLogic.GetCompanyById(id);
 
         }
 
-
-        [Route("GetCompany")]
+        [Route("GetCompanies")]
         [HttpGet]
-        public List<Company> GetCompanys()
+        public async Task<List<Company>> GetCompanies()
         {
-            return companyRepo.GetCompanys();
+            return await companyBussinessLogic.GetCompanies();
         }
-
 
         [Route("AddCompany")]
         [HttpPost]
-        public int InsertCompany(Company  company)
+        public async Task<int> AddCompany(Company company)
         {
-            return companyRepo.InsertCompany(company);
+            return await companyBussinessLogic.AddCompany(company);
+        }
+
+        [Route("AddRangeCompany")]
+        [HttpPost]
+        public async Task<int> AddRangeCompany(List<Company> companies)
+        {
+            return await companyBussinessLogic.AddRangeCompany(companies);
         }
 
 
         [Route("UpdateCompany")]
         [HttpPut]
-        public int UpdateCompany(Company company)
+        public async Task<int> UpdateCompany(Company company)
         {
-            return companyRepo.UpdateCompany(company);
+            return await companyBussinessLogic.UpdateCompany(company);
+        }
+
+        [Route("UpdateRangeCompany")]
+        [HttpPut]
+        public async Task<int> UpdateRangeCompany(List<Company> companies)
+        {
+            return await companyBussinessLogic.UpdateRangeCompany(companies);
         }
 
         [Route("AddCompanyDetail")]
         [HttpPost]
-        public bool AddCompanyDetail(CompanyDetail companyDetail)
+        public async Task<bool> AddCompanyDetail(CompanyDetail companyDetail)
         {
-            return companyRepo.AddCompanyDetail(companyDetail);
+            return await companyBussinessLogic.AddCompanyDetail(companyDetail);
         }
 
         [Route("AddCompanyTables")]
         [HttpPost]
-
-        public bool AddCompanyTables(CompanyModels companyModels)
+        public async Task<bool> AddCompanyTables(CompanyModels companyModels)
         {
-            return companyRepo.AddCompanyTables(companyModels);
+            return await companyBussinessLogic.AddCompanyTables(companyModels);
         }
 
     }

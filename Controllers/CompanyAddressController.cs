@@ -17,57 +17,78 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class CompanyAddressController : ControllerBase
     {
-        ICompanyAddressBussinessLogic userRepository;
-        public CompanyAddressController(ICompanyAddressBussinessLogic Repo)
+        public readonly ICompanyAddressBussinessLogic companyAddressBussinessLogic;
+        public CompanyAddressController(ICompanyAddressBussinessLogic companyAddressBussinessLogic)
         {
-            userRepository = Repo;
+            this.companyAddressBussinessLogic = companyAddressBussinessLogic;
         }
 
-        [Route("DeleteCompanyAddress/{id}")]
+        [Route("DeleteCompanyAddress/{companyAddressId}")]
         [HttpDelete]
-        public int DeleteCompanyAddress(int id)
+        public async Task<int> DeleteCompanyAddress(int companyAddressId)
         {
-            return userRepository.DeleteCompanyAddress(id);
+            return await companyAddressBussinessLogic.DeleteCompanyAddress(companyAddressId);
+        }
+
+        [Route("DeleteRangeCompanyAddress")]
+        [HttpDelete]
+        public async Task<int> DeleteRangeCompanyAddress(List<int> companyAddressIds)
+        {
+            return await companyAddressBussinessLogic.DeleteRangeCompanyAddress(companyAddressIds);
         }
 
 
-        [Route("GetCompanyAddressById/{id}")]
+        [Route("GetCompanyAddressByCompanyAddressId/{companyAddressId}")]
         [HttpGet]
-        public CompanyAddress GetByCompanyAddressId(int id)
-            {
-            return userRepository.GetByCompanyAddressId(id);
+        public async Task<CompanyAddress> GetCompanyAddressByCompanyAddressId(int companyAddressId)
+        {
+            return await companyAddressBussinessLogic.GetCompanyAddressByCompanyAddressId(companyAddressId);
         }
 
 
-        [Route("GetCompanyAddress")]
+        [Route("GetCompanyAddresses")]
         [HttpGet]
-        public List<CompanyAddress> GetCompanyAddresss()
+        public async Task<List<CompanyAddress>> GetCompanyAddresses()
         {
-            return userRepository.GetCompanyAddresss();
+            return await companyAddressBussinessLogic.GetCompanyAddresses();
         }
 
 
         [Route("AddCompanyAddress")]
         [HttpPost]
-        public int InsertCompanyAddress(CompanyAddress user)
+        public async Task<int> AddCompanyAddress(CompanyAddress companyAddress)
         {
-            return userRepository.InsertCompanyAddress(user);
+            return await companyAddressBussinessLogic.AddCompanyAddress(companyAddress);
+        }
+
+        [Route("AddRangeCompanyAddress")]
+        [HttpPost]
+        public async Task<List<int>> AddRangeCompanyAddress(List<CompanyAddress> companyAddresses)
+        {
+            return await companyAddressBussinessLogic.AddRangeCompanyAddress(companyAddresses);
         }
 
 
         [Route("UpdateCompanyAddress")]
         [HttpPut]
-        public bool UpdateCompanyAddress(CompanyAddress user)
+        public async Task<bool> UpdateCompanyAddress(CompanyAddress companyAddress)
         {
-            return userRepository.UpdateCompanyAddress(user);
+            return await companyAddressBussinessLogic.UpdateCompanyAddress(companyAddress);
+        }
+
+        [Route("UpdateRangeCompanyAddress")]
+        [HttpPut]
+        public async Task<bool> UpdateRangeCompanyAddress(List<CompanyAddress> companyAddresses)
+        {
+            return await companyAddressBussinessLogic.UpdateRangeCompanyAddress(companyAddresses);
         }
 
 
         [Route("GetCompanyAddressIdByCompanyId/{companyid}")]
         [HttpGet]
-        public List<CompanyAddress> GetCompanyAddressIdByCompanyId(int companyid)
+        public async Task<List<CompanyAddress>> GetCompanyAddressesByCompanyId(int companyId)
         {
-            return userRepository.GetCompanyAddressIdByCompanyId(companyid);
+            return await companyAddressBussinessLogic.GetCompanyAddressesIdByCompanyId(companyId);
 
         }
 
