@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonsInfoV2Api.IBussinessLogic
+namespace PersonsInfoV2Api.IRepository
 {
- public   interface ICompanyContactBussinessLogic
+    public interface ICompanyContactRepository
     {
         public Task<List<CompanyContact>> GetCompanyContacts();
         public Task<CompanyContact> GetCompanyContactById(int id);

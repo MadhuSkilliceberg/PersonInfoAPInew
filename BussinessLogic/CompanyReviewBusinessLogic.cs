@@ -11,55 +11,69 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class CompanyReviewBusinessLogic : ICompanyReviewBusinessLogic
     {
-        ICompanyReviewRepo  companyReviewRepo;
+        private readonly ICompanyReviewRepository companyReviewRepository;
 
-        public CompanyReviewBusinessLogic(ICompanyReviewRepo companyReviewRepo)
+        public CompanyReviewBusinessLogic(ICompanyReviewRepository companyReviewRepository)
         {
-            this.companyReviewRepo = companyReviewRepo;
-        }
-
-        public int DeleteCompanyReview(int id)
-        {
-            return companyReviewRepo.DeleteCompanyReview(id);
+            this.companyReviewRepository = companyReviewRepository;
         }
 
-        public CompanyReview GetByCompanyReviewId(int id)
+        public async Task<int> AddCompanyReview(CompanyReview companyReview)
         {
-            return companyReviewRepo.GetByCompanyReviewId(id);
-        }
-        public List<CompanyReview> GetByCompanyReviewComapanyId1(int id)
-        {
-            return companyReviewRepo.GetByCompanyReviewComapanyId1(id);
+            return await companyReviewRepository.AddCompanyReview(companyReview);
         }
 
-        public List<CompanyReviewModel> GetByCompanyReviewComapanyId(int id)
+        public async Task<int> AddRangeCompanyReview(List<CompanyReview> companyReviews)
         {
-            return companyReviewRepo.GetByCompanyReviewComapanyId(id);
+            return await companyReviewRepository.AddRangeCompanyReview(companyReviews);
         }
 
-        public List<CompanyReview> GetcompanyReviews()
+        public async Task<int> DeleteCompanyReview(int id)
         {
-            return companyReviewRepo.GetcompanyReviews();
+            return await companyReviewRepository.DeleteCompanyReview(id);
         }
 
-        public int InsertCompanyReview(CompanyReview companyReview)
+        public async Task<int> DeleteRangeCompanyReview(List<int> ids)
         {
-            return companyReviewRepo.InsertCompanyReview(companyReview);
+            return await companyReviewRepository.DeleteRangeCompanyReview(ids);
         }
 
-        public int UpdateCompanyReview(CompanyReview companyReview)
+        public async Task<List<CompanyReviewModel>> GetByCompanyReviewComapanyId(int companyId)
         {
-            return companyReviewRepo.UpdateCompanyReview(companyReview);
-        }
-        public List<CompanyReviewsCommentModel> GetByCompanyReviewComments(int reviewId)
-        {
-           
-            return companyReviewRepo.GetByCompanyReviewComments(reviewId);
+            return await companyReviewRepository.GetByCompanyReviewComapanyId(companyId);
         }
 
-        public List<object> GetCompanyReviewTreeHierarchical(int reviewId)
+        public async Task<List<CompanyReview>> GetByCompanyReviewComapanyId1(int companyId)
         {
-            List<CompanyReviewsCommentModel> categories = GetByCompanyReviewComments(reviewId);
+            return await companyReviewRepository.GetByCompanyReviewComapanyId1(companyId);
+        }
+
+        public async Task<CompanyReview> GetCompanyReviewById(int id)
+        {
+            return await companyReviewRepository.GetCompanyReviewById(id);
+        }
+
+        public async Task<List<CompanyReview>> GetcompanyReviews()
+        {
+            return await companyReviewRepository.GetcompanyReviews();
+        }
+        public async Task<int> UpdateCompanyReview(CompanyReview companyReview)
+        {
+            return await companyReviewRepository.UpdateCompanyReview(companyReview);
+        }
+
+        public async Task<int> UpdateRangeCompanyReview(List<CompanyReview> companyReviews)
+        {
+            return await companyReviewRepository.UpdateRangeCompanyReview(companyReviews);
+        }
+        public async Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId)
+        {
+            return await companyReviewRepository.GetByCompanyReviewComments(reviewId);
+        }
+
+        public async Task<List<object>> GetCompanyReviewTreeHierarchical(int reviewId)
+        {
+            List<CompanyReviewsCommentModel> categories = await GetByCompanyReviewComments(reviewId);
 
             List<CompanyReviewsCommentModel> rootCategories = categories.Where(c => !c.ParentId.HasValue).ToList();
             List<object> result = new List<object>();
@@ -71,9 +85,8 @@ namespace PersonsInfoV2Api.BussinessLogic
             return result;
         }
 
-        private object BuildCategoryTree(CompanyReviewsCommentModel category, List<CompanyReviewsCommentModel> categories)
+        private async Task<object> BuildCategoryTree(CompanyReviewsCommentModel category, List<CompanyReviewsCommentModel> categories)
         {
-
             var children = categories.Where(c => c.ParentId == category.Id).ToList();
             if (children.Count == 0)
             {

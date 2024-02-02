@@ -4,95 +4,109 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
-    public class CompanyContactRepo : ICompanyContactRepo
+    public class CompanyContactRepo : ICompanyContactRepository
     {
-        PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
+        private readonly PersonsInfoV3NewContext context;
 
-        public bool AddCompanyContact(List<CompanyContact> companyContacts)
+        public CompanyContactRepo(PersonsInfoV3NewContext personsInfoV3NewContext)
         {
-            try
-            {
-                if (companyContacts != null)
-                {
-                    Context.CompanyContacts.AddRange(companyContacts);
-                    Context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            this.context = personsInfoV3NewContext;
         }
 
-        public bool UpdateCompanyContact(List<CompanyContact> companyContacts)
+        public async Task<List<CompanyContact>> GetCompanyContacts()
         {
-            try
-            {
-                if (companyContacts != null)
-                {
-                    Context.CompanyContacts.UpdateRange(companyContacts);
-                    Context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            return await context.CompanyContacts.ToListAsync();
+           // return await context.CompanyContacts.Where(i => i.CompanyAddressId == companyaddressId).ToListAsync();
+        }
+        public async Task<CompanyContact> GetCompanyContactById(int id)
+        {
+           return await context.CompanyContacts.Where(a => a.Id == id).FirstOrDefaultAsync();
         }
 
-        public int DeleteCompanyContact(int id)
+        public async Task<int> AddCompanyContact(CompanyContact companyContact)
         {
-
-            var k = Context.CompanyContacts.Where(a => a.Id == id).FirstOrDefault();
-            Context.CompanyContacts.Remove(k);
-            Context.SaveChanges();
-            return 1;
-        }
-
-
-        public List<CompanyContact> GetCompanyContacts()
-        {
-            return Context.CompanyContacts.ToList();
-        }
-
-        public int InsertCompanyContact(CompanyContact companyContact)
-        {
-            Context.CompanyContacts.Add(companyContact);
-            Context.SaveChanges();
+            await context.CompanyContacts.AddAsync(companyContact);
+            await context.SaveChangesAsync();
             return companyContact.Id;
         }
 
-        public bool UpdateCompanyContact(CompanyContact companyContact)
+        public async Task<int> AddRanageCompanyContact(List<CompanyContact> companyContacts)
         {
-            Context.CompanyContacts.Update(companyContact);
-            Context.SaveChanges();
+            try
+            {
+                if (companyContacts != null)
+                {
+                    await context.CompanyContacts.AddRangeAsync(companyContacts);
+                    await context.SaveChangesAsync();
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch 
+            {
+                return 0;
+            }
+        }
+
+       public async Task<int>  UpdateCompanyContact(CompanyContact companyContact)
+        {
+             context.CompanyContacts.Update(companyContact);
+            await context.SaveChangesAsync();
+            return 1;
+        }
+
+        public async Task<int> UpdateRangeCompanyContact(List<CompanyContact> companyContacts)
+        {
+            try
+            {
+                if (companyContacts != null)
+                {
+                     context.CompanyContacts.UpdateRange(companyContacts);
+                    await context.SaveChangesAsync();
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public async Task<bool> DeleteCompanyContact(int id)
+        {
+            context.CompanyContacts.Remove(await context.CompanyContacts.Where(a => a.Id == id).FirstOrDefaultAsync());
+            await context.SaveChangesAsync();
             return true;
         }
 
-
-
-        public List<CompanyContact> GetCompanyContactsByCompanyAddressId(int companyaddressId)
+        public async Task<bool> DeleteRangeCompanyContact(List<int> ids)
         {
-            return Context.CompanyContacts.Where(i => i.CompanyAddressId == companyaddressId).ToList();
+            context.CompanyContacts.RemoveRange(await context.CompanyContacts.Where(x => ids.Contains(x.Id)).ToListAsync());
+            await context.SaveChangesAsync();
+            return true;
         }
 
-        public CompanyContact GetCompanyContactsById(int id)
+       public async Task<int> AddRangeCompanyContact(List<CompanyContact> companyContacts)
         {
-            var data = Context.CompanyContacts.Where(a => a.Id == id).FirstOrDefault();
-            return data;
+            await context.CompanyContacts.AddRangeAsync(companyContacts);
+            await context.SaveChangesAsync();
+            return 1;
+        }
+
+       public async Task<List<CompanyContact>> GetCompanyContactByCompanyAddressId(int companyaddressId)
+        {
+            return await context.CompanyContacts.Where(i => i.CompanyAddressId == companyaddressId).ToListAsync();
         }
 
     }

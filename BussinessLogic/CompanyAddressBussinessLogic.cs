@@ -5,47 +5,69 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.OpenApi.Writers;
+using System.ComponentModel.Design;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
-    public class CompanyAddressBussinessLogic: ICompanyAddressBussinessLogic
+    public class CompanyAddressBussinessLogic : ICompanyAddressBussinessLogic
     {
-        ICompanyAddressRepo userRepository;
-        public CompanyAddressBussinessLogic(ICompanyAddressRepo Repo)
+        private readonly ICompanyAddressRepository companyAddressRepo;
+        public CompanyAddressBussinessLogic(ICompanyAddressRepository companyAddressRepo)
         {
-            userRepository = Repo;
+            this.companyAddressRepo = companyAddressRepo;
         }
 
-        public int DeleteCompanyAddress(int id)
+        //This method used to Delete Company Address based on companyAddressId
+        public async Task<int> DeleteCompanyAddress(int companyAddressId)
         {
-            return userRepository.DeleteCompanyAddress(id);
+            return await companyAddressRepo.DeleteCompanyAddress(companyAddressId);
         }
 
-        public CompanyAddress GetByCompanyAddressId(int id)
+        //This method used to Get Company Address based on CompanyAddressId
+        public async Task<CompanyAddress> GetCompanyAddressByCompanyAddressId(int companyAddressId)
         {
-            return userRepository.GetByCompanyAddressId(id);
+            return await companyAddressRepo.GetCompanyAddressByCompanyAddressId(companyAddressId);
         }
 
-        public List<CompanyAddress> GetCompanyAddresss()
+        //This method used for Get CompanyAddresses 
+        public async Task<List<CompanyAddress>> GetCompanyAddresses()
         {
-            return userRepository.GetCompanyAddresss();
+            return await companyAddressRepo.GetCompanyAddresses();
         }
 
-        public int InsertCompanyAddress(CompanyAddress companyAddress)
+        //This method used for Add CompanyAddress based on the companyAddress
+        public async Task<int> AddCompanyAddress(CompanyAddress companyAddress)
         {
-            return userRepository.InsertCompanyAddress(companyAddress);
+            return await companyAddressRepo.AddCompanyAddress(companyAddress);
         }
 
-        public bool UpdateCompanyAddress(CompanyAddress companyAddress)
+        //This method used for Update CompanyAddress based on the CompanyAddress
+        public async Task<bool> UpdateCompanyAddress(CompanyAddress companyAddress)
         {
-            return userRepository.UpdateCompanyAddress(companyAddress);
+            return await companyAddressRepo.UpdateCompanyAddress(companyAddress);
         }
 
-        public List<CompanyAddress> GetCompanyAddressIdByCompanyId(int companyid)
+        //This method used for Get Company Addresses based on CompanyId
+        public async Task<List<CompanyAddress>> GetCompanyAddressesIdByCompanyId(int companyId)
         {
-            return userRepository.GetCompanyAddressIdByCompanyId(companyid);
-             
+            return await companyAddressRepo.GetCompanyAddressesIdByCompanyId(companyId);
+
         }
 
+        public async Task<int> DeleteRangeCompanyAddress(List<int> companyAddressIds)
+        {
+            return await companyAddressRepo.DeleteRangeCompanyAddress(companyAddressIds);
+        }
+
+        public async Task<List<int>> AddRangeCompanyAddress(List<CompanyAddress> companyAddresses)
+        {
+            return await AddRangeCompanyAddress(companyAddresses);
+        }
+
+        public async Task<bool> UpdateRangeCompanyAddress(List<CompanyAddress> companyAddresses)
+        {
+            return await UpdateRangeCompanyAddress(companyAddresses);
+        }
     }
 }

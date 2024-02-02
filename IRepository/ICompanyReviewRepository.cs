@@ -1,13 +1,14 @@
 ﻿using PersonsInfoV2Api.Entities;
 using PersonsInfoV2Api.Models;
+using PersonsInfoV2Api.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonsInfoV2Api.IBussinessLogic
+namespace PersonsInfoV2Api.IRepository
 {
-  public  interface ICompanyReviewBusinessLogic
+    public interface ICompanyReviewRepository
     {
         public Task<List<CompanyReview>> GetcompanyReviews();
         public Task<int> AddCompanyReview(CompanyReview companyReview);
@@ -19,7 +20,6 @@ namespace PersonsInfoV2Api.IBussinessLogic
         public Task<CompanyReview> GetCompanyReviewById(int id);
         public Task<List<CompanyReviewModel>> GetByCompanyReviewComapanyId(int companyId);
         public Task<List<CompanyReview>> GetByCompanyReviewComapanyId1(int companyId);
-        public Task<List<object>> GetCompanyReviewTreeHierarchical(int reviewId);
         public Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId);
     }
 }

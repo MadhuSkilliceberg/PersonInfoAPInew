@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonsInfoV2Api.IBussinessLogic
+namespace PersonsInfoV2Api.IRepository
 {
-   public interface ICompanyAddressBussinessLogic
+   public interface ICompanyAddressRepository
     {
         //This method used for Get CompanyAddresses 
-        public Task<List<CompanyAddress>> GetCompanyAddresses();
+        public Task< List<CompanyAddress>> GetCompanyAddresses();
 
         //This method used for Add CompanyAddress based on the companyAddress
         public Task<int> AddCompanyAddress(CompanyAddress companyAddress);
@@ -34,5 +34,6 @@ namespace PersonsInfoV2Api.IBussinessLogic
 
         //This method used for Update CompanyAddress based on the CompanyAddresses
         public Task<bool> UpdateRangeCompanyAddress(List<CompanyAddress> companyAddresses);
+
     }
 }
