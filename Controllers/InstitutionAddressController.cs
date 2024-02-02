@@ -13,73 +13,94 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PersonsInfoV2Api.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutionAddressController : ControllerBase
     {
-        IInstitutionAddressBusinessLogic InstitutionAddressRepository;
-        public InstitutionAddressController(IInstitutionAddressBusinessLogic repo)
+     private readonly  IInstitutionAddressBusinessLogic _institutionAddressBusinessLogic;
+        public InstitutionAddressController(IInstitutionAddressBusinessLogic institutionAddressBusinessLogic)
         {
-            InstitutionAddressRepository = repo;
+            _institutionAddressBusinessLogic = institutionAddressBusinessLogic;
         }
 
-        [Route("DeleteInstitutionAddress/{Id}")]
+        [Route("DeleteInstitutionAddressByInstitutionId/{institutionAdressId}")]
         [HttpDelete]
-        public int DeleteInstitutionAddress(int id)
+        public Task<int> DeleteInstitutionAddressByInstitutionId(int institutionAdressId)
+
         {
-            return InstitutionAddressRepository.DeleteInstitutionAddress(id);
+            return _institutionAddressBusinessLogic.DeleteInstitutionAddressByInstitutionId(institutionAdressId);
         }
 
-
-        [Route("GetInstitutionAddressById/{Id}")]  
+        [Route("GetInstitutionAddressByInstitutionAdressId/{institutionAdressId}")]  
         [HttpGet]
-        public InstitutionAddress GetInstitutionAddressById(int id)
+        public async Task<InstitutionAddress> GetInstitutionAddressByInstitutionAdressId(int institutionAdressId)
+
         {
-            return InstitutionAddressRepository.GetByInstitutionAddressId(id);
+            return await _institutionAddressBusinessLogic.GetInstitutionAddressByInstitutionAdressId(institutionAdressId);
         }
 
-
-
-        [Route("GetInstitutionAddress")]
+        [Route("GetInstitutionAddresses")]
         [HttpGet]
-        public List<InstitutionAddress> GetInstitutionAddress()
+        public async Task<List<InstitutionAddress>> GetInstitutionAddresses()
         {
-            return InstitutionAddressRepository.GetInstitutionAddresss();
+            return await _institutionAddressBusinessLogic.GetInstitutionAddresses();
         }
-
 
         [Route("AddInstitutionAddress")]
         [HttpPost]
-        public int AddInstitutionAddress(InstitutionAddress institutionAddress)
-        {
-            return InstitutionAddressRepository.InsertInstitutionAddress(institutionAddress);
-        }
+        public async Task<int> AddInstitutionAddress(InstitutionAddress institutionAddress)
 
+        {
+            return await _institutionAddressBusinessLogic.AddInstitutionAddress(institutionAddress);
+        }
 
         [Route("UpdateInstitutionAddress")]
         [HttpPut]
-        public int UpdateInstitutionAddress(InstitutionAddress institutionAddress)
+        public async Task<int> UpdateInstitutionAddress(InstitutionAddress institutionAddress)
+
         {
-            return InstitutionAddressRepository.UpdateInstitutionAddress(institutionAddress);
+            return await _institutionAddressBusinessLogic.UpdateInstitutionAddress(institutionAddress);
         }
 
         [Route("GetInstitutionAddresslist")]
         [HttpGet]
-        public List<InstitutionAddresslist> GetInstitutionAddresslist()
+        public async Task<List<InstitutionAddresslist>> GetInstitutionAddresslist()
         {
-            return InstitutionAddressRepository.GetInstitutionAddresslist();
+            return await _institutionAddressBusinessLogic.GetInstitutionAddresslist();
         }
-
 
         [Route("GetInstitutionAddressByInstituteId/{instituteId}")]
         [HttpGet]
-        public List<InstitutionAddress> GetInstitutionAddressByInstituteId(int instituteId)
+        public Task<List<InstitutionAddress>> GetInstitutionAddressByInstituteId(int instituteId)
         {
-            return InstitutionAddressRepository.GetInstitutionAddressByInstituteId(instituteId);
+            return _institutionAddressBusinessLogic.GetInstitutionAddressByInstituteId(instituteId);
         }
 
+        [Route("AddRangeInstitutionAddresses")]
+        [HttpPost]
+        public Task<bool> AddRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+        {
+            return _institutionAddressBusinessLogic.AddRangeInstitutionAddresses(institutionAddresses);
+        }
+
+        [Route("UpdateRangeInstitutionAddresses")]
+        [HttpPut]
+        public Task<bool> UpdateRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+        {
+            return _institutionAddressBusinessLogic.UpdateRangeInstitutionAddresses(institutionAddresses);
+        }
+
+        [Route("DeleteRangeInstitutionAddresses")]
+        [HttpDelete]
+        public Task<bool> DeleteRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+        {
+            return _institutionAddressBusinessLogic.DeleteRangeInstitutionAddresses(institutionAddresses);
+        }
+
+
+
     }
-    
+
 }

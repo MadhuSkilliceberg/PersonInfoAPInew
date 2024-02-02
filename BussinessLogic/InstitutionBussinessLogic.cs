@@ -9,80 +9,84 @@ using PersonsInfoV2Api.CoustumModels;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
-    public class InstitutionBussinessLogic: IInstitutionBussinessLogic
+    public class InstitutionBussinessLogic : IInstitutionBussinessLogic
     {
-        IInstitutionRepo InstitutionRepository;
-        IQualificationtypeRepo qualificationtype;
-        IMediumRepo mediumRepo;
-        IInstitutionAddressRepo institutionAddRepo;
-        IInstitutionContactRepo institutionContactRepo;
-        IInstitutionEmailRepo institutionEmailRepo;
-        IRepoInstitutionCourse repoInstitutionCourse;
+        private readonly IInstitutionRepository _institutionRepository;
+        private readonly IQualificationtypeRepo _qualificationtype;
+        private readonly IMediumRepo _mediumRepo;
+        private readonly IInstitutionAddressRepository _institutionAddressRepository;
+        private readonly IInstitutionContactRepository _institutionContactRepository;
+        private readonly IInstitutionEmailRepository _institutionEmailRepository;
+        private readonly IInstitutionCourseRepository _institutionCourseRepository;
 
 
         public InstitutionBussinessLogic(
-            IInstitutionRepo Repo,
+            IInstitutionRepository institutionRepository,
             IQualificationtypeRepo qualificationtypes,
             IMediumRepo mediumRepos,
-            IInstitutionAddressRepo institutionAddressRepo,
-            IInstitutionContactRepo institutionContact,
-            IInstitutionEmailRepo  institutionEmail,
-            IRepoInstitutionCourse repoInstitution
+            IInstitutionAddressRepository institutionAddressRepository,
+            IInstitutionContactRepository institutionContactRepository,
+            IInstitutionEmailRepository institutionEmailRepository,
+            IInstitutionCourseRepository institutionCourseRepository
 
             )
 
         {
-            InstitutionRepository = Repo;
-            qualificationtype = qualificationtypes;
-            mediumRepo = mediumRepos;
-            institutionAddRepo = institutionAddressRepo;
-            institutionContactRepo = institutionContact;
-            institutionEmailRepo = institutionEmail;
-            repoInstitutionCourse = repoInstitution;
+            _institutionRepository = institutionRepository;
+            _qualificationtype = qualificationtypes;
+            _mediumRepo = mediumRepos;
+            _institutionAddressRepository = institutionAddressRepository;
+            _institutionEmailRepository = institutionEmailRepository;
+            _institutionCourseRepository = institutionCourseRepository;
+            _institutionContactRepository = institutionContactRepository;
 
         }
 
-        public int DeleteInstitution(int id)
+        public async Task<int> DeleteInstitutionByInstitutionId(int institutionId)
+
         {
-            return InstitutionRepository.DeleteInstitution(id);
+            return await _institutionRepository.DeleteInstitutionByInstitutionId(institutionId);
         }
 
-        public Institution GetByInstitutionId(int id)
+        public Task<Institution> GetInstitutionByInstitutionId(int institutionId)
+
         {
-            return InstitutionRepository.GetByInstitutionId(id);
+            return _institutionRepository.GetInstitutionByInstitutionId(institutionId);
         }
 
-      
 
-        public List<Institution> GetInstitutions()
+
+        public async Task<List<Institution>> GetInstitutions()
         {
-            return InstitutionRepository.GetInstitutions();
+            return await _institutionRepository.GetInstitutions();
         }
 
-        public int InsertInstitution(Institution institution)
+        public async Task<int> AddInstitution(Institution institution)
+
         {
-            return InstitutionRepository.InsertInstitution(institution);
+            return await _institutionRepository.AddInstitution(institution);
         }
 
-        public int UpdateInstitution(Institution institution)
+        public Task<int> UpdateInstitution(Institution institution)
+
         {
-            return InstitutionRepository.UpdateInstitution(institution);
+            return _institutionRepository.UpdateInstitution(institution);
         }
 
-        public List<Qualificationcs> GetQualificationcs()
+        public async Task<List<Qualificationcs>> GetQualificationcs()
         {
             //List<Qualificationcs> qualificationcs = new List<Qualificationcs>();
-            var institutiondata = InstitutionRepository.GetInstitutions();
-            var Qualificationdata = qualificationtype.GetUsers();
-            var mediumdata = mediumRepo.GetUsers();
+            var institutionData = await _institutionRepository.GetInstitutions();
+            var qualificationData = _qualificationtype.GetUsers();
+            var mediumData = _mediumRepo.GetUsers();
 
 
-            var data = from i in institutiondata
+            var data = from i in institutionData
                        join
-                       s in Qualificationdata on
+                       s in qualificationData on
                        i.QulificationTypeId equals s.Id
                        join
-                       m in mediumdata on
+                       m in mediumData on
                        i.MediumId equals m.Id
                        select new Qualificationcs
                        {
@@ -95,31 +99,31 @@ namespace PersonsInfoV2Api.BussinessLogic
             return data.ToList();
         }
 
-        public bool InstitutionModel(InstitutionModels institutionModels)
+        public async Task<bool> InstitutionModel(InstitutionModels institutionModels)
         {
-            int institutionId = InsertInstitution(institutionModels.institutions);
-            if(institutionId>0)
+            int institutionId = await AddInstitution(institutionModels.institutions);
+            if (institutionId > 0)
             {
                 if (institutionModels.institutionaddress != null)
                 {
                     institutionModels.institutionaddress.InstitutionId = institutionId;
-                    institutionAddRepo.InsertInstitutionAddress(institutionModels.institutionaddress);
+                    await _institutionAddressRepository.AddInstitutionAddress(institutionModels.institutionaddress);
 
                 }
                 if (institutionModels.institutioncontacts != null)
                 {
                     institutionModels.institutioncontacts.InstitutionAddressId = institutionId;
-                    institutionContactRepo.InsertInstitutionContact(institutionModels.institutioncontacts);
+                    await _institutionContactRepository.AddInstitutionContact(institutionModels.institutioncontacts);
                 }
                 if (institutionModels.institutionCourses != null)
                 {
                     institutionModels.institutionCourses.InstitutionId = institutionId;
-                    repoInstitutionCourse.InsertInstitutionCourse(institutionModels.institutionCourses);
+                    await _institutionCourseRepository.AddInstitutionCourse(institutionModels.institutionCourses);
                 }
-                if(institutionModels.institutionemail != null)
+                if (institutionModels.institutionemail != null)
                 {
                     institutionModels.institutionemail.InstitutionAddressId = institutionId;
-                    institutionEmailRepo.InsertInstitutionEmail(institutionModels.institutionemail);
+                    await _institutionEmailRepository.AddInstitutionEmail(institutionModels.institutionemail);
                 }
                 return true;
             }
@@ -131,19 +135,19 @@ namespace PersonsInfoV2Api.BussinessLogic
 
 
 
-        public bool InstitutionDetails(InstitutionDetails institutionDetails)
+        public async Task<bool> InstitutionDetails(InstitutionDetails institutionDetails)
 
         {
             int institutionId = 0;
             if (institutionDetails.institutions.Id < 0)
             {
-                institutionId = InsertInstitution(institutionDetails.institutions);
+                institutionId = await AddInstitution(institutionDetails.institutions);
             }
             else
             {
-                institutionId = UpdateInstitution(institutionDetails.institutions);
+                institutionId = await UpdateInstitution(institutionDetails.institutions);
             }
-            // int institutionaddress = institutionAddRepo.InsertInstitution(institutionDetails.institutionaddress);
+            bool institutionaddress = await _institutionAddressRepository.AddRangeInstitutionAddresses(institutionDetails.institutionaddress);
 
             if (institutionId > 0)
             {
@@ -151,30 +155,30 @@ namespace PersonsInfoV2Api.BussinessLogic
                 {
 
 
-                    institutionAddRepo.DeleteinstitutionAddressDetails(institutionDetails.institutionaddress.Where(n => n.IsDeleted == true).ToList());
+                    await _institutionAddressRepository.DeleteRangeInstitutionAddresses(institutionDetails.institutionaddress.Where(n => n.IsDeleted == true).ToList());
 
 
                     foreach (var institutionadd in institutionDetails.institutionaddress)
                     {
-                        
+
                         if (institutionadd.Id > 0)
-                            institutionAddRepo.UpdateinstitutionAddress(institutionadd);
+                            await _institutionAddressRepository.UpdateInstitutionAddress(institutionadd);
                         else
-                            institutionAddRepo.InsertInstitutionAddress(institutionadd);
+                            await _institutionAddressRepository.AddInstitutionAddress(institutionadd);
 
 
 
                         //Contacts start
 
-                        institutionContactRepo.DeleteinstitutionContactsDetails(institutionadd.InstitutionContacts.Where(n => n.IsDeleted == true).ToList());
+                        await _institutionContactRepository.DeleteRangeInstitutionContacts(institutionadd.InstitutionContacts.Where(n => n.IsDeleted == true).ToList());
 
 
-                        institutionContactRepo.UpdateinstitutionContactsDetails(institutionadd.InstitutionContacts.Where(n => n.Id >0).ToList());
+                        await _institutionContactRepository.UpdateRangeInstitutionContacts(institutionadd.InstitutionContacts.Where(n => n.Id > 0).ToList());
 
                         foreach (var InstitutionCont in institutionadd.InstitutionContacts.Where(n => n.Id < 1))
                         {
                             InstitutionCont.InstitutionAddressId = institutionadd.Id;
-                            institutionContactRepo.InsertInstitutionContact(InstitutionCont);
+                            await _institutionContactRepository.AddInstitutionContact(InstitutionCont);
                         }
 
                         //Contacts End 
@@ -183,60 +187,61 @@ namespace PersonsInfoV2Api.BussinessLogic
                         // institutionEmailRepo.DeleteinstitutionEmailDetails(institutionadd.InstitutionEmails.Where(n => n.IsDeleted == true).ToList());
 
 
-                        var data = institutionEmailRepo.GetInstitutionEmailsByAddressId(institutionadd.Id).Select(t=>t.Id);
+                        var data = await _institutionEmailRepository.GetInstitutionEmailsByAddressId(institutionadd.Id).ConfigureAwait(false);//Select(t => t.Id);
+                        var institutionEmailIds = data.Select(t => t.Id);
 
+                        await _institutionEmailRepository.DeleteRangeInstitutionEmails(institutionadd.InstitutionEmails.Where(n => institutionEmailIds.Contains(n.Id)).ToList());
 
-                        institutionEmailRepo.DeleteinstitutionEmailDetails(institutionadd.InstitutionEmails.Where(n => !data.Contains(n.Id)).ToList());
-
-                        institutionEmailRepo.UpdateinstitutionEmailDetails(institutionadd.InstitutionEmails.Where(n => n.Id > 0 ).ToList());
+                        await _institutionEmailRepository.UpdateRangeInstitutionEmails(institutionadd.InstitutionEmails.Where(n => n.Id > 0).ToList());
 
                         foreach (var InstitutionEmail in institutionadd.InstitutionEmails.Where(n => n.Id < 1))
                         {
                             InstitutionEmail.InstitutionAddressId = institutionadd.Id;
-                            institutionEmailRepo.InsertInstitutionEmail(InstitutionEmail);
+                            await _institutionEmailRepository.AddInstitutionEmail(InstitutionEmail);
                         }
-                            
-                        //Email End
+
+                        //    //Email End
 
                     }
 
 
 
-                    //institutionAddRepo.UpdateinstitutionAddressDetails(institutionDetails.institutionaddress.Where(n => n.Id > 0).ToList());
+                    await _institutionAddressRepository.UpdateRangeInstitutionAddresses(institutionDetails.institutionaddress.Where(n => n.Id > 0).ToList());
 
-                    //foreach (var institutionadd in institutionDetails.institutionaddress.Where(n => n.Id < 1))
-                    //{
-                    //    institutionadd.InstitutionId = institutionId;
-                    //}
-                    //institutionAddRepo.AddinstitutionAddressDetails(institutionDetails.institutionaddress);
+                    foreach (var institutionAddress in institutionDetails.institutionaddress.Where(n => n.Id < 1))
+                    {
+                        institutionAddress.InstitutionId = institutionId;
+                    }
+                    await _institutionAddressRepository.AddRangeInstitutionAddresses(institutionDetails.institutionaddress);
 
 
 
 
                 }
-                //if (institutionDetails.institutioncontacts != null)
-                //{
-                //    institutionDetails.institutioncontacts.ForEach(i => i.InstitutionAddressId = institutionId);
-                //    institutionContactRepo.institutionContactsDetails(institutionDetails.institutioncontacts);
-                //}
-                //if (institutionDetails.institutionCourses != null)
-                //{
-                //    institutionDetails.institutionCourses.ForEach(i => i.InstitutionId = institutionId);
-                //    repoInstitutionCourse.institutionCourseDetails(institutionDetails.institutionCourses);
-                //}
-                //if (institutionDetails.institutionemail != null)
-                //{
-                //    institutionDetails.institutionemail.ForEach(i => i.InstitutionAddressId = institutionId);
-                //    institutionEmailRepo.institutionEmailDetails(institutionDetails.institutionemail);
-                //}
+                if (institutionDetails.institutioncontacts != null)
+                {
+                    institutionDetails.institutionCourses.ForEach(i => i.InstitutionId = institutionId);
+                    await _institutionContactRepository.AddRangeInstitutionContacts(institutionDetails.institutioncontacts);
+                }
+                if (institutionDetails.institutionCourses != null)
+                {
+                    institutionDetails.institutionCourses.ForEach(i => i.InstitutionId = institutionId);
+                  await  _institutionCourseRepository.AddRangeInstitutionCourseDetails(institutionDetails.institutionCourses);
+                }
+                if (institutionDetails.institutionemail != null)
+                {
+                    institutionDetails.institutionemail.ForEach(i => i.InstitutionAddressId = institutionId);
+               await     _institutionEmailRepository.AddRangeInstitutionEmails(institutionDetails.institutionemail);
+                }
                 return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
-            {
-                return false;
-            }
-        }
 
-      
+
+        }
     }
-}
+

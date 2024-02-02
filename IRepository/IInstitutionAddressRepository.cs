@@ -1,15 +1,13 @@
-﻿using PersonsInfoV2Api.CoustumModels;
-using PersonsInfoV2Api.Entities;
+﻿using PersonsInfoV2Api.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonsInfoV2Api.IBussinessLogic
+namespace PersonsInfoV2Api.IRepository
 {
-    public interface IInstitutionAddressBusinessLogic
+  public  interface IInstitutionAddressRepository
     {
-
         public Task<List<InstitutionAddress>> GetInstitutionAddresses();
         public Task<int> AddInstitutionAddress(InstitutionAddress institutionAddress);
 
@@ -27,17 +25,6 @@ namespace PersonsInfoV2Api.IBussinessLogic
         public Task<bool> UpdateRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses);
 
         public Task<bool> DeleteRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses);
-        public  Task<List<InstitutionAddresslist>> GetInstitutionAddresslist();
-
-
-
-
-
-
-
-
-
-
 
 
     }

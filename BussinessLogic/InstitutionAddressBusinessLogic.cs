@@ -11,65 +11,65 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class InstitutionAddressBusinessLogic : IInstitutionAddressBusinessLogic
     {
-        IInstitutionAddressRepo InstitutionAddressRepository;
-        IInstitutionBussinessLogic institutionBussiness;
-        IStateBussinessLogic statebussinesslogic;
-        ICountryBussinessLogic countrybussinessLogic;
-        IMediumBussinessLogic mediumbussinessLogic;
-        public InstitutionAddressBusinessLogic(IInstitutionAddressRepo repo, IInstitutionBussinessLogic institutionbussiness ,
-                                               IStateBussinessLogic statebussiness, ICountryBussinessLogic countrybussiness, IMediumBussinessLogic mediumbussiness)
+      private readonly  IInstitutionAddressRepository _institutionAddressRepository;
+      private readonly  IInstitutionBussinessLogic _institutionBussinessLogic;
+      private readonly  IStateBussinessLogic _stateBussinessLogic;
+      private readonly  ICountryBussinessLogic _countryBussinessLogic;
+      private readonly  IMediumBussinessLogic _mediumBussinessLogic;
+       public InstitutionAddressBusinessLogic(IInstitutionAddressRepository institutionAddressRepository, IInstitutionBussinessLogic institutionBussinessLogic ,
+                                               IStateBussinessLogic stateBussinessLogic, ICountryBussinessLogic countryBussinessLogic, IMediumBussinessLogic mediumBussinessLogic)
         {
-            InstitutionAddressRepository = repo;
-            institutionBussiness = institutionbussiness;
-            statebussinesslogic = statebussiness;
-            countrybussinessLogic = countrybussiness;
-            mediumbussinessLogic = mediumbussiness;
+            _institutionAddressRepository = institutionAddressRepository;
+            _institutionBussinessLogic = institutionBussinessLogic;
+            _stateBussinessLogic = stateBussinessLogic;
+            _countryBussinessLogic = countryBussinessLogic;
+            _mediumBussinessLogic = mediumBussinessLogic;
         }
-        public int DeleteInstitutionAddress(int id)
+        public async Task<int> DeleteInstitutionAddressByInstitutionId(int institutionAddressId)
         {
-            return InstitutionAddressRepository.DeleteInstitutionAddress(id);
-        }
-
-        public InstitutionAddress GetByInstitutionAddressId(int id)
-        {
-            return InstitutionAddressRepository.GetByInstitutionAddressId(id);
+            return await _institutionAddressRepository.DeleteInstitutionAddressByInstitutionId(institutionAddressId);
         }
 
-        public List<InstitutionAddress> GetInstitutionAddresss()
+        public async Task<InstitutionAddress> GetInstitutionAddressByInstitutionAdressId(int institutionAddressId)
         {
-            return InstitutionAddressRepository.GetInstitutionAddress();
+            return await _institutionAddressRepository.GetInstitutionAddressByInstitutionAdressId(institutionAddressId);
         }
 
-        public int InsertInstitutionAddress(InstitutionAddress institutionAddress)
+        public async Task<List<InstitutionAddress>> GetInstitutionAddresses()
         {
-            return InstitutionAddressRepository.InsertInstitutionAddress(institutionAddress);
+            return  await _institutionAddressRepository.GetInstitutionAddresses();
         }
 
-        public int UpdateInstitutionAddress(InstitutionAddress institutionAddress)
+        public async  Task<int> AddInstitutionAddress(InstitutionAddress institutionAddress)
         {
-            return InstitutionAddressRepository.UpdateinstitutionAddress(institutionAddress);
+            return await _institutionAddressRepository.AddInstitutionAddress(institutionAddress);
         }
 
-        public List<InstitutionAddresslist> GetInstitutionAddresslist()
+        public async Task<int> UpdateInstitutionAddress(InstitutionAddress institutionAddress)
         {
-            var InstitutionAddressRepositorydata = InstitutionAddressRepository.GetInstitutionAddress();
-            var institutionBussinessdata = institutionBussiness.GetInstitutions();
-            var statebussinesslogicdata = statebussinesslogic.GetUsers();
-            var countrybussinessLogicdata = countrybussinessLogic.GetCountries();
-            var mediumbussinessLogicdata = mediumbussinessLogic.GetUsers();
+            return await _institutionAddressRepository.UpdateInstitutionAddress(institutionAddress);
+        }
 
-            var data = from i in InstitutionAddressRepositorydata
+        public async Task<List<InstitutionAddresslist>> GetInstitutionAddresslist()
+        {
+            var institutionAddressRepositoryData =await _institutionAddressRepository.GetInstitutionAddresses();
+            var institutionBussinessData =await _institutionBussinessLogic.GetInstitutions();
+            var statebussinesslogicData = _stateBussinessLogic.GetUsers();
+            var countrybussinessLogicData = _countryBussinessLogic.GetCountries();
+            var mediumbussinessLogicData = _mediumBussinessLogic.GetUsers();
+
+            var data = from i in institutionAddressRepositoryData
                        join
-                       institution in institutionBussinessdata
+                       institution in institutionBussinessData
                        on i.InstitutionId equals institution.Id
                        join
-                       stat in statebussinesslogicdata
+                       stat in statebussinesslogicData
                        on i.StateId equals stat.Id
                        join
-                       countryy in countrybussinessLogicdata
+                       countryy in countrybussinessLogicData
                        on i.CountryId equals countryy.Id
                        join
-                       medium in mediumbussinessLogicdata
+                       medium in mediumbussinessLogicData
                        on i.MeduimId equals medium.Id
 
                        select new InstitutionAddresslist
@@ -90,10 +90,29 @@ namespace PersonsInfoV2Api.BussinessLogic
 
 
         }
-        public List<InstitutionAddress> GetInstitutionAddressByInstituteId(int instituteId)
+        public async Task<List<InstitutionAddress>> GetInstitutionAddressByInstituteId(int instituteId)
         {
-            return InstitutionAddressRepository.GetInstitutionAddressByInstituteId(instituteId);
+            return await _institutionAddressRepository.GetInstitutionAddressByInstituteId(instituteId);
         }
+
+
+
+        public async Task<bool> AddRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+        {
+            return await _institutionAddressRepository.AddRangeInstitutionAddresses(institutionAddresses);
+        }
+
+
+        public async Task<bool> UpdateRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+        {
+            return await _institutionAddressRepository.UpdateRangeInstitutionAddresses(institutionAddresses);
+        }
+
+        public async Task<bool> DeleteRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+        {
+            return await _institutionAddressRepository.UpdateRangeInstitutionAddresses(institutionAddresses);
+        }
+
 
     }
 }

@@ -12,31 +12,33 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PersonsInfoV2Api.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutionContactController : ControllerBase
     {
-        IInstitutionContactBussinessLogic InstitutionContactRepository;
-        public InstitutionContactController(IInstitutionContactBussinessLogic Repo)
+      private readonly  IInstitutionContactBussinessLogic _institutionContactBussinessLogic;
+        public InstitutionContactController(IInstitutionContactBussinessLogic institutionContactBussinessLogic)
         {
-            InstitutionContactRepository = Repo;
+            _institutionContactBussinessLogic = institutionContactBussinessLogic;
         }
 
-        [Route("DeleteInstitutionContacts/{Id}")]
+        [Route("DeleteInstitutionContactByInstitutionContactId/{institutionContactId}")]
         [HttpDelete]
-        public int DeleteInstitutionContact(int id)
+        public async Task<int> DeleteInstitutionContactByInstitutionContactId(int institutionContactId)
+
         {
-            return InstitutionContactRepository.DeleteInstitutionContact(id);
+            return await _institutionContactBussinessLogic.DeleteInstitutionContactByInstitutionContactId(institutionContactId);
         }
 
 
-        [Route("GetInstitutionContactsById/{Id}")]
+        [Route("GetInstitutionContactByInstitutionContactId/{institutionContactId}")]
         [HttpGet]
-        public InstitutionContact GetByInstitutionContactId(int id)
+        public async Task<InstitutionContact> GetInstitutionContactByInstitutionContactId(int institutionContactId)
+
         {
-            return InstitutionContactRepository.GetByInstitutionContactId(id);
+            return await _institutionContactBussinessLogic.GetInstitutionContactByInstitutionContactId(institutionContactId);
         }
 
       
@@ -45,40 +47,69 @@ namespace PersonsInfoV2Api.Controllers
 
         [Route("GetInstitutionContacts")]
         [HttpGet]
-        public List<InstitutionContact> GetInstitutionContacts()
+        public async Task<List<InstitutionContact>> GetInstitutionContacts()
+
         {
-            return InstitutionContactRepository.GetInstitutionContacts();
+            return await _institutionContactBussinessLogic.GetInstitutionContacts();
         }
 
 
-        [Route("AddInstitutionContacts")]
+        [Route("AddInstitutionContact")]
         [HttpPost]
-        public int InsertInstitutionContact(InstitutionContact institutionContact)
+        public async Task<int> AddInstitutionContact(InstitutionContact institutionContact)
+
         {
-            return InstitutionContactRepository.InsertInstitutionContact(institutionContact);
+            return await _institutionContactBussinessLogic.AddInstitutionContact(institutionContact);
         }
 
 
-        [Route("UpdateInstitutionContacts")]
+        [Route("UpdateInstitutionContact")]
         [HttpPut]
-        public int UpdateInstitutionContact(InstitutionContact institutionContact)
+        public async Task<int> UpdateInstitutionContact(InstitutionContact institutionContact)
+
         {
-            return InstitutionContactRepository.UpdateInstitutionContact(institutionContact);
+            return await _institutionContactBussinessLogic.UpdateInstitutionContact(institutionContact);
         }
 
         [Route("GetInstitutionContactList")]
         [HttpGet]
-        public List<InstitutionContactList> GetInstitutionContactList()
+        public async  Task<List<InstitutionContactList>> GetInstitutionContactList()
         {
-            return InstitutionContactRepository.GetInstitutionContactList();
+            return await _institutionContactBussinessLogic.GetInstitutionContactList();
         }
 
 
         [Route("GetInstitutionContactsByAddressId/{AddressId}")]
         [HttpGet]
-        public List<InstitutionContact> GetInstitutionContactsByAddressId(int AddressId)
+        public async Task<List<InstitutionContact>> GetInstitutionContactsByAddressId(int addressId)
+
         {
-            return InstitutionContactRepository.GetInstitutionContactsByAddressId(AddressId);
+            return await _institutionContactBussinessLogic.GetInstitutionContactsByAddressId(addressId);
         }
+
+
+        [Route("AddRangeInstitutionContacts")]
+        [HttpPost]
+        public async Task<bool> AddRangeInstitutionContacts(List<InstitutionContact> institutionContacts)
+        {
+            return await _institutionContactBussinessLogic.AddRangeInstitutionContacts(institutionContacts);
+        }
+
+        [Route("UpdateRangeInstitutionContacts")]
+        [HttpPut]
+        public async Task<bool> UpdateRangeInstitutionContacts(List<InstitutionContact> institutionContacts)
+        {
+            return await _institutionContactBussinessLogic.UpdateRangeInstitutionContacts(institutionContacts);
+        }
+
+        [Route("DeleteRangeInstitutionContacts")]
+        [HttpDelete]
+        public async Task<bool> DeleteRangeInstitutionContacts(List<InstitutionContact> institutionContacts)
+        {
+            return await _institutionContactBussinessLogic.DeleteRangeInstitutionContacts(institutionContacts);
+        }
+
+
+
     }
 }

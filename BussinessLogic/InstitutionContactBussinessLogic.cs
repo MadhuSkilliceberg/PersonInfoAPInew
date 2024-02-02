@@ -12,66 +12,92 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class InstitutionContactBussinessLogic : IInstitutionContactBussinessLogic
     {
-        IInstitutionContactRepo InstitutionContactRepository;
-        IInstitutionAddressRepo institutionAddressRepo;
-        public InstitutionContactBussinessLogic(IInstitutionContactRepo Repo, IInstitutionAddressRepo institutionAddressRepo)
+        private readonly IInstitutionContactRepository _institutionContactRepository;
+        private readonly IInstitutionAddressRepository _institutionAddressRepository;
+        public InstitutionContactBussinessLogic(IInstitutionContactRepository institutionContactRepository, IInstitutionAddressRepository institutionAddressRepository)
         {
-            InstitutionContactRepository = Repo;
-            this.institutionAddressRepo = institutionAddressRepo;
+            _institutionAddressRepository = institutionAddressRepository;
+            _institutionContactRepository = institutionContactRepository;
         }
 
-        public int DeleteInstitutionContact(int id)
+        public async Task<int> DeleteInstitutionContactByInstitutionContactId(int institutionContactId)
+
         {
-            return InstitutionContactRepository.DeleteInstitutionContact(id);
+            return await _institutionContactRepository.DeleteInstitutionContactByInstitutionContactId(institutionContactId);
         }
 
-        public InstitutionContact GetByInstitutionContactId(int id)
+        public async Task<InstitutionContact> GetInstitutionContactByInstitutionContactId(int institutionContactId)
+
         {
-            return InstitutionContactRepository.GetByInstitutionContactId(id);
+            return await _institutionContactRepository.GetInstitutionContactByInstitutionContactId(institutionContactId);
         }
 
-        public List<InstitutionContact> GetInstitutionContacts()
+        public async Task<List<InstitutionContact>> GetInstitutionContacts()
+
         {
-            return InstitutionContactRepository.GetInstitutionContacts();
+            return await _institutionContactRepository.GetInstitutionContacts();
         }
 
-        public int InsertInstitutionContact(InstitutionContact institutionContact)
+        public async Task<int> AddInstitutionContact(InstitutionContact institutionContact)
+
         {
-            return InstitutionContactRepository.InsertInstitutionContact(institutionContact);
+            return await _institutionContactRepository.AddInstitutionContact(institutionContact);
         }
 
-        public int UpdateInstitutionContact(InstitutionContact institutionContact)
+        public async Task<int> UpdateInstitutionContact(InstitutionContact institutionContact)
+
         {
-            return InstitutionContactRepository.UpdateInstitutionContact(institutionContact);
+            return await _institutionContactRepository.UpdateInstitutionContact(institutionContact);
         }
 
-        public List<InstitutionContactList> GetInstitutionContactList()
+        public async Task<List<InstitutionContactList>> GetInstitutionContactList()
         {
-            var institutionemail = InstitutionContactRepository.GetInstitutionContacts();
-            var institutioncontsct = institutionAddressRepo.GetInstitutionAddress();
+            var institutionEmail = await _institutionContactRepository.GetInstitutionContacts();
+            var institutioncontsct = await _institutionAddressRepository.GetInstitutionAddresses();
 
-                        var data = from i in institutionemail
-                                   join
-                                   inaddress in institutioncontsct on
-                                   i.InstitutionAddressId equals inaddress.Id
+            var data = from i in institutionEmail
+                       join
+                       inaddress in institutioncontsct on
+                       i.InstitutionAddressId equals inaddress.Id
 
-                                   select new InstitutionContactList
-                                   {
-                                       Id = i.Id,
-                                       Address1 = inaddress.Address1,
-                                       MobileNumber = i.MobileNumber,
-                                       IsPrimary = i.IsPrimary,
-                                       OrderId = i.OrderId,
+                       select new InstitutionContactList
+                       {
+                           Id = i.Id,
+                           Address1 = inaddress.Address1,
+                           MobileNumber = i.MobileNumber,
+                           IsPrimary = i.IsPrimary,
+                           OrderId = i.OrderId,
 
-                                   };
+                       };
             return data.ToList();
 
-           
+
         }
 
-        public List<InstitutionContact> GetInstitutionContactsByAddressId(int AddressId)
+        public async Task<List<InstitutionContact>> GetInstitutionContactsByAddressId(int addressId)
+
         {
-            return InstitutionContactRepository.GetInstitutionContactsByAddressId(AddressId);
+            return await _institutionContactRepository.GetInstitutionContactsByAddressId(addressId);
         }
+
+
+        public async Task<bool> AddRangeInstitutionContacts(List<InstitutionContact> institutionContacts)
+
+        {
+
+            return await _institutionContactRepository.AddRangeInstitutionContacts(institutionContacts);
+
+        }
+        public async Task<bool> UpdateRangeInstitutionContacts(List<InstitutionContact> institutionContacts)
+        {
+            return await _institutionContactRepository.UpdateRangeInstitutionContacts(institutionContacts);
+        }
+
+        public async Task<bool> DeleteRangeInstitutionContacts(List<InstitutionContact> institutionContacts)
+        {
+            return await _institutionContactRepository.DeleteRangeInstitutionContacts(institutionContacts);
+
+        }
+
     }
 }

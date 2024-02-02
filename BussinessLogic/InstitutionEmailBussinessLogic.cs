@@ -9,47 +9,52 @@ using PersonsInfoV2Api.CoustumModels;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
-    public class InstitutionEmailBussinessLogic: IInstitutionEmailBussinessLogic
+    public class InstitutionEmailBussinessLogic : IInstitutionEmailBussinessLogic
     {
-        IInstitutionEmailRepo InstitutionEmailRepository;
-        IInstitutionAddressRepo institutionAddressRepo;
-        public InstitutionEmailBussinessLogic(IInstitutionEmailRepo Repo, IInstitutionAddressRepo addressRepo)
+        private readonly IInstitutionEmailRepository _institutionEmailRepository;
+        private readonly IInstitutionAddressRepository _institutionAddressRepository;
+        public InstitutionEmailBussinessLogic(IInstitutionEmailRepository institutionEmailRepository, IInstitutionAddressRepository institutionAddressRepository)
         {
-            InstitutionEmailRepository = Repo;
-            institutionAddressRepo = addressRepo;
+            _institutionAddressRepository = institutionAddressRepository;
+            _institutionEmailRepository = institutionEmailRepository;
         }
 
-        public int DeleteInstitutionEmail(int id)
+        public async Task<int> DeleteInstitutionEmailByInstitutionEmailId(int institutionEmailId)
+
         {
-            return InstitutionEmailRepository.DeleteInstitutionEmail(id);
+            return await _institutionEmailRepository.DeleteInstitutionEmailByInstitutionEmailId(institutionEmailId);
         }
 
-        public InstitutionEmail GetByInstitutionEmailId(int id)
+        public async Task<InstitutionEmail> GetInstitutionEmailIdByinstitutionEmailId(int institutionEmailId)
+
         {
-            return InstitutionEmailRepository.GetByInstitutionEmailId(id);
+            return await _institutionEmailRepository.GetInstitutionEmailIdByinstitutionEmailId(institutionEmailId);
         }
 
-        public List<InstitutionEmail> GetInstitutionEmails()
+        public async Task<List<InstitutionEmail>> GetInstitutionEmails()
+
         {
-            return InstitutionEmailRepository.GetInstitutionEmails();
+            return await _institutionEmailRepository.GetInstitutionEmails();
         }
 
-        public int InsertInstitutionEmail(InstitutionEmail institutionEmail)
+        public async Task<int> AddInstitutionEmail(InstitutionEmail institutionEmail)
+
         {
-            return InstitutionEmailRepository.InsertInstitutionEmail(institutionEmail);
+            return await _institutionEmailRepository.AddInstitutionEmail(institutionEmail);
         }
 
-        public int UpdateInstitutionEmail(InstitutionEmail institutionEmail)
+        public async Task<int> UpdateInstitutionEmail(InstitutionEmail institutionEmail)
+
         {
-            return InstitutionEmailRepository.UpdateInstitutionEmail(institutionEmail);
+            return await _institutionEmailRepository.UpdateInstitutionEmail(institutionEmail);
         }
 
-        public List<InstitutionEmailList> GetInstitutionEmailList()
+        public async Task<List<InstitutionEmailList>> GetInstitutionEmailList()
         {
-            var institutionemail = InstitutionEmailRepository.GetInstitutionEmails();
-            var institutionaddress = institutionAddressRepo.GetInstitutionAddress();
+            var institutionEmails = await _institutionEmailRepository.GetInstitutionEmails();
+            var institutionaddress = await _institutionAddressRepository.GetInstitutionAddresses();
 
-            var data = from i in institutionemail
+            var data = from i in institutionEmails
                        join
                        inaddresss in institutionaddress on
                        i.InstitutionAddressId equals inaddresss.Id
@@ -66,9 +71,28 @@ namespace PersonsInfoV2Api.BussinessLogic
             return data.ToList();
         }
 
-        public List<InstitutionEmail> GetInstitutionEmailsByAddressId(int addressId)
+        public async Task<List<InstitutionEmail>> GetInstitutionEmailsByAddressId(int addressId)
+
         {
-            return InstitutionEmailRepository.GetInstitutionEmailsByAddressId(addressId);
+            return await _institutionEmailRepository.GetInstitutionEmailsByAddressId(addressId);
+
+
         }
+        public async Task<bool> UpdateRangeInstitutionEmails(List<InstitutionEmail> institutionEmails)
+        {
+            return await _institutionEmailRepository.UpdateRangeInstitutionEmails(institutionEmails);
+        }
+        public async Task<bool> AddRangeInstitutionEmails(List<InstitutionEmail> institutionEmails)
+        {
+            return await _institutionEmailRepository.AddRangeInstitutionEmails(institutionEmails);
+        }
+
+        public async Task<bool> DeleteRangeInstitutionEmails(List<InstitutionEmail> institutionEmails)
+        {
+            return await _institutionEmailRepository.DeleteRangeInstitutionEmails(institutionEmails);
+        }
+
+
+
     }
 }

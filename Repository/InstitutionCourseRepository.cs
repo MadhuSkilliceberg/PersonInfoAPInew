@@ -1,4 +1,5 @@
-﻿using PersonsInfoV2Api.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonsInfoV2Api.Entities;
 using PersonsInfoV2Api.IRepository;
  
 using System;
@@ -8,52 +9,71 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.Repository
 {
-    public class InstitutionCourseRepository : IRepoInstitutionCourse
+    public class InstitutionCourseRepository : IInstitutionCourseRepository
     {
-        PersonsInfoV3NewContext person = new PersonsInfoV3NewContext();
-        public int DeleteInstitutionCourse(int id)
+        private PersonsInfoV3NewContext _context;
+
+
+        public InstitutionCourseRepository(PersonsInfoV3NewContext context)
         {
-            var a = person.InstitutionCourses.Where(c => c.Id == id).FirstOrDefault();
-            person.InstitutionCourses.Remove(a);
-            person.SaveChanges();
+            _context = context;
+        }
+
+
+        // Deleting Institution Course based on InstitutionCourseId
+        public async Task<int> DeleteInstitutionCourseByInstitutionCourseId(int institutionCourseId)
+        {
+            var a = _context.InstitutionCourses.Where(c => c.Id == institutionCourseId).FirstOrDefault();
+            _context.InstitutionCourses.Remove(a);
+            await _context.SaveChangesAsync();
             return 1;
         }
 
-        public InstitutionCourse GetByInstitutionCourseId(int id)
+        // Getting Institution Course based on InstitutionCourseId
+        public async Task<InstitutionCourse> GetInstitutionCourseByInstitutionCourseId(int institutionCourseId)
         {
-            return person.InstitutionCourses.Where(c => c.Id == id).FirstOrDefault();
+            return await _context.InstitutionCourses.Where(c => c.Id == institutionCourseId).FirstOrDefaultAsync();
         }
 
-        public List<InstitutionCourse> GetInstitutionCourse()
+
+        // Getting All Institution Courses
+        public async Task<List<InstitutionCourse>> GetInstitutionCourse()
         {
-            return person.InstitutionCourses.ToList();
+            return await _context.InstitutionCourses.ToListAsync();
         }
 
-        public int InsertInstitutionCourse(InstitutionCourse institutionCourse)
+
+        // Inserting  Institution Course
+        public async Task<int> AddInstitutionCourse(InstitutionCourse institutionCourse)
         {
-            person.InstitutionCourses.Add(institutionCourse);
-            person.SaveChanges();
+            _context.InstitutionCourses.Add(institutionCourse);
+            await _context.SaveChangesAsync();
             return institutionCourse.Id;
 
         }
 
-        public int UpdateInstitutionCourse(InstitutionCourse institutionCourse)
+
+        // Updating Institution Course   
+        public async Task<int> UpdateInstitutionCourse(InstitutionCourse institutionCourse)
         {
-            person.InstitutionCourses.Update(institutionCourse);
-            person.SaveChanges();
+            _context.InstitutionCourses.Update(institutionCourse);
+            await _context.SaveChangesAsync();
             return institutionCourse.Id;
         }
 
-        public bool institutionCourseDetails(List<InstitutionCourse> institutionCourses)
+
+
+        //Adding  more than one Institution Courses
+        public async Task<bool> AddRangeInstitutionCourseDetails(List<InstitutionCourse> institutionCourses)
         {
             try
             {
                 if (institutionCourses != null)
                 {
-                    person.InstitutionCourses.AddRange(institutionCourses);
-                    if(person != null)
+                    _context.InstitutionCourses.AddRange(institutionCourses);
+                    if (_context != null)
                     {
-                        person.SaveChanges();
+                        await _context.SaveChangesAsync();
                     }
                     return true;
 
@@ -67,6 +87,64 @@ namespace PersonsInfoV2Api.Repository
             {
                 return false;
             }
+        }
+
+        public async Task<int> UpdateRangeInstitutionCourse(List<InstitutionCourse> institutionCourse)
+        {
+            try
+            {
+
+                if (institutionCourse != null)
+                {
+
+
+                    _context.InstitutionCourses.UpdateRange(institutionCourse);
+                    await _context.SaveChangesAsync();
+
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return 0;
+        }
+
+
+        public async Task<bool> DeleteRangeInstitutionCourseDetails(List<InstitutionCourse> institutionCourses)
+
+        {
+
+
+            try
+            {
+                if(institutionCourses!=null && institutionCourses.Count>0)
+                {
+                    _context.InstitutionCourses.RemoveRange(institutionCourses);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+
+
+         
+
         }
     }
 }

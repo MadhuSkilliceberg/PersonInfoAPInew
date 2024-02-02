@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.Repository
 {
-    public class IndustryTypeRepository : IIndustryTypeRepo
+    public class IndustryTypeRepository : IIndustryTypeRepository
     {
         PersonsInfoV3NewContext person = new PersonsInfoV3NewContext();
         public int DeleteIndustryType(int id)

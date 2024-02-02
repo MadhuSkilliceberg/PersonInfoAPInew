@@ -134,7 +134,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IGenderRepo, GenderRepo>();
             services.AddScoped<IGenderBussinessLogic, GenderBussinessLogic>();
 
-            services.AddScoped<IInstitutionRepo, InstitutionRepo>();
+            services.AddScoped<IInstitutionRepository, InstitutionRepository>();
             services.AddScoped<IInstitutionBussinessLogic, InstitutionBussinessLogic>();
 
 
@@ -142,10 +142,10 @@ namespace PersonsInfoV2Api
             services.AddScoped<ICompanyBussinessLogic, CompanyBussinessLogic>();
 
 
-            services.AddScoped<IInstitutionEmailRepo, InstitutionEmailRepo>();
+            services.AddScoped<IInstitutionEmailRepository, InstitutionEmailRepository>();
             services.AddScoped<IInstitutionEmailBussinessLogic, InstitutionEmailBussinessLogic>();
 
-            services.AddScoped<IInstitutionContactRepo, InstitutionContactRepo>();
+            services.AddScoped<IInstitutionContactRepository, InstitutionContactRepository>();
             services.AddScoped<IInstitutionContactBussinessLogic, InstitutionContactBussinessLogic>();
 
             services.AddScoped<ICompanyEmailRepo, CompanyEmailRepo>();
@@ -178,7 +178,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IFamilyEmailRepo, FamilyEmailRepo>();
             services.AddScoped<IFamilyEmailbusinessLogic, FamilyEmailbusinessLogic>();
 
-            services.AddScoped<IInstitutionAddressRepo, InstitutionAddressRepository>();
+            services.AddScoped<IInstitutionAddressRepository, InstitutionAddressRepository>();
             services.AddScoped<IInstitutionAddressBusinessLogic, InstitutionAddressBusinessLogic>();
 
 
@@ -215,7 +215,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<ICyearRepo, CyearRepository>();
             services.AddScoped<ICyearBusinessLogic, CyearBusinessLogic>();
 
-            services.AddScoped<IRepoInstitutionCourse, InstitutionCourseRepository>();
+            services.AddScoped<IInstitutionCourseRepository, InstitutionCourseRepository>();
             services.AddScoped<IInstitutionCourseBusinessLogic, InstitutionCourseBusinessLogic>();
 
             services.AddScoped<IRepoSemester, SemesterRepository>();
@@ -236,7 +236,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IEmploymentTypeRepo, EmploymentTypeRepository>();
             services.AddScoped<IEmploymentTypeBusinessLogic, EmploymentTypeBusinessLogic>();
 
-            services.AddScoped<IIndustryTypeRepo, IndustryTypeRepository>();
+            services.AddScoped<IIndustryTypeRepository, IndustryTypeRepository>();
             services.AddScoped<IIndustryTypeBusinessLogic, IndustryTypeBusinessLogic>();
 
             services.AddScoped<IReviewRepo, ReviewRepository>();

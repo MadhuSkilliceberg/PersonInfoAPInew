@@ -2,7 +2,7 @@
 using PersonsInfoV2Api.Entities;
 using PersonsInfoV2Api.IBussinessLogic;
 using PersonsInfoV2Api.IRepository;
- 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,49 +12,54 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class InstitutionCourseBusinessLogic : IInstitutionCourseBusinessLogic
     {
-        IRepoInstitutionCourse SkillRepo;
-        ICourseRepo courseRepo;
-        IInstitutionRepo InstitutionsRepository;
+        private readonly IInstitutionCourseRepository _institutionCourseRepository;
+        private readonly ICourseRepo _courseRepo;
+        private readonly IInstitutionRepository _institutionRepository;
 
-        public InstitutionCourseBusinessLogic(IRepoInstitutionCourse Repo, ICourseRepo courseRepo, IInstitutionRepo userRepository)
+        public InstitutionCourseBusinessLogic(IInstitutionCourseRepository institutionCourseRepository, ICourseRepo courseRepo, IInstitutionRepository institutionRepository)
         {
-            SkillRepo = Repo;
-           this. courseRepo = courseRepo;
-            this.InstitutionsRepository = userRepository;
+            _institutionCourseRepository = institutionCourseRepository;
+            _courseRepo = courseRepo;
+            _institutionRepository = institutionRepository;
         }
 
-        public int DeleteInstitutionCourse(int id)
+        public async Task<int> DeleteInstitutionCourseByInstitutionCourseId(int institutionCourseId)
+
         {
-            return SkillRepo.DeleteInstitutionCourse(id);
+            return await _institutionCourseRepository.DeleteInstitutionCourseByInstitutionCourseId(institutionCourseId);
         }
 
-        public InstitutionCourse GetByInstitutionCourseId(int id)
+        public async Task<InstitutionCourse> GetInstitutionCourseByInstitutionCourseId(int institutionCourseId)
+
         {
-            return SkillRepo.GetByInstitutionCourseId(id);
+            return await _institutionCourseRepository.GetInstitutionCourseByInstitutionCourseId(institutionCourseId);
         }
 
-        public List<InstitutionCourse> GetInstitutionCourse()
+        public async Task<List<InstitutionCourse>> GetInstitutionCourse()
+
         {
-            return SkillRepo.GetInstitutionCourse();
+            return await _institutionCourseRepository.GetInstitutionCourse();
         }
 
-        public int InsertInstitutionCourse(InstitutionCourse institutionCourse)
+        public async Task<int> AddInstitutionCourse(InstitutionCourse institutionCourse)
+
         {
-            return SkillRepo.InsertInstitutionCourse(institutionCourse);
+            return await _institutionCourseRepository.AddInstitutionCourse(institutionCourse);
         }
 
-        public int UpdateInstitutionCourse(InstitutionCourse institutionCourse)
+        public async Task<int> UpdateInstitutionCourse(InstitutionCourse institutionCourse)
+
         {
-            return SkillRepo.UpdateInstitutionCourse(institutionCourse);
+            return await _institutionCourseRepository.UpdateInstitutionCourse(institutionCourse);
         }
 
-        public List<InstitutionCourseList> GetinstitutionCourseLists()
+        public async Task<List<InstitutionCourseList>> GetinstitutionCourseLists()
         {
-            var skillrepo = SkillRepo.GetInstitutionCourse();
-            var course = courseRepo.GetCourse();
-            var user = InstitutionsRepository.GetInstitutions();
+            var institutionCourses = await _institutionCourseRepository.GetInstitutionCourse();
+            var course = _courseRepo.GetCourse();
+            var user = await _institutionRepository.GetInstitutions();
 
-            var data = from i in skillrepo
+            var data = from i in institutionCourses
                        join
                        c in course on
                        i.InstitutionId equals c.Id
@@ -72,5 +77,23 @@ namespace PersonsInfoV2Api.BussinessLogic
                        };
             return data.ToList();
         }
+
+
+        public async Task<int> UpdateRangeInstitutionCourse(List<InstitutionCourse> institutionCourse)
+        {
+            return await _institutionCourseRepository.UpdateRangeInstitutionCourse(institutionCourse);
+        }
+        public async Task<bool> AddRangeInstitutionCourseDetails(List<InstitutionCourse> institutionCourses)
+        {
+            return await _institutionCourseRepository.AddRangeInstitutionCourseDetails(institutionCourses);
+        }
+
+
+        public async Task<bool> DeleteRangeInstitutionCourseDetails(List<InstitutionCourse> institutionCourses)
+
+        {
+            return await _institutionCourseRepository.DeleteRangeInstitutionCourseDetails(institutionCourses);
+        }
+
     }
 }

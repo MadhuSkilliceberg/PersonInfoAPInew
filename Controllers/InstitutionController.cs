@@ -12,78 +12,85 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PersonsInfoV2Api.Controllers
 { 
-    [Authorize]
+   // [Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutionController : ControllerBase
     {
-        IInstitutionBussinessLogic InstitutionRepository;
-        public InstitutionController(IInstitutionBussinessLogic Repo)
+      private readonly  IInstitutionBussinessLogic _institutionBussinessLogic;
+        public InstitutionController(IInstitutionBussinessLogic institutionBussinessLogic)
         {
-            InstitutionRepository = Repo;
+            _institutionBussinessLogic = institutionBussinessLogic;
         }
 
 
-        [Route("DeleteInstitutions/{id}")]
+        [Route("DeleteInstitutionByInstitutionId/{institutionId}")]
         [HttpDelete]
-        public int DeleteInstitutions(int id)
+        public async Task<int> DeleteInstitutionByInstitutionId(int institutionId)
+
         {
-            return InstitutionRepository.DeleteInstitution(id);
+            return await _institutionBussinessLogic.DeleteInstitutionByInstitutionId(institutionId);
         }
 
 
-        [Route("GetInstitutionsById/{id}")]
+        [Route("GetInstitutionByInstitutionId/{institutionId}")]
         [HttpGet]
-        public Institution GetInstitutionsById(int id)
+        public async Task<Institution> GetInstitutionByInstitutionId(int institutionId)
+
         {
-            return InstitutionRepository.GetByInstitutionId(id);
+            return await _institutionBussinessLogic.GetInstitutionByInstitutionId(institutionId);
         }
 
 
         [Route("GetInstitutions")]
         [HttpGet]
-        public List<Institution> GetInstitutions()
+        public async Task<List<Institution>> GetInstitutions()
+
         {
-            return InstitutionRepository.GetInstitutions();
+            return await _institutionBussinessLogic.GetInstitutions();
         }
 
 
         [Route("AddInstitutions")]
         [HttpPost]
-        public int AddInstitutions(Institution institution)
+        public async Task<int> AddInstitution(Institution institution)
+
         {
-            return InstitutionRepository.InsertInstitution(institution);
+            return await _institutionBussinessLogic.AddInstitution(institution);
         }
 
 
         [Route("UpdateInstitutions")]
         [HttpPut]
-        public int UpdateInstitutions(Institution institution)
+        public async Task<int> UpdateInstitution(Institution institution)
+
         {
-            return InstitutionRepository.UpdateInstitution(institution);
+            return await _institutionBussinessLogic.UpdateInstitution(institution);
         }
 
 
         [Route("GetQualificationcs")]
         [HttpGet]
-        public List<Qualificationcs> GetQualificationcs()
+        public async Task<List<Qualificationcs>> GetQualificationcs()
+
         {
-            return InstitutionRepository.GetQualificationcs();
+            return await _institutionBussinessLogic.GetQualificationcs();
         }
 
         [Route("AddInstitutionModel")]
         [HttpPost]
-        public bool AddInstitutionModel(InstitutionModels institutionModels)
+        public async Task<bool> InstitutionModel(InstitutionModels institutionModels)
+
         {
-            return InstitutionRepository.InstitutionModel(institutionModels);
+            return await _institutionBussinessLogic.InstitutionModel(institutionModels);
         }
 
         [Route("AddInstitutionDetails")]
         [HttpPost]
-        public bool AddInstitutionDetails([FromBody]InstitutionDetails institutionDetails)
+        public async Task<bool> AddInstitutionDetails([FromBody]InstitutionDetails institutionDetails)
          {
-            return InstitutionRepository.InstitutionDetails(institutionDetails);
+            return await _institutionBussinessLogic.InstitutionDetails(institutionDetails);
         }
 
     }

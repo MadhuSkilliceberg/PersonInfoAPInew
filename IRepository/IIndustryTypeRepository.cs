@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.IRepository
 {
-    public interface IIndustryTypeRepo
+    public interface IIndustryTypeRepository
     {
         public List<IndustryType> GetIndustryTypes();
         public int InsertIndustryType(IndustryType IndustryType);

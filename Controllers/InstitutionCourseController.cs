@@ -12,36 +12,38 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutionCourseController : ControllerBase
     {
-        IInstitutionCourseBusinessLogic institutionCourseBusiness;
+     private readonly   IInstitutionCourseBusinessLogic _institutionCourseBusiness;
 
-        public InstitutionCourseController(IInstitutionCourseBusinessLogic logic)
+        public InstitutionCourseController(IInstitutionCourseBusinessLogic institutionCourseBusiness)
         {
-            institutionCourseBusiness = logic;
+            _institutionCourseBusiness = institutionCourseBusiness;
         }
 
 
 
-        [Route("DeleteInstitutionCourses/{Id}")]
+        [Route("DeleteInstitutionCourseByInstitutionCourseId/{institutionCourseId}")]
         [HttpDelete]
-        public int DeleteInstitutionCourse(int id)
+        public async Task<int> DeleteInstitutionCourseByInstitutionCourseId(int institutionCourseId)
+
         {
-            return institutionCourseBusiness.DeleteInstitutionCourse(id);
+            return await _institutionCourseBusiness.DeleteInstitutionCourseByInstitutionCourseId(institutionCourseId);
         }
 
 
 
 
-        [Route("GetInstitutionCoursesById/{Id}")]
+        [Route("GetInstitutionCourseByInstitutionCourseId/{institutionCourseId}")]
         [HttpGet]
-        public InstitutionCourse GetByInstitutionCourseId(int id)
+        public async Task<InstitutionCourse> GetInstitutionCourseByInstitutionCourseId(int institutionCourseId)
+
         {
-            return institutionCourseBusiness.GetByInstitutionCourseId(id);
+            return await _institutionCourseBusiness.GetInstitutionCourseByInstitutionCourseId(institutionCourseId);
         }
 
 
@@ -49,9 +51,10 @@ namespace PersonsInfoV2Api.Controllers
 
         [Route("GEtInstitutionCourses")]
         [HttpGet]
-        public List<InstitutionCourse> GetInstitutionCourse()
+        public async Task<List<InstitutionCourse>> GetInstitutionCourse()
+
         {
-            return institutionCourseBusiness.GetInstitutionCourse();
+            return await _institutionCourseBusiness.GetInstitutionCourse();
         }
 
 
@@ -59,27 +62,57 @@ namespace PersonsInfoV2Api.Controllers
 
         [Route("AddInstitutionCourses")]
         [HttpPost]
-        public int InsertInstitutionCourse(InstitutionCourse institutionCourse)
+        public async Task<int> AddInstitutionCourse(InstitutionCourse institutionCourse)
+
         {
-            return institutionCourseBusiness.InsertInstitutionCourse(institutionCourse);
+            return await _institutionCourseBusiness.AddInstitutionCourse(institutionCourse);
         }
 
 
 
 
-        [Route("UpdateInstitutionCourses")]
+        [Route("UpdateInstitutionCourse")]
         [HttpPut]
-        public int UpdateInstitutionCourse(InstitutionCourse institutionCourse)
+        public async Task<int> UpdateInstitutionCourse(InstitutionCourse institutionCourse)
+
         {
-            return institutionCourseBusiness.UpdateInstitutionCourse(institutionCourse);
+            return await _institutionCourseBusiness.UpdateInstitutionCourse(institutionCourse);
         }
 
 
         [Route("GetinstitutionCourseLists")]
         [HttpGet]
-        public List<InstitutionCourseList> GetinstitutionCourseLists()
-        {
-            return institutionCourseBusiness.GetinstitutionCourseLists();
+        public async Task<List<InstitutionCourseList>> GetinstitutionCourseLists()
+        { 
+
+            return await _institutionCourseBusiness.GetinstitutionCourseLists();
         }
+
+        [Route("DeleteRangeInstitutionCourseDetails")]
+        [HttpDelete]
+        public async Task<bool> DeleteRangeInstitutionCourseDetails(List<InstitutionCourse> institutionCourses)
+
+        {
+            return await _institutionCourseBusiness.DeleteRangeInstitutionCourseDetails(institutionCourses);
+        }
+
+
+        [Route("AddRangeInstitutionCourseDetails")]
+        [HttpPost]
+        public async Task<bool> AddRangeInstitutionCourseDetails(List<InstitutionCourse> institutionCourses)
+        {
+            return await _institutionCourseBusiness.AddRangeInstitutionCourseDetails(institutionCourses);
+        }
+
+
+        [Route("UpdateRangeInstitutionCourse")]
+        [HttpPut]
+        public async Task<int> UpdateRangeInstitutionCourse(List<InstitutionCourse> institutionCourse)
+
+        {
+            return await _institutionCourseBusiness.UpdateRangeInstitutionCourse(institutionCourse);
+        }
+
+
     }
 }

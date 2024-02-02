@@ -12,32 +12,34 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PersonsInfoV2Api.Controllers
 {
-    [Authorize]
+  //  [Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutionEmailController : ControllerBase
     {
-        IInstitutionEmailBussinessLogic institutionEmailBussinessLogic;
+      private readonly  IInstitutionEmailBussinessLogic _institutionEmailBussinessLogic;
         public InstitutionEmailController(IInstitutionEmailBussinessLogic institutionEmailBussinessLogic)
         {
-           this. institutionEmailBussinessLogic = institutionEmailBussinessLogic;
+            _institutionEmailBussinessLogic = institutionEmailBussinessLogic;
         }
 
 
-        [Route("DeleteInstitutionEmails")]
+        [Route("DeleteInstitutionEmailByInstitutionEmailId/{institutionEmailId}")]
         [HttpDelete]
-        public int DeleteInstitutionEmail(int id)
+        public async Task<int> DeleteInstitutionEmailByInstitutionEmailId(int institutionEmailId)
+
         {
-            return institutionEmailBussinessLogic.DeleteInstitutionEmail(id);
+            return await _institutionEmailBussinessLogic.DeleteInstitutionEmailByInstitutionEmailId(institutionEmailId);
         }
 
 
-        [Route("GetInstitutionEmailsById/{id}")]
+        [Route("GetInstitutionEmailIdByinstitutionEmailId/{institutionEmailId}")]
         [HttpGet]
-        public InstitutionEmail GetByInstitutionEmailId(int id)
+        public async Task<InstitutionEmail> GetInstitutionEmailIdByinstitutionEmailId(int institutionEmailId)
+
         {
-            return institutionEmailBussinessLogic.GetByInstitutionEmailId(id);
+            return await _institutionEmailBussinessLogic.GetInstitutionEmailIdByinstitutionEmailId(institutionEmailId);
         }
 
       
@@ -45,40 +47,68 @@ namespace PersonsInfoV2Api.Controllers
 
         [Route("GetInstitutionEmails")]
         [HttpGet]
-        public List<InstitutionEmail> GetInstitutionEmails()
+        public async Task<List<InstitutionEmail>> GetInstitutionEmails()
+
         {
-            return institutionEmailBussinessLogic.GetInstitutionEmails();
+            return await _institutionEmailBussinessLogic.GetInstitutionEmails();
         }
 
 
-        [Route("AddInstitutionEmails")]
+        [Route("AddInstitutionEmail")]
         [HttpPost]
-        public int InsertInstitutionEmail(InstitutionEmail institutionEmail)
+        public async Task<int> AddInstitutionEmail(InstitutionEmail institutionEmail)
+
         {
-            return institutionEmailBussinessLogic.InsertInstitutionEmail(institutionEmail);
+            return await _institutionEmailBussinessLogic.AddInstitutionEmail(institutionEmail);
         }
 
 
-        [Route("UpdateInstitutionEmails")]
+        [Route("UpdateInstitutionEmail")]
         [HttpPut]
-        public int UpdateInstitutionEmail(InstitutionEmail institutionEmail)
+        public async Task<int> UpdateInstitutionEmail(InstitutionEmail institutionEmail)
+
         {
-            return institutionEmailBussinessLogic.UpdateInstitutionEmail(institutionEmail);
+            return await _institutionEmailBussinessLogic.UpdateInstitutionEmail(institutionEmail);
         }
 
         [Route("GetInstitutionEmailList")]
         [HttpGet]
-        public List<InstitutionEmailList> GetInstitutionEmailList()
+        public async Task<List<InstitutionEmailList>> GetInstitutionEmailList()
         {
-            return institutionEmailBussinessLogic.GetInstitutionEmailList();
+            return await _institutionEmailBussinessLogic.GetInstitutionEmailList();
         }
 
         [Route("GetInstitutionEmailsByAddressId/{addressId}")]
         [HttpGet]
-        public List<InstitutionEmail> GetInstitutionEmailsByAddressId(int addressId)
+        public Task<List<InstitutionEmail>> GetInstitutionEmailsByAddressId(int addressId)
+
         {
-            return institutionEmailBussinessLogic.GetInstitutionEmailsByAddressId(addressId);
+            return _institutionEmailBussinessLogic.GetInstitutionEmailsByAddressId(addressId);
         }
+
+        [Route("UpdateRangeInstitutionEmails")]
+       [HttpPut]
+        public async Task<bool> UpdateRangeInstitutionEmails(List<InstitutionEmail> institutionEmails)
+        {
+            return await _institutionEmailBussinessLogic.UpdateRangeInstitutionEmails(institutionEmails);
+        }
+
+        [Route("AddRangeInstitutionEmails")]
+        [HttpPost]
+        public async Task<bool> AddRangeInstitutionEmails(List<InstitutionEmail> institutionEmails)
+        {
+            return await _institutionEmailBussinessLogic.AddRangeInstitutionEmails(institutionEmails);
+        }
+
+        [Route("DeleteRangeInstitutionEmails")]
+        [HttpDelete]
+        public async Task<bool> DeleteRangeInstitutionEmails(List<InstitutionEmail> institutionEmails)
+        {
+            return await _institutionEmailBussinessLogic.DeleteRangeInstitutionEmails(institutionEmails);
+        }
+
+
+
 
     }
 }

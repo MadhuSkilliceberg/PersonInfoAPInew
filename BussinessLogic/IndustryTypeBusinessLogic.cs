@@ -10,9 +10,9 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class IndustryTypeBusinessLogic: IIndustryTypeBusinessLogic
     {
-        IIndustryTypeRepo IndustryTypeRepo;
+        IIndustryTypeRepository IndustryTypeRepo;
 
-        public  IndustryTypeBusinessLogic(IIndustryTypeRepo Repo)
+        public  IndustryTypeBusinessLogic(IIndustryTypeRepository Repo)
         {
             IndustryTypeRepo = Repo;
         }

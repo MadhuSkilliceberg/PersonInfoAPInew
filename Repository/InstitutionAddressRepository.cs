@@ -4,54 +4,75 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
-    public class InstitutionAddressRepository : IInstitutionAddressRepo
+    public class InstitutionAddressRepository : IInstitutionAddressRepository
     {
-        PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
-        public int DeleteInstitutionAddress(int id)
+        PersonsInfoV3NewContext context;
+
+
+        public InstitutionAddressRepository(PersonsInfoV3NewContext context)
         {
-            var k = Context.InstitutionAddresses.Where(a => a.Id == id).FirstOrDefault();
-            Context.InstitutionAddresses.Remove(k);
-            Context.SaveChanges();
+            this.context = context;
+
+        }
+
+        //Deleting Institution Address based on InstitutionAdressId
+        public async Task<int> DeleteInstitutionAddressByInstitutionId(int institutionAdressId)
+
+        {
+            var k = await context.InstitutionAddresses.Where(a => a.Id == institutionAdressId).FirstOrDefaultAsync();
+            context.InstitutionAddresses.Remove(k);
+          await  context.SaveChangesAsync();
             return 1;
         }
 
-        public InstitutionAddress GetByInstitutionAddressId(int id)
+        // Getting  Institution Address based on InstitutionAdressId
+        public async Task<InstitutionAddress> GetInstitutionAddressByInstitutionAdressId(int institutionAdressId)
         {
 
-            return Context.InstitutionAddresses.Where(a => a.Id == id).FirstOrDefault();
+            return await context.InstitutionAddresses.Where(a => a.Id == institutionAdressId).FirstOrDefaultAsync();
           
         }
 
-        public List<InstitutionAddress> GetInstitutionAddress()
+
+        // Getting All Institution Addresses
+        public async Task<List<InstitutionAddress>> GetInstitutionAddresses()
         {
-            return Context.InstitutionAddresses.ToList();
+            return await context.InstitutionAddresses.ToListAsync();
         }
 
-        public int InsertInstitutionAddress(InstitutionAddress  institutionAddress)
+
+        // Inserting  Institution Address 
+        public async Task<int> AddInstitutionAddress(InstitutionAddress  institutionAddress)
         {
-            Context.InstitutionAddresses.Add(institutionAddress);
-            Context.SaveChanges();
+            context.InstitutionAddresses.Add(institutionAddress);
+          await context.SaveChangesAsync();
             return institutionAddress.Id;
         }
 
-        public int UpdateinstitutionAddress(InstitutionAddress institutionAddress)
+
+        // Updating  Institution Address 
+        public async Task<int> UpdateInstitutionAddress(InstitutionAddress institutionAddress)
         {
-            Context.InstitutionAddresses.Update(institutionAddress);
-            Context.SaveChanges();
+            context.InstitutionAddresses.Update(institutionAddress);
+          await context.SaveChangesAsync();
             return institutionAddress.Id;
         }
 
-        public bool AddinstitutionAddressDetails(List<InstitutionAddress> institutionAddresses)
+
+        // Adding more than One Institution Address Details
+        public async Task<bool> AddRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+
         {
             try
             {
                 if (institutionAddresses != null)
                 {
-                    Context.InstitutionAddresses.AddRange(institutionAddresses);
-                    Context.SaveChanges();
+                    context.InstitutionAddresses.AddRange(institutionAddresses);
+                  await context.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -65,14 +86,17 @@ namespace PersonsInfoV2Api.Repository
             }
         }
 
-        public bool DeleteinstitutionAddressDetails(List<InstitutionAddress> institutionAddresses)
+
+        // Deleting  more than One Institution Address Details
+        public async Task<bool> DeleteRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+
         {
             try
             {
                 if (institutionAddresses != null && institutionAddresses.Count>0)
                 {
-                    Context.InstitutionAddresses.RemoveRange(institutionAddresses);
-                    Context.SaveChanges();
+                    context.InstitutionAddresses.RemoveRange(institutionAddresses);
+                 await context.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -86,14 +110,17 @@ namespace PersonsInfoV2Api.Repository
             }
         }
 
-        public bool UpdateinstitutionAddressDetails(List<InstitutionAddress> institutionAddresses)
+
+        //Updating more than One Institution Address Details 
+        public async Task<bool> UpdateRangeInstitutionAddresses(List<InstitutionAddress> institutionAddresses)
+
         {
             try
             {
                 if (institutionAddresses != null)
                 {
-                    Context.InstitutionAddresses.UpdateRange(institutionAddresses);
-                    Context.SaveChanges();
+                    context.InstitutionAddresses.UpdateRange(institutionAddresses);
+                  await context.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -107,9 +134,11 @@ namespace PersonsInfoV2Api.Repository
             }
         }
 
-        public List<InstitutionAddress> GetInstitutionAddressByInstituteId(int instituteId)
+
+        // Getting Institute Address based on InstituteId
+        public async Task<List<InstitutionAddress>> GetInstitutionAddressByInstituteId(int instituteId)
         {
-            return Context.InstitutionAddresses.Where(i =>i.InstitutionId == instituteId ).ToList();
+            return await context.InstitutionAddresses.Where(i =>i.InstitutionId == instituteId ).ToListAsync();
         }
     }
 }
