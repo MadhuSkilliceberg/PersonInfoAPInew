@@ -11,6 +11,8 @@ namespace PersonsInfoV2Api.IBussinessLogic
   public  interface IUserCourseBusinessLogic
     {
         public List<UserCourse> GetUserCourse();
+
+       // public Task<List<UserContact>> GetUserCoursesByUserId(int userId);
         public int InsertUserCourse(UserCourse userCourse);
 
         public int UpdateUserCourse(UserCourse userCourse);

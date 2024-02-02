@@ -19,6 +19,7 @@ namespace PersonsInfoV2Api.Entities
 
         public virtual DbSet<BookDemo> BookDemos { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Chat> Chats { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<CommentDocument> CommentDocuments { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
@@ -43,11 +44,13 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<Education> Educations { get; set; }
         public virtual DbSet<EmployeeCount> EmployeeCounts { get; set; }
         public virtual DbSet<EmploymentType> EmploymentTypes { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<FamilyContact> FamilyContacts { get; set; }
         public virtual DbSet<FamilyEducationDetail> FamilyEducationDetails { get; set; }
         public virtual DbSet<FamilyEmail> FamilyEmails { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<IndustryType> IndustryTypes { get; set; }
         public virtual DbSet<Institution> Institutions { get; set; }
         public virtual DbSet<InstitutionAddress> InstitutionAddresses { get; set; }
@@ -66,6 +69,7 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<Medium> Media { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<MenuList> MenuLists { get; set; }
+        public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
@@ -160,6 +164,34 @@ namespace PersonsInfoV2Api.Entities
                     .WithMany(p => p.InverseParentCategory)
                     .HasForeignKey(d => d.ParentCategoryId)
                     .HasConstraintName("FK__Categorie__Paren__2CF2ADDF");
+            });
+
+            modelBuilder.Entity<Chat>(entity =>
+            {
+                entity.ToTable("Chat");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.Heading).IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.Chats)
+                    .HasForeignKey(d => d.GroupId)
+                    .HasConstraintName("FK__Chat__GroupId__1C5231C2");
+
+                entity.HasOne(d => d.Parent)
+                    .WithMany(p => p.InverseParent)
+                    .HasForeignKey(d => d.ParentId)
+                    .HasConstraintName("FK__Chat__ParentId__1E3A7A34");
+
+                entity.HasOne(d => d.ToUser)
+                    .WithMany(p => p.Chats)
+                    .HasForeignKey(d => d.ToUserId)
+                    .HasConstraintName("FK__Chat__ToUserId__1D4655FB");
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -583,6 +615,32 @@ namespace PersonsInfoV2Api.Entities
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<Event>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.Heading).IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.GroupId)
+                    .HasConstraintName("FK__Events__GroupId__25DB9BFC");
+
+                entity.HasOne(d => d.Parent)
+                    .WithMany(p => p.InverseParent)
+                    .HasForeignKey(d => d.ParentId)
+                    .HasConstraintName("FK__Events__ParentId__27C3E46E");
+
+                entity.HasOne(d => d.ToUser)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.ToUserId)
+                    .HasConstraintName("FK__Events__ToUserId__26CFC035");
+            });
+
             modelBuilder.Entity<Family>(entity =>
             {
                 entity.ToTable("Family");
@@ -671,6 +729,24 @@ namespace PersonsInfoV2Api.Entities
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.ToTable("Group");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Heading)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Heading ");
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
@@ -1072,6 +1148,32 @@ namespace PersonsInfoV2Api.Entities
                     .HasColumnName("M_NAME");
 
                 entity.Property(e => e.MPId).HasColumnName("M_P_ID");
+            });
+
+            modelBuilder.Entity<News>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.Heading).IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.News)
+                    .HasForeignKey(d => d.GroupId)
+                    .HasConstraintName("FK__News__GroupId__2116E6DF");
+
+                entity.HasOne(d => d.Parent)
+                    .WithMany(p => p.InverseParent)
+                    .HasForeignKey(d => d.ParentId)
+                    .HasConstraintName("FK__News__ParentId__22FF2F51");
+
+                entity.HasOne(d => d.ToUser)
+                    .WithMany(p => p.News)
+                    .HasForeignKey(d => d.ToUserId)
+                    .HasConstraintName("FK__News__ToUserId__220B0B18");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -1610,22 +1712,28 @@ namespace PersonsInfoV2Api.Entities
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.OfferDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.UserCompanies)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__UserCompa__Compa__55F4C372");
+                    .HasConstraintName("FK__UserCompa__Compa__2AA05119");
 
                 entity.HasOne(d => d.Designation)
                     .WithMany(p => p.UserCompanies)
                     .HasForeignKey(d => d.DesignationId)
-                    .HasConstraintName("FK__UserCompa__Desig__56E8E7AB");
+                    .HasConstraintName("FK__UserCompa__Desig__2B947552");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserCompanies)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserCompa__UserI__57DD0BE4");
+                    .HasConstraintName("FK__UserCompa__UserI__2C88998B");
             });
 
             modelBuilder.Entity<UserContact>(entity =>

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using PersonsInfoV2Api.BussinessLogic;
 
 namespace PersonsInfoV2Api.Controllers
 {   
@@ -17,50 +18,82 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class UserAddressDetailController : ControllerBase
     {
-        IUserAddressDetailBusinessLogic userAddress;
+        IUserAddressDetailBusinessLogic userAddressDetailBusinessLogic;
 
         public  UserAddressDetailController(IUserAddressDetailBusinessLogic Repo)
         {
-            userAddress = Repo;
+            userAddressDetailBusinessLogic = Repo;
         }
 
-        [Route("DeleteUserAddressDetails/{id}")]
+        [Route("DeleteUserAddressDetailById/{id}")]
         [HttpDelete]
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserAddressDetailById(int id)
         {
-            return userAddress.DeleteUser(id);
+            return await userAddressDetailBusinessLogic.DeleteUserAddressDetailById(id);
         }
 
 
         [Route("GetUserAddressDetailsById/{id}")]
         [HttpGet]
-        public UserAddressDetail GetByUserId(int id)
+        public async Task<UserAddressDetail> GetUserAddressDetailById(int id)
         {
-            return userAddress.GetByUserId(id);
+            return await userAddressDetailBusinessLogic.GetUserAddressDetailById(id);
         }
+
+        [Route("GetUserAddressDetailsByUserId/{id}")]
+        [HttpGet]
+        public async Task<List<UserAddressDetail>> GetUserAddressDetailsByUserId(int id)
+        {
+            return await userAddressDetailBusinessLogic.GetUserAddressDetailsByUserId(id);
+        }
+
+         
 
 
         [Route("GetUserAddressDetails")]
         [HttpGet]
-        public List<UserAddressDetail> GetUsers()
+        public async Task<List<UserAddressDetail>> GetUserAddressDetails()
         {
-            return userAddress.GetUsers();
+            return await userAddressDetailBusinessLogic.GetUserAddressDetails();
         }
 
-
-        [Route("AddUserAddressDetails")]
+        [Route("AddUserAddressDetail")]
         [HttpPost]
-        public bool InsertUser(UserAddressDetail user)
+        public async Task<int> AddUserAddressDetail(UserAddressDetail userAddressDetail)
         {
-            return userAddress.InsertUser(user);
+            return await userAddressDetailBusinessLogic.AddUserAddressDetail(userAddressDetail);
         }
 
 
-        [Route("UpdateUserAddressDetails")]
+        [Route("UpdateUserAddressDetail")]
         [HttpPut]
-        public bool UpdateUser(UserAddressDetail user)
+        public async Task<int> UpdateUserAddressDetail(UserAddressDetail user)
         {
-            return userAddress.UpdateUser(user);
+            return await userAddressDetailBusinessLogic.UpdateUserAddressDetail(user);
+        }
+
+        [Route("AddUpdateUserAddressDetail")]
+        [HttpPut]
+        public async Task<int> AddUpdateUserAddressDetail(UserAddressDetail userAddressDetail)
+        {
+            if (userAddressDetail == null)
+            {
+              var data=  userAddressDetail.Id >0 ? await userAddressDetailBusinessLogic.UpdateUserAddressDetail(userAddressDetail): await userAddressDetailBusinessLogic.AddUserAddressDetail(userAddressDetail);
+            }
+            return 1;
+        }
+
+        [Route("AddOrUpdateUserAddressDetails")]
+        [HttpPut]
+        public async Task<int> AddOrUpdateUserAddressDetails(List<UserAddressDetail> userAddressDetails)
+        {
+            if (userAddressDetails == null)
+            {
+                await userAddressDetailBusinessLogic.UpdateUserAddressDetails(userAddressDetails.Where(ad => ad.Id > 0).ToList());
+                await userAddressDetailBusinessLogic.AddUserAddressDetails(userAddressDetails.Where(ad=>ad.Id<1).ToList()); 
+               
+            }
+            return 1;
         }
 
     }

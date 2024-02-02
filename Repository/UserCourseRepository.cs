@@ -1,4 +1,5 @@
-﻿using PersonsInfoV2Api.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonsInfoV2Api.Entities;
 using PersonsInfoV2Api.IRepository;
  
 using System;
@@ -10,7 +11,7 @@ namespace PersonsInfoV2Api.Repository
 {
     public class UserCourseRepository : IRepoUserCourse
     {
-        PersonsInfoV3NewContext person = new PersonsInfoV3NewContext();
+        PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
 
         public bool AddUserCoures(List<UserCourse> userCourses)
         {
@@ -18,8 +19,8 @@ namespace PersonsInfoV2Api.Repository
             {
                 if (userCourses != null)
                 {
-                    person.UserCourses.AddRange(userCourses);
-                    person.SaveChanges();
+                    context.UserCourses.AddRange(userCourses);
+                    context.SaveChanges();
                     return true;
                 }
                 else
@@ -35,28 +36,33 @@ namespace PersonsInfoV2Api.Repository
 
         public int DeleteUserCourse(int id)
         {
-            var a = person.UserCourses.Where(c => c.Id == id).FirstOrDefault();
-            person.UserCourses.Remove(a);
-            person.SaveChanges();
+            var a = context.UserCourses.Where(c => c.Id == id).FirstOrDefault();
+            context.UserCourses.Remove(a);
+            context.SaveChanges();
             return 1;
         }
 
         public UserCourse GetByUserCourseId(int id)
         {
-            return person.UserCourses.Where(c => c.Id == id).FirstOrDefault();
+            return context.UserCourses.Where(c => c.Id == id).FirstOrDefault();
         }
 
         public List<UserCourse> GetUserCourse()
         {
-            return person.UserCourses.ToList();
+            return context.UserCourses.ToList();
+        }
+
+        public async Task<List<UserCourse>> GetUserCoursesByUserId(int UserId)
+        {
+            return await context.UserCourses.Where(a => a.UserId == UserId).ToListAsync();
         }
 
         public int InsertUserCourse(UserCourse userCourse)
         {
             try
             {
-                person.UserCourses.Add(userCourse);
-                person.SaveChanges();
+                context.UserCourses.Add(userCourse);
+                context.SaveChanges();
                 return userCourse.Id;
             }catch(Exception ex)
             {
@@ -67,9 +73,16 @@ namespace PersonsInfoV2Api.Repository
 
         public int UpdateUserCourse(UserCourse userCourse)
         {
-            person.UserCourses.Update(userCourse);
-            person.SaveChanges();
+            context.UserCourses.Update(userCourse);
+            context.SaveChanges();
             return userCourse.Id;
+        }
+
+        public int UpdateUserCourses(List<UserCourse> userCourses)
+        {
+            context.UserCourses.UpdateRange(userCourses);
+            context.SaveChanges();
+            return 1;
         }
     }
 }

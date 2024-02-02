@@ -43,5 +43,11 @@ namespace PersonsInfoV2Api.Repository
             Context.SaveChanges();
             return true;
         }
+
+
+        public string GetLookUpValueNameById(int id)
+        {
+           return Context.LookUpValues.Where(a => a.Id == id).FirstOrDefault().Name;
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using PersonsInfoV2Api.BussinessLogic;
 
 namespace PersonsInfoV2Api.Controllers
 {
@@ -17,48 +18,90 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class UserEducationDetailsController : ControllerBase
     {
-        IUserEducationDetailLogics user1;
+        IUserEducationDetailsBussinessLogic userEducationDetailsBussinessLogic;
 
-        public UserEducationDetailsController(IUserEducationDetailLogics Logic)
+        public UserEducationDetailsController(IUserEducationDetailsBussinessLogic Logic)
         {
-            user1 = Logic;
+            userEducationDetailsBussinessLogic = Logic;
         }
 
-
-        [Route("DeleteUserEducationDetails/{Id}")]
-        [HttpDelete]
-        public int DeleteUser(int id)
-        {
-            return user1.DeleteUser(id);
-        }
-
-        [Route("GetUserEducationDetailsById/{Id}")]
-        [HttpGet]
-        public UserEducationDetail GetByUserId(int id)
-        {
-            return user1.GetByUserId(id);
-        }
 
         [Route("GetUserEducationDetails")]
         [HttpGet]
-        public List<UserEducationDetail> GetUsers()
+        public async Task<List<UserEducationDetail>> GetUserEducationDetails()
         {
-            return user1.GetUsers();
+            return await userEducationDetailsBussinessLogic.GetUserEducationDetails();
+        }
+
+        [Route("GetUserEducationDetailsById/{id}")]
+        [HttpGet]
+        public async Task<UserEducationDetail> GetUserEducationDetailsById(int id)
+        {
+            return await userEducationDetailsBussinessLogic.GetUserEducationDetailsById(id);
+        }
+
+
+        [Route("DeleteUserEducationDetails/{id}")]
+        [HttpDelete]
+        public async Task<int> DeleteUserEducationDetail(int id)
+        {
+            return await userEducationDetailsBussinessLogic.DeleteUserEducationDetail(id);
+        }
+
+      
+        [Route("AddUserEducationDetail")]
+        [HttpPost]
+        public async Task<int> AddUserEducationDetail(UserEducationDetail user)
+        {
+            return await userEducationDetailsBussinessLogic.InsertUserEducationDetail(user);
         }
 
         [Route("AddUserEducationDetails")]
         [HttpPost]
-        public int InsertUser(UserEducationDetail user)
+        public async Task<int> InsertUserEducationDetails(List<UserEducationDetail> userEducationDetails)
         {
-            return user1.InsertUser(user);
+            return await userEducationDetailsBussinessLogic.InsertUserEducationDetails(userEducationDetails);
+        }
+
+        [Route("UpdateUserEducationDetail")]
+        [HttpPut]
+        public async Task<int> UpdateUserEducationDetail(UserEducationDetail user)
+        {
+            return await userEducationDetailsBussinessLogic.UpdateUserEducationDetail(user);
         }
 
         [Route("UpdateUserEducationDetails")]
         [HttpPut]
-        public int UpdateUser(UserEducationDetail user)
+        public async Task<int> UpdateUserEducationDetails(List<UserEducationDetail> user)
         {
-            return user1.UpdateUser(user);
+            return await userEducationDetailsBussinessLogic.UpdateUserEducationDetails(user);
         }
+
+        [Route("AddUpdateUserEducationDetail")]
+        [HttpPut]
+        public async Task<int> AddUpdateUserEducationDetail(UserEducationDetail userEducationDetail)
+        {
+            if (userEducationDetail == null)
+            {
+                var data = userEducationDetail.Id > 0 ? await userEducationDetailsBussinessLogic.UpdateUserEducationDetail(userEducationDetail) : await userEducationDetailsBussinessLogic.InsertUserEducationDetail(userEducationDetail);
+            }
+            return 1;
+        }
+
+        [Route("AddOrUpdateUserEducationDetails")]
+        [HttpPut]
+        public async Task<int> AddOrUpdateUserAddressDetails(List<UserEducationDetail> userAddressDetails)
+        {
+            if (userAddressDetails == null)
+            {
+                await userEducationDetailsBussinessLogic.UpdateUserEducationDetails(userAddressDetails.Where(ad => ad.Id > 0).ToList());
+                await userEducationDetailsBussinessLogic.InsertUserEducationDetails(userAddressDetails.Where(ad => ad.Id < 1).ToList());
+
+            }
+            return 1;
+        }
+
+
     }
 }
 

@@ -8,13 +8,20 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
     public interface IUserContactBussinessLogic
     {
-        public List<UserContact> GetUsers();
-        public bool InsertUser(UserContact user);
+        public Task<List<UserContact>> GetUserContacts();
 
-        public bool UpdateUser(UserContact user);
+        public Task<List<UserContact>> GetUserContactsByUserId(int userId);
 
-        public int DeleteUser(int id);
+        public Task<int> AddUserContact(UserContact user);
 
-        public UserContact GetByUserId(int id);
+        public Task<int> UpdateUserContact(UserContact user);
+
+        public Task<UserContact> GetUserContactById(int id);
+
+        public Task<int> DeleteUserContactById(int id);
+
+        public Task<int> AddUserContacts(List<UserContact> userContacts);
+
+        public Task<int> UpdateUserContacts(List<UserContact> userContacts);
     }
 }

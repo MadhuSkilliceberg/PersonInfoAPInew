@@ -8,36 +8,52 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
-    public class UserEducationDetailBusinessLogics : IUserEducationDetailLogics
+    public class UserEducationDetailBusinessLogics : IUserEducationDetailsBussinessLogic
     {
-        IUserEducationDetailRepo Educaton;
+      private readonly IUserEducationDetailRepo userEducationDetailRepo;
         public UserEducationDetailBusinessLogics(IUserEducationDetailRepo Repo)
         {
-            Educaton = Repo;
-        }
-        public int DeleteUser(int id)
-        {
-            return Educaton.DeleteUser(id);
+            userEducationDetailRepo = Repo;
         }
 
-        public UserEducationDetail GetByUserId(int id)
+        public async Task<int> DeleteUserEducationDetail(int id)
         {
-            return Educaton.GetByUserId(id);
+            return await userEducationDetailRepo.DeleteUserEducationDetail(id);
         }
 
-        public List<UserEducationDetail> GetUsers()
+        public async Task<List<UserEducationDetail>> GetUserEducationDetails()
         {
-            return Educaton.GetUsers();
+           return await userEducationDetailRepo.GetUserEducationDetails();
         }
 
-        public int InsertUser(UserEducationDetail user)
+        public async Task<UserEducationDetail> GetUserEducationDetailsById(int id)
         {
-            return Educaton.InsertUser(user);
+           return await userEducationDetailRepo.GetUserEducationDetailsById(id);
         }
 
-        public int UpdateUser(UserEducationDetail user)
+        public async Task<List<UserEducationDetail>> GetUserEducationDetailsByUserId(int userId)
         {
-            return Educaton.UpdateUser(user);
+            return await userEducationDetailRepo.GetUserEducationDetailsByUserId(userId);
+        }
+
+        public async Task<int> InsertUserEducationDetail(UserEducationDetail userEducationDetail)
+        {
+           return await userEducationDetailRepo.InsertUserEducationDetail(userEducationDetail);
+        }
+
+        public async Task<int> InsertUserEducationDetails(List<UserEducationDetail> userEducationDetail)
+        {
+           return await userEducationDetailRepo.InsertUserEducationDetails(userEducationDetail);
+        }
+
+        public async Task<int> UpdateUserEducationDetail(UserEducationDetail userEducationDetail)
+        {
+           return await userEducationDetailRepo.UpdateUserEducationDetail(userEducationDetail);
+        }
+
+        public async Task<int> UpdateUserEducationDetails(List<UserEducationDetail> userEducationDetail)
+        {
+           return await userEducationDetailRepo.UpdateUserEducationDetails(userEducationDetail);
         }
     }
 }

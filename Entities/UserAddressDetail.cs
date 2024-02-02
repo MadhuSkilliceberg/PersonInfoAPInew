@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -22,16 +21,6 @@ namespace PersonsInfoV2Api.Entities
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         public int? TypeId { get; set; }
-
-        [NotMapped]
-        public string TypeValue { get; set; }
-
-        [NotMapped]
-        public string StateName { get; set; }
-
-        [NotMapped]
-        public string CountryName { get; set; }
-
 
         public virtual Country Country { get; set; }
         public virtual State State { get; set; }

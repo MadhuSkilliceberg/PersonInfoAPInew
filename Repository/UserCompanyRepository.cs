@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
@@ -11,58 +12,95 @@ namespace PersonsInfoV2Api.Repository
     {
         PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
 
-        public bool AddUserCompanies(List<UserCompany> userCompanies)
+        public async Task<int> AddUserCompanies(List<UserCompany> userCompanies)
         {
             try
             {
                 if (userCompanies != null)
                 {
                     context.UserCompanies.AddRange(userCompanies);
-                    context.SaveChanges();
-                    return true;
+                    await context.SaveChangesAsync();
+                    return 1;
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
 
-        public int DeleteUser(int id)
-        {
-            var o = context.UserCompanies.Where(a => a.Id == id).FirstOrDefault();
-            context.UserCompanies.Remove(o);
-            context.SaveChanges();
+        public async Task<int> DeleteUserCompanyById(int id)
+        {          
+            context.UserCompanies.Remove(context.UserCompanies.Where(a => a.Id == id).FirstOrDefault());
+            await context.SaveChangesAsync();
             return 1;
         }
 
-        public UserCompany GetByUserId(int id)
+        public async Task<int> DeleteUserCompaniesById(List<int> ids)
         {
-            var k = context.UserCompanies.Where(a => a.Id == id).FirstOrDefault();
-            return k;
+            try
+            {
+                context.UserCompanies.RemoveRange(context.UserCompanies.Where(a => ids.Contains(a.Id)));
+                await context.SaveChangesAsync();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
-        public List<UserCompany> GetUsers()
+        public async Task<UserCompany> GetUserCompanyById(int id)
         {
-            return context.UserCompanies.ToList();
+            return await context.UserCompanies.Where(a => a.Id == id).FirstOrDefaultAsync();
+
         }
 
-        public int InsertUser(UserCompany user)
+        public async Task<List<UserCompany>> GetUserCompanies()
         {
-            context.UserCompanies.Add(user);
-            context.SaveChanges();
-            return user.Id;
+            return await context.UserCompanies.ToListAsync();
         }
 
-        public int UpdateUser(UserCompany user)
+        public async Task<List<UserCompany>> GetUserCompaniesByUserId(int UserId)
         {
-            context.UserCompanies.Update(user);
-            context.SaveChanges();
-            return user.Id;
+            return await context.UserCompanies.Where(a => a.UserId == UserId).ToListAsync();
         }
+
+
+        public async Task<int> AddUserCompany(UserCompany userCompany)
+        {
+            await context.UserCompanies.AddAsync(userCompany);
+            await context.SaveChangesAsync();
+            return userCompany.Id;
+        }
+
+   
+
+        public async Task<int> UpdateUserCompany(UserCompany userCompany)
+        {
+            context.UserCompanies.Update(userCompany);
+            await context.SaveChangesAsync();
+            return userCompany.Id;
+        }
+
+        public async Task<int> UpdateUserCompanies(List<UserCompany> userCompanies)
+        {
+            try
+            {
+                context.UserCompanies.UpdateRange(userCompanies);
+                await context.SaveChangesAsync();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        
     }
 }

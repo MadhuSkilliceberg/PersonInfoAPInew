@@ -4,65 +4,91 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
     public class UserEducationDetailRepo: IUserEducationDetailRepo
     {
-        PersonsInfoV3NewContext persons = new PersonsInfoV3NewContext();
+        PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
 
-        public bool AddUserEducationDetails(List<UserEducationDetail> userEducationDetails)
+        public async Task<int> DeleteUserEducationDetail(int id)
         {
-            try
-            {
-                if (userEducationDetails != null)
-                {
-                    persons.UserEducationDetails.AddRange(userEducationDetails);
-                    persons.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        public int DeleteUser(int id)
-        {
-            var k = persons.UserEducationDetails.Where(a => a.Id == id).FirstOrDefault();
-            persons.UserEducationDetails.Remove(k);
-            persons.SaveChanges();
+            context.UserEducationDetails.Remove(context.UserEducationDetails.Where(a => a.Id == id).FirstOrDefault());
+            await context.SaveChangesAsync();
             return 1;
         }
 
-        public UserEducationDetail GetByUserId(int id)
-        {
-            var l = persons.UserEducationDetails.Where(a => a.Id == id).FirstOrDefault();
-            return l;
+        public async Task<int> DeleteRangeUserEducationDetail(List<int> ids)
+        {         
+            context.UserEducationDetails.RemoveRange(await context.UserEducationDetails.Where(a => ids.Contains(a.Id)).ToListAsync());
+            await context.SaveChangesAsync();
+            return 1;
         }
 
-        public List<UserEducationDetail> GetUsers()
+        public async Task<UserEducationDetail> GetUserEducationDetailsById(int id)
         {
-            return persons.UserEducationDetails.ToList(); ;
+           return context.UserEducationDetails.Where(a => a.Id == id).FirstOrDefault();
+           
         }
 
-        public int InsertUser(UserEducationDetail user)
+        public async Task<List<UserEducationDetail>> GetUserEducationDetailsByUserId(int userId)
         {
-            persons.UserEducationDetails.Add(user);
-            persons.SaveChanges();
-            return user.Id;
+            return await context.UserEducationDetails.Where(a => a.Id == userId).ToListAsync();
         }
 
-        public int UpdateUser(UserEducationDetail user)
+        
+
+        public async Task<List<UserEducationDetail>> GetUserEducationDetails()
         {
-            persons.UserEducationDetails.Update(user);
-            persons.SaveChanges();
-            return user.Id;
+            return await context.UserEducationDetails.ToListAsync(); 
         }
+
+        public async Task<int> InsertUserEducationDetail(UserEducationDetail userEducationDetail)
+        {
+            await context.UserEducationDetails.AddAsync(userEducationDetail);
+            await context.SaveChangesAsync();
+            return userEducationDetail.Id;
+        }
+
+
+        public async  Task<int> InsertUserEducationDetails(List<UserEducationDetail> userEducationDetail)
+        {
+           
+            try
+            {
+                await context.UserEducationDetails.AddRangeAsync(userEducationDetail);
+                await context.SaveChangesAsync();
+                return 1;
+            }
+            catch
+            {
+
+            }
+            return 0;
+        }
+
+        public async Task<int> UpdateUserEducationDetail(UserEducationDetail userEducationDetail)
+        {
+            context.UserEducationDetails.Update(userEducationDetail);
+            await context.SaveChangesAsync();
+            return userEducationDetail.Id;
+        }
+
+        public async Task<int> UpdateUserEducationDetails(List<UserEducationDetail> userEducationDetails)
+        {
+            try
+            {
+                context.UserEducationDetails.UpdateRange(userEducationDetails);
+                await context.SaveChangesAsync();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+       
     }
 }

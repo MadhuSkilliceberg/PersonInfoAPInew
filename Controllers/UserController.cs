@@ -16,6 +16,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Net.Http.Json;
 using System.Xml;
+using PersonsInfoV2Api.Models;
 
 namespace PersonsInfoV2Api.Controllers
 {
@@ -200,7 +201,7 @@ namespace PersonsInfoV2Api.Controllers
                  {
                      Id = e.Id,
                      Email = e.Email,
-                     ContactType=e.Type.Name
+                     ContactType = e.Type.Name
                  }
              }),
          Courses = u.UserCourses
@@ -225,8 +226,8 @@ namespace PersonsInfoV2Api.Controllers
                      QulificationtypeId = ed.QulificationtypeId,
                      QulificationtypeName = ed.Qulificationtype.Name,
                      YearOFPassout = ed.YearOfpassout,
-                     StartYear = ed.StartYear,
-                     EndYear = ed.EndYear,
+                     StartYear = ed.StartDate,
+                     EndYear = ed.EndDate,
                      InstitutionId = ed.InstitutionId,
                      Institution = ed.InstitutionId,
                      Percentage = ed.Percentage
@@ -281,7 +282,7 @@ namespace PersonsInfoV2Api.Controllers
             {
                 UsersData = usersData
             };
-           // var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+            // var json = JsonConvert.SerializeObject(result, Formatting.Indented);
 
             // var json = JsonConvert.SerializeObject(result, Formatting.Indented);
             return result;
@@ -298,8 +299,8 @@ namespace PersonsInfoV2Api.Controllers
                 string connectionString = @"data source=LAPTOP-CS8AKO34\\SQLEXPRESS; database=PersonsInfoV3New; integrated security=SSPI";
                 connectionString = @"Data Source=LAPTOP-CS8AKO34\\SQLEXPRESS;Integrated Security=true;Initial Catalog=PersonsInfoV3New";
                 // Creating Connection  
-                   con = new SqlConnection(connectionString); 
-                
+                con = new SqlConnection(connectionString);
+
                 // writing sql query  
                 SqlCommand cm = new SqlCommand("[dbo].[get_user_data_json]", con);
                 cm.CommandType = CommandType.StoredProcedure;
@@ -326,7 +327,83 @@ namespace PersonsInfoV2Api.Controllers
         }
 
 
-        
+        //     [Route("GetUserAllData/{id}")]
+        //     [HttpGet]
+        //     public User GetUserAllData(int id)
+        //     {
+        //         User user = new User();
+
+        //         user=Context.Users
+
+
+        ////         user = Context.Users
+        ////.Include(u => u.UserAddressDetails)
+        ////.Include(u => u.UserCompanies)
+        ////.Include(u => u.UserContacts)
+        ////.Include(u => u.UserCourses)
+        ////.Include(u => u.UserEducationDetails)
+        ////.Include(u => u.UserEmails)
+        ////.Include(u => u.UserSkills)
+        ////.SingleOrDefault(u => u.Id == id);
+
+
+        //         // Access the related data
+        //         //  var allUserDataFromDb = userWithRelatedData?.UserSkills;
+
+        //         return user;
+        //     }
+
+        //   [Route("GetUserAllData/{id}")]
+        //   [HttpGet]
+        //   public object GetUserAllData(int id)
+
+        //   {
+        //       var usersData = Context.Users
+        //.Select(u => new
+        //{
+
+        //    Skills = u.UserSkills.ToList(),
+
+        //    Contacts = u.UserContacts.ToList(),
+
+        //    Emails = u.UserEmails.ToList(),
+
+        //    Courses = u.UserCourses.ToList(),
+
+        //    EducationDetails = u.UserEducationDetails.ToList(),
+        //    Companies = u.UserCompanies.ToList(),
+
+        //    AddressDetails = u.UserAddressDetails.ToList(),
+
+        //})
+        //.FirstOrDefault();
+
+
+
+        //       var result = new
+        //       {
+        //           UsersData = usersData
+        //       };
+        //       // var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+
+        //       // var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+        //       return usersData;
+        //   }
+
+        [Route("GetUserAllData/{id}")]
+        [HttpGet]
+        public async Task<UserModel> GetUserAllData(int id)
+        {
+            //UserModel user = new UserModel();
+            //user.User = Context.Users.FirstOrDefault(u => u.Id == id);
+            //user.UserEmails = Context.UserEmails.Where(u => u.UserId == id).ToList();
+            //user.UserContacts = Context.UserContacts.Where(u => u.UserId == id).ToList();
+            //user.UserAddressDetails = Context.UserAddressDetails.Where(u => u.UserId == id).ToList();
+            //user.UserEducationDetails = Context.UserEducationDetails.Where(u => u.UserId == id).ToList();
+
+            return await Logic.GetUserById(id);
+            
+        }
 
     }
 }

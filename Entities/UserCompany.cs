@@ -10,14 +10,14 @@ namespace PersonsInfoV2Api.Entities
         public int Id { get; set; }
         public int? UserId { get; set; }
         public int? CompanyId { get; set; }
-        public int? YearOfPassout { get; set; }
-        public int? StartYear { get; set; }
-        public int? EndYear { get; set; }
+        public DateTime? OfferDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int? Salary { get; set; }
-        public int? Percentage { get; set; }
         public int? DesignationId { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDelete { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Session;
+using Microsoft.Extensions.Options;
 
 namespace PersonsInfoV2Api
 {
@@ -81,7 +82,10 @@ namespace PersonsInfoV2Api
             services.AddDbContext<PersonsInfoV3NewContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("PersonsInfo1Connection")));
 
-            services.AddControllers().AddJsonOptions(o => { o.JsonSerializerOptions.PropertyNamingPolicy = null; });
+            services.AddControllers().AddJsonOptions(o => {
+                o.JsonSerializerOptions.PropertyNamingPolicy = null;
+             //   o.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            });
             services.AddCors(options => options.AddDefaultPolicy(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 
@@ -191,7 +195,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IRelationTypeRepo, RelationTypeRepository>();
             services.AddScoped<IRelationTypeBusinessLogic, RelationTypeBusinessLogic>();
 
-            services.AddScoped<IUserAddressDetailRepo, UserAddressDetailRepository>();
+            services.AddScoped<IUserAddressDetailRepository, UserAddressDetailRepository>();
             services.AddScoped<IUserAddressDetailBusinessLogic, UserAddressDetailBusinessLogic>();
 
             services.AddScoped<IUserSkillRepo, UserSkillRepository>();
@@ -201,7 +205,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IUserCompanyBusinessLogic, UserCompanyBusinessLogic>();
 
             services.AddScoped<IUserEducationDetailRepo, UserEducationDetailRepo>();
-            services.AddScoped<IUserEducationDetailLogics, UserEducationDetailBusinessLogics>();
+            services.AddScoped<IUserEducationDetailsBussinessLogic, UserEducationDetailBusinessLogics>();
 
             services.AddTransient<ICourseRepo, CourseRepoRepository>();
             services.AddTransient<ICourseBusinessLogic, CourseBusinessLogic>();

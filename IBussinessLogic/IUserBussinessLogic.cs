@@ -1,5 +1,6 @@
 ﻿using PersonsInfoV2Api.CoustumModels;
 using PersonsInfoV2Api.Entities;
+using PersonsInfoV2Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace PersonsInfoV2Api.IBussinessLogic
 
 
         //  public List<string> GetUserByPutState(string statename);
+
+        public Task<UserModel> GetUserById(int id);
+
 
 
 

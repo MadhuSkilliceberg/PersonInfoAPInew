@@ -8,14 +8,22 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
   public  interface IUserSkillBusinessLogic
     {
-        public List<UserSkill> GetUsers();
-        public int InsertUser(UserSkill user);
 
-        public int UpdateUser(UserSkill user);
+        public Task<List<UserSkill>> GetUserSkills();
 
-        public int DeleteUser(int id);
+        public Task<List<UserSkill>> GetUserSkillsByUserId(int userId);
 
-        public UserSkill GetByUserId(int id);
+        public Task<int> AddUserSkill(UserSkill user);
+
+        public Task<int> UpdateUserSkill(UserSkill user);
+
+        public Task<UserSkill> GetUserSkillById(int id);
+
+        public Task<int> DeleteUserSkillById(int id);
+
+        public Task<int> AddUserSkills(List<UserSkill> userSkills);
+
+        public Task<int> UpdateUserSkills(List<UserSkill> userSkills);
 
     }
 }

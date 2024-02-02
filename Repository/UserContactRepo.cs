@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
@@ -11,60 +12,94 @@ namespace PersonsInfoV2Api.Repository
     {
 
         PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
-
-        public bool AddUserContacts(List<UserContact> userContacts)
+        public async Task<int> AddUserContacts(List<UserContact> userContacts)
         {
             try
             {
                 if (userContacts != null)
                 {
                     context.UserContacts.AddRange(userContacts);
-                    context.SaveChanges();
-                    return true;
+                    await context.SaveChangesAsync();
+                    return 1;
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
 
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserContactById(int id)
         {
-            var k = context.UserContacts.Where(a => a.Id == id).FirstOrDefault();
-            context.UserContacts.Remove(k);
-            context.SaveChanges();
+            context.UserContacts.Remove(context.UserContacts.Where(a => a.Id == id).FirstOrDefault());
+            await context.SaveChangesAsync();
             return 1;
         }
 
-        public UserContact GetByUserId(int id)
+        public async Task<int> DeleteUserContact(List<int> ids)
         {
-            var k = context.UserContacts.Where(a => a.Id == id).FirstOrDefault();
-            return k;
+            try
+            {
+                context.UserContacts.RemoveRange(context.UserContacts.Where(a => ids.Contains(a.Id)));
+                await context.SaveChangesAsync();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
-        public List<UserContact> GetUsers()
+        public async Task<UserContact> GetUserContactById(int id)
         {
+            return await context.UserContacts.Where(a => a.Id == id).FirstOrDefaultAsync();
 
-            return context.UserContacts.ToList();
         }
 
-        public bool InsertUser(UserContact user)
+        public async Task<List<UserContact>> GetUserContacts()
         {
-            context.UserContacts.Add(user);
-            context.SaveChanges();
-            return true;
+            return await context.UserContacts.ToListAsync();
         }
 
-        public bool UpdateUser(UserContact user)
+        public async Task<List<UserContact>> GetUserContactsByUserId(int UserId)
         {
-            context.UserContacts.Update(user);
-            context.SaveChanges();
-            return true;
+            return await context.UserContacts.Where(a => a.UserId == UserId).ToListAsync();
         }
+
+        public async Task<int> AddUserContact(UserContact userContact)
+        {
+            await context.UserContacts.AddAsync(userContact);
+            await context.SaveChangesAsync();
+            return userContact.Id;
+        }
+
+
+
+        public async Task<int> UpdateUserContact(UserContact userContact)
+        {
+            context.UserContacts.Update(userContact);
+            await context.SaveChangesAsync();
+            return userContact.Id;
+        }
+
+        public async Task<int> UpdateUserContacts(List<UserContact> userContacts)
+        {
+            try
+            {
+                context.UserContacts.UpdateRange(userContacts);
+                await context.SaveChangesAsync();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+
     }
 }

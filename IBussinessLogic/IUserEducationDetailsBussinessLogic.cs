@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonsInfoV2Api.IRepository
+namespace PersonsInfoV2Api.IBussinessLogic
 {
-   public interface IUserEducationDetailRepo
+  public  interface IUserEducationDetailsBussinessLogic
     {
         //This method used to get user education details 
         public Task<List<UserEducationDetail>> GetUserEducationDetails();
@@ -30,6 +30,5 @@ namespace PersonsInfoV2Api.IRepository
 
         //This method used to get one user education details by Id
         public Task<UserEducationDetail> GetUserEducationDetailsById(int id);
-
     }
 }

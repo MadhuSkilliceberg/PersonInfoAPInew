@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using PersonsInfoV2Api.BussinessLogic;
 
 namespace PersonsInfoV2Api.Controllers
 {
@@ -25,42 +26,101 @@ namespace PersonsInfoV2Api.Controllers
         }
         [Route("DeleteUserSkills/{Id}")]
         [HttpDelete]
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserSkills(int id)
         {
-            return skillBusinessLogic.DeleteUser(id);
+            return await skillBusinessLogic.DeleteUserSkillById(id);
+        }
+
+
+        [Route("GetUserSkillById/{Id}")]
+        [HttpGet]
+        public async Task<UserSkill> GetUserSkillById(int id)
+        {
+            return await skillBusinessLogic.GetUserSkillById(id);
         }
 
 
         [Route("GetUserSkillsById/{Id}")]
         [HttpGet]
-        public UserSkill GetByUserId(int id)
+        public async Task<UserSkill> GetUserSkillsById(int id)
         {
-            return skillBusinessLogic.GetByUserId(id);
+            return await skillBusinessLogic.GetUserSkillById(id);
+        }
+
+        [Route("GetUserSkillsByUserId/{Id}")]
+        [HttpGet]
+        public async Task<List<UserSkill>> GetUserSkillsByUserId(int id)
+        {
+            return await skillBusinessLogic.GetUserSkillsByUserId(id);
         }
 
 
         [Route("GetUserSkills")]
         [HttpGet]
-        public List<UserSkill> GetUsers()
+        public async Task<List<UserSkill>> GetUserSkills()
         {
-            return skillBusinessLogic.GetUsers();
+            return await skillBusinessLogic.GetUserSkills();
         }
 
+        [Route("AddUserSkill")]
+        [HttpPost]
+        public async Task<int> AddUserSkill(UserSkill userSkill)
+        {
+            return await skillBusinessLogic.AddUserSkill(userSkill);
+        }
 
         [Route("AddUserSkills")]
         [HttpPost]
-        public int InsertUser(UserSkill user)
+        public async Task<int> AddUserSkills(List<UserSkill> userSkills)
         {
-            return skillBusinessLogic.InsertUser(user);
+            return await skillBusinessLogic.AddUserSkills(userSkills);
+        }
+
+
+        [Route("UpdateUserSkill")]
+        [HttpPut]
+        public async Task<int> UpdateUserSkill(UserSkill userSkill)
+        {
+           
+                return await skillBusinessLogic.UpdateUserSkill(userSkill);
+           
         }
 
 
         [Route("UpdateUserSkills")]
         [HttpPut]
-        public int UpdateUser(UserSkill user)
+        public async Task<int> UpdateUserSkills(List<UserSkill> userSkills)
         {
-           
-                return skillBusinessLogic.UpdateUser(user);
-           
+
+            return await skillBusinessLogic.UpdateUserSkills(userSkills);
+
         }
-}}
+
+
+        [Route("AddUpdateUserSkill")]
+        [HttpPut]
+        public async Task<int> AddUpdateUserSkill(UserSkill UserSkill)
+        {
+            if (UserSkill == null)
+            {
+                var data = UserSkill.Id > 0 ? await skillBusinessLogic.UpdateUserSkill(UserSkill) : await skillBusinessLogic.AddUserSkill(UserSkill);
+            }
+            return  1;
+        }
+
+        [Route("AddOrUpdateUserSkills")]
+        [HttpPut]
+        public async Task<int> AddOrUpdateUserSkills(List<UserSkill> UserSkills)
+        {
+            if (UserSkills == null)
+            {
+                await skillBusinessLogic.UpdateUserSkills(UserSkills.Where(ad => ad.Id > 0).ToList());
+                await skillBusinessLogic.AddUserSkills(UserSkills.Where(ad => ad.Id < 1).ToList());
+
+            }
+            return  1;
+        }
+
+
+    }
+}

@@ -10,35 +10,50 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class UserEmailBussinessLogic: IUserEmailBussinessLogic
     {
-       public IUserEmailRepo userRepository;
-        public UserEmailBussinessLogic(IUserEmailRepo Repo)
+       public IUserEmailRepo  userRepository;
+        public  UserEmailBussinessLogic(IUserEmailRepo Repo)
         {
-            userRepository = Repo;
+             userRepository = Repo;
         }
 
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserEmails(int id)
         {
-            return userRepository.DeleteUser(id);
+            return await userRepository.DeleteUserEmails(id);
         }
 
-        public UserEmail GetByUserId(int id)
+        public async Task<UserEmail> GetUserEmailById(int id)
         {
-            return userRepository.GetByUserId(id);
+            return await  userRepository.GetUserEmailById(id);
         }
 
-        public List<UserEmail> GetUsers()
+        public async Task<List<UserEmail>> GetUserEmails()
         {
-            return userRepository.GetUsers();
+            return await userRepository.GetUserEmails();
         }
 
-        public bool InsertUser(UserEmail user)
+        public async Task<int> AddUserEmail(UserEmail  userEmail)
         {
-            return userRepository.InsertUser(user);
+            return await userRepository.AddUserEmail(userEmail);
         }
 
-        public bool UpdateUser(UserEmail user)
+        public async Task<int> UpdateUserEmail(UserEmail userEmail)
         {
-            return userRepository.UpdateUser(user);
+            return await userRepository.UpdateUserEmail(userEmail);
+        }
+
+        public async Task<int> AddUserEmails(List<UserEmail> userEmails)
+        {
+            return await userRepository.AddUserEmails(userEmails);
+        }
+
+        public async Task<int> UpdateUserEmails(List<UserEmail> userEmails)
+        {
+            return await userRepository.UpdateUserEmails(userEmails);
+        }
+
+        public async Task<List<UserEmail>> GetUserEmailsByUserId(int userId)
+        {
+            return await userRepository.GetUserEmailsByUserId(userId);
         }
     }
 }
