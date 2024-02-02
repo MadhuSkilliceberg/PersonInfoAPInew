@@ -8,15 +8,15 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
  public   interface ICompanyContactBussinessLogic
     {
-        public List<CompanyContact> GetCompanyContacts();
-        public int InsertCompanyContact(CompanyContact companyContact);
-
-        public bool UpdateCompanyContact(CompanyContact companyContact);
-
-        public int DeleteCompanyContact(int id);
-
-        public List<CompanyContact> GetCompanyContactsByCompanyAddressId(int companyaddressId);
-        public CompanyContact GetCompanyContactsById(int id);
+        public Task<List<CompanyContact>> GetCompanyContacts();
+        public Task<CompanyContact> GetCompanyContactById(int id);
+        public Task<int> AddCompanyContact(CompanyContact companyContact);
+        public Task<int> AddRangeCompanyContact(List<CompanyContact> companyContacts);
+        public Task<int> UpdateCompanyContact(CompanyContact companyContact);
+        public Task<int> UpdateRangeCompanyContact(List<CompanyContact> companyContacts);
+        public Task<bool> DeleteCompanyContact(int id);
+        public Task<bool> DeleteRangeCompanyContact(List<int> ids);
+        public Task<List<CompanyContact>> GetCompanyContactByCompanyAddressId(int companyaddressId);
 
     }
 }

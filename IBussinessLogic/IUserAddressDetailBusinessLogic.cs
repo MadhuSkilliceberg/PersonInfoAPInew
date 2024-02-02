@@ -8,14 +8,21 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
     public interface IUserAddressDetailBusinessLogic
     {
-        public List<UserAddressDetail> GetUsers();
-        public bool InsertUser(UserAddressDetail user);
+        public Task<List<UserAddressDetail>> GetUserAddressDetails();
 
-        public bool UpdateUser(UserAddressDetail user);
+        public Task<List<UserAddressDetail>> GetUserAddressDetailsByUserId(int userId);
 
-        public int DeleteUser(int id);
+        public Task<int> AddUserAddressDetail(UserAddressDetail userAddressDetail);
 
-        public UserAddressDetail GetByUserId(int id);
+        public Task<int> AddUserAddressDetails(List<UserAddressDetail> userAddressDetails);
+
+        public Task<int> UpdateUserAddressDetail(UserAddressDetail userAddressDetail);
+
+        public Task<int> UpdateUserAddressDetails(List<UserAddressDetail> userAddressDetails);
+
+        public Task<int> DeleteUserAddressDetailById(int id);
+
+        public Task<UserAddressDetail> GetUserAddressDetailById(int id);
 
     }
 }

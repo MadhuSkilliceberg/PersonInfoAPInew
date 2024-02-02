@@ -8,43 +8,57 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
-    public class CompanyContactBussinessLogic: ICompanyContactBussinessLogic
+    public class CompanyContactBussinessLogic : ICompanyContactBussinessLogic
     {
-        ICompanyContactRepo userRepository;
-        public CompanyContactBussinessLogic(ICompanyContactRepo Repo)
+        private readonly ICompanyContactRepository companyContactRepository;
+
+        public CompanyContactBussinessLogic(ICompanyContactRepository companyContactRepository)
         {
-            userRepository = Repo;
+            this.companyContactRepository = companyContactRepository;
+        }
+        public async Task<List<CompanyContact>> GetCompanyContacts()
+        {
+            return await companyContactRepository.GetCompanyContacts();
         }
 
-        public int DeleteCompanyContact(int id)
+        public async Task<CompanyContact> GetCompanyContactById(int id)
         {
-            return userRepository.DeleteCompanyContact(id);
+            return await companyContactRepository.GetCompanyContactById(id);
         }
 
-       
-        public List<CompanyContact> GetCompanyContacts()
+        public async Task<int> AddCompanyContact(CompanyContact companyContact)
         {
-            return userRepository.GetCompanyContacts();
+            return await companyContactRepository.AddCompanyContact(companyContact);
         }
 
-        public int InsertCompanyContact(CompanyContact companyContact)
+        public async Task<int> AddRangeCompanyContact(List<CompanyContact> companyContacts)
         {
-            return userRepository.InsertCompanyContact(companyContact);
+            return await companyContactRepository.AddRangeCompanyContact(companyContacts);
         }
 
-        public bool UpdateCompanyContact(CompanyContact companyContact)
+        async Task<int> ICompanyContactBussinessLogic.UpdateCompanyContact(CompanyContact companyContact)
         {
-            return userRepository.UpdateCompanyContact(companyContact);
+            return await companyContactRepository.UpdateCompanyContact(companyContact);
         }
 
-        public List<CompanyContact> GetCompanyContactsByCompanyAddressId(int companyaddressId)
+        public async Task<int> UpdateRangeCompanyContact(List<CompanyContact> companyContacts)
         {
-            return userRepository.GetCompanyContactsByCompanyAddressId(companyaddressId);
+            return await companyContactRepository.UpdateRangeCompanyContact(companyContacts);
         }
 
-        public CompanyContact GetCompanyContactsById(int id)
+        async Task<bool> ICompanyContactBussinessLogic.DeleteCompanyContact(int id)
         {
-            return userRepository.GetCompanyContactsById(id);
+            return await companyContactRepository.DeleteCompanyContact(id);
+        }
+
+        public async Task<bool> DeleteRangeCompanyContact(List<int> ids)
+        {
+            return await companyContactRepository.DeleteRangeCompanyContact(ids);
+        }
+
+        async Task<List<CompanyContact>> ICompanyContactBussinessLogic.GetCompanyContactByCompanyAddressId(int companyaddressId)
+        {
+            return await companyContactRepository.GetCompanyContactByCompanyAddressId(companyaddressId);
         }
     }
 }

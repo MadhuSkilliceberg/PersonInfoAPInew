@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using PersonsInfoV2Api.BussinessLogic;
 
 namespace PersonsInfoV2Api.Controllers
 {
@@ -17,49 +18,89 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class UserContactController : ControllerBase
     {
-         IUserContactBussinessLogic Logic;
+         IUserContactBussinessLogic userContactBussinessLogic;
         public UserContactController(IUserContactBussinessLogic use)
         {
-            Logic = use;
+            userContactBussinessLogic = use;
         }
 
-        [Route("DeleteUserContacts/{Id}")]
+        [Route("DeleteUserContactById/{id}")]
         [HttpDelete]
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserContactById(int id)
         {
-            return Logic.DeleteUser(id);
+            return await userContactBussinessLogic.DeleteUserContactById(id);
         }
 
 
-        [Route("GetUserContactsById/{id}")]
+        [Route("GetUserContactById/{id}")]
         [HttpGet]
-        public UserContact GetByUserId(int id)
+        public async Task<UserContact> GetUserContactById(int id)
         {
-            return Logic.GetByUserId(id);
+            return await userContactBussinessLogic.GetUserContactById(id);
         }
 
 
         [Route("GetUserContacts")]
         [HttpGet]
-        public List<UserContact> GetUsers()
+        public async Task<List<UserContact>> GetUserContacts()
         {
-            return Logic.GetUsers();
+            return await userContactBussinessLogic.GetUserContacts();
         }
 
 
+        [Route("AddUserContact")]
+        [HttpPost]
+        public async Task<int> AddUserContact(UserContact user)
+        {
+            return await userContactBussinessLogic.AddUserContact(user);
+        }
+
+
+        [Route("UpdateUserContact")]
+        [HttpPut]
+        public async Task<int> UpdateUserContact(UserContact userContact)
+        {
+            return await userContactBussinessLogic.UpdateUserContact(userContact);
+        }
+
         [Route("AddUserContacts")]
         [HttpPost]
-        public bool InsertUser(UserContact user)
+        public async Task<int> AddUserContacts(List<UserContact> userContacts)
         {
-            return Logic.InsertUser(user);
+            return await userContactBussinessLogic.AddUserContacts(userContacts);
         }
 
 
         [Route("UpdateUserContacts")]
         [HttpPut]
-        public bool UpdateUser(UserContact user)
+        public async Task<int> UpdateUserContacts(List<UserContact> userContacts)
         {
-            return Logic.UpdateUser(user);
+            return await userContactBussinessLogic.UpdateUserContacts(userContacts);
         }
+
+        [Route("AddUpdateUserContact")]
+        [HttpPut]
+        public async Task<int> AddUpdateUserContact(UserContact userContact)
+        {
+            if (userContact == null)
+            {
+                var data = userContact.Id > 0 ? await userContactBussinessLogic.UpdateUserContact(userContact) : await userContactBussinessLogic.AddUserContact(userContact);
+            }
+            return 1;
+        }
+
+        [Route("AddOrUpdateUserContacts")]
+        [HttpPut]
+        public async Task<int> AddOrUpdateUserContacts(List<UserContact> userContacts)
+        {
+            if (userContacts == null)
+            {
+                await userContactBussinessLogic.UpdateUserContacts(userContacts.Where(ad => ad.Id > 0).ToList());
+                await userContactBussinessLogic.AddUserContacts(userContacts.Where(ad => ad.Id < 1).ToList());
+
+            }
+            return 1;
+        }
+
     }
 }

@@ -18,86 +18,101 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class CompanyReviewController : ControllerBase
     {
-        ICompanyReviewBusinessLogic CompanyReviewBusinessLogic;
+        private readonly ICompanyReviewBusinessLogic companyReviewBusinessLogic;
 
-        public CompanyReviewController(ICompanyReviewBusinessLogic Repo)
+        public CompanyReviewController(ICompanyReviewBusinessLogic  companyReviewBusinessLogic)
         {
-            CompanyReviewBusinessLogic = Repo;
+            this.companyReviewBusinessLogic = companyReviewBusinessLogic;
         }
-        [Route("DeleteCompanyReviews/{id}")]
+
+        [Route("DeleteCompanyReview/{id}")]
         [HttpDelete]
-        public int DeleteCompanyReview(int id)
+        public async Task<int> DeleteCompanyReview(int id)
         {
-            return CompanyReviewBusinessLogic.DeleteCompanyReview(id);
+            return await companyReviewBusinessLogic.DeleteCompanyReview(id);
+        }
+
+        [Route("DeleteRangeCompanyReview")]
+        [HttpDelete]
+        public async Task<int> DeleteRangeCompanyReview(List<int> ids)
+        {
+            return await companyReviewBusinessLogic.DeleteRangeCompanyReview(ids);
         }
 
 
-        [Route("GetCompanyReviewsById/{id}")]
+        [Route("GetCompanyReviewById/{id}")]
         [HttpGet]
-        public CompanyReview GetByCompanyReviewId(int id)
+        public async Task<CompanyReview> GetCompanyReviewById(int id)
         {
-            return CompanyReviewBusinessLogic.GetByCompanyReviewId(id);
+            return await companyReviewBusinessLogic.GetCompanyReviewById(id);
         }
 
         [Route("GetByCompanyReviewComapanyId1/{id}")]
         [HttpGet]
-        public List<CompanyReview> GetByCompanyReviewComapanyId1(int id)
+        public async Task<List<CompanyReview>> GetByCompanyReviewComapanyId1(int id)
         {
-            return CompanyReviewBusinessLogic.GetByCompanyReviewComapanyId1(id);
+            return await companyReviewBusinessLogic.GetByCompanyReviewComapanyId1(id);
         }
 
         [Route("GetByCompanyReviewComapanyId/{id}")]
         [HttpGet]
-        public List<CompanyReviewModel> GetByCompanyReviewComapanyId(int id)
+        public async Task<List<CompanyReviewModel>> GetByCompanyReviewComapanyId(int id)
         {
-            return CompanyReviewBusinessLogic.GetByCompanyReviewComapanyId(id);
+            return await companyReviewBusinessLogic.GetByCompanyReviewComapanyId(id);
         }
-
-
-
 
         [Route("GetCompanyReviews")]
         [HttpGet]
-        public List<CompanyReview> GetcompanyReviews()
+        public async Task<List<CompanyReview>> GetcompanyReviews()
         {
-            return CompanyReviewBusinessLogic.GetcompanyReviews();
+            return await companyReviewBusinessLogic.GetcompanyReviews();
         }
 
 
-        [Route("AddCompanyReviews")]
+        [Route("AddCompanyReview")]
         [HttpPost]
-        public int InsertCompanyReview(CompanyReview CompanyReview)
+        public async Task<int> AddCompanyReview(CompanyReview CompanyReview)
         {
-            return CompanyReviewBusinessLogic.InsertCompanyReview(CompanyReview);
+            return await companyReviewBusinessLogic.AddCompanyReview(CompanyReview);
+        }
+
+        [Route("AddRangeCompanyReview")]
+        [HttpPost]
+        public async Task<int> AddRangeCompanyReview(List<CompanyReview> CompanyReviews)
+        {
+            return await companyReviewBusinessLogic.AddRangeCompanyReview(CompanyReviews);
         }
 
 
-        [Route("UpdateCompanyReviews")]
+        [Route("UpdateCompanyReview")]
         [HttpPut]
-        public int UpdateCompanyReview(CompanyReview CompanyReview)
+        public async Task<int> UpdateCompanyReview(CompanyReview CompanyReview)
         {
+            return await companyReviewBusinessLogic.UpdateCompanyReview(CompanyReview);
+        }
 
-            return CompanyReviewBusinessLogic.UpdateCompanyReview(CompanyReview);
-
+        [Route("UpdateRangeCompanyReview")]
+        [HttpPut]
+        public async Task<int> UpdateRangeCompanyReview(List<CompanyReview> CompanyReviews)
+        {
+            return await companyReviewBusinessLogic.UpdateRangeCompanyReview(CompanyReviews);
         }
 
         [Route("GetByCompanyReviewComments")]
         [HttpPut]
-        public List<CompanyReviewsCommentModel> GetByCompanyReviewComments(int reviewId)
+        public async Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId)
         {
-
-            return CompanyReviewBusinessLogic.GetByCompanyReviewComments(reviewId);
-
+            return await companyReviewBusinessLogic.GetByCompanyReviewComments(reviewId);
         }
+
         [Route("GetCompanyReviewTreeHierarchical/{id}")]
         [HttpGet]
-        public List<object> GetCompanyReviewTreeHierarchical(int id)
+        public async Task<List<object>> GetCompanyReviewTreeHierarchical(int id)
         {
-
-            return CompanyReviewBusinessLogic.GetCompanyReviewTreeHierarchical(id);
+            return await companyReviewBusinessLogic.GetCompanyReviewTreeHierarchical(id);
 
         }
 
-       
+
     }
 }

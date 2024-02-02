@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PersonsInfoV2Api.CoustumModels;
+using PersonsInfoV2Api.Models;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
     public class UserBussinessLogic : IUserBussinessLogic
     {
         private IUserRepository userRepository;
-        IUserAddressDetailRepo userAddressDetailRepo;
+        IUserAddressDetailRepository userAddressDetailRepo;
         IUserCompanyRepo userCompanyRepo;
         IUserContactRepo userContactRepo;
         IRepoUserCourse repoUserCourse;
@@ -23,7 +24,7 @@ namespace PersonsInfoV2Api.BussinessLogic
 
         public UserBussinessLogic(
             IUserRepository Repo,
-            IUserAddressDetailRepo userAddressDetailRepo,
+            IUserAddressDetailRepository userAddressDetailRepo,
             IUserCompanyRepo userCompanyRepo,
             IUserContactRepo userContactRepo,
             IRepoUserCourse repoUserCourse,
@@ -51,7 +52,13 @@ namespace PersonsInfoV2Api.BussinessLogic
 
         public User GetByUserId(int id)
         {
-            return userRepository.GetByUserId(id);
+            User user = new User();
+            user= userRepository.GetByUserId(id);
+            if (user == null)
+            {
+                return new User();
+            }
+            return user;
         }
 
         public List<User> GetUsers()
@@ -147,19 +154,19 @@ namespace PersonsInfoV2Api.BussinessLogic
                 if (userModels.userAddressDetails != null)
                 {
                     userModels.userAddressDetails.UserId = userId;
-                    userAddressDetailRepo.InsertUser(userModels.userAddressDetails);
+                    userAddressDetailRepo.AddUserAddressDetail(userModels.userAddressDetails);
                 }
 
                 if (userModels.userCompany != null)
                 {
                     userModels.userCompany.UserId = userId;
-                    userCompanyRepo.InsertUser(userModels.userCompany);
+                    userCompanyRepo.AddUserCompany(userModels.userCompany);
                 }
 
                 if (userModels.userContact != null)
                 {
                     userModels.userContact.UserId = userId;
-                    userContactRepo.InsertUser(userModels.userContact);
+                    userContactRepo.AddUserContact(userModels.userContact);
                 }
 
                 if (userModels.userCourses != null)
@@ -171,21 +178,21 @@ namespace PersonsInfoV2Api.BussinessLogic
                 if (userModels.userEducationDetails != null)
                 {
                     userModels.userEducationDetails.UserId = userId;
-                    userEducationDetailRepo.InsertUser(userModels.userEducationDetails);
+                    userEducationDetailRepo.InsertUserEducationDetail(userModels.userEducationDetails);
                 }
 
                 if (userModels.userEmails != null)
                 {
                     userModels.userEmails.UserId = userId;
-                    userEmailRepo.InsertUser(userModels.userEmails);
+                    userEmailRepo.AddUserEmail(userModels.userEmails);
                 }
 
-                if (userModels.userSkills != null)                                                                                                                                                                                                                                                                                                                                                                                                              
+                if (userModels.userSkills != null)
                 {
                     userModels.userSkills.UserId = userId;
-                    userSkillRepo.InsertUser(userModels.userSkills);
+                    userSkillRepo.AddUserSkill(userModels.userSkills);
                 }
-                                                                    
+
                 if (userModels.userTypes != null)
                 {
                     userModels.userAddressDetails.UserId = userId;
@@ -200,7 +207,7 @@ namespace PersonsInfoV2Api.BussinessLogic
         }
 
 
-        public bool AddUserDetail(UserDetail userDetail)
+        public bool AddUserDetail1(UserDetail userDetail)
         {
             int userId = InsertUser(userDetail.user);
             if (userId > 0)
@@ -233,7 +240,7 @@ namespace PersonsInfoV2Api.BussinessLogic
                 if (userDetail.userEducationDetails != null)
                 {
                     userDetail.userEducationDetails.ForEach(u => u.UserId = userId);
-                    userEducationDetailRepo.AddUserEducationDetails(userDetail.userEducationDetails);
+                    userEducationDetailRepo.InsertUserEducationDetails(userDetail.userEducationDetails);
                 }
 
                 if (userDetail.userEmails != null)
@@ -254,5 +261,83 @@ namespace PersonsInfoV2Api.BussinessLogic
                 return false;
             }
         }
+
+
+        public bool AddUserDetail(UserDetail userDetail)
+        {
+            int userId = InsertUser(userDetail.user);
+            if (userId > 0)
+            {
+                if (userDetail.userAddressDetails != null)
+                {
+                    userDetail.userAddressDetails.ForEach(u => u.UserId = userId);
+                    userAddressDetailRepo.UpdateUserAddressDetails(userDetail.userAddressDetails.Where(t => t.Id > 0).ToList());
+                    userAddressDetailRepo.AddUserAddressDetails(userDetail.userAddressDetails.Where(t => t.Id < 1).ToList());
+                }
+
+                if (userDetail.userCompanies != null)
+                {
+                    userDetail.userCompanies.ForEach(u => u.UserId = userId);
+                    userCompanyRepo.UpdateUserCompanies(userDetail.userCompanies.Where(t => t.Id > 0).ToList());
+                    userCompanyRepo.AddUserCompanies(userDetail.userCompanies.Where(t => t.Id <1).ToList());
+                }
+
+                if (userDetail.userContacts != null)
+                {
+                    userDetail.userContacts.ForEach(u => u.UserId = userId);
+                    userContactRepo.UpdateUserContacts(userDetail.userContacts.Where(t => t.Id > 0).ToList());
+                    userContactRepo.AddUserContacts(userDetail.userContacts.Where(t => t.Id < 1).ToList());
+                }
+
+                if (userDetail.userCourses != null)
+                {
+                    userDetail.userCourses.ForEach(u => u.UserId = userId);
+                    repoUserCourse.UpdateUserCourses(userDetail.userCourses.Where(t => t.Id > 0).ToList());
+                    repoUserCourse.AddUserCoures(userDetail.userCourses.Where(t => t.Id > 0).ToList());
+                }
+
+                if (userDetail.userEducationDetails != null)
+                {
+                    userDetail.userEducationDetails.ForEach(u => u.UserId = userId);
+                    userEducationDetailRepo.UpdateUserEducationDetails(userDetail.userEducationDetails.Where(t => t.Id > 0).ToList());
+                    userEducationDetailRepo.InsertUserEducationDetails(userDetail.userEducationDetails.Where(t => t.Id > 0).ToList());
+                }
+
+                if (userDetail.userEmails != null)
+                {
+                    userDetail.userEmails.ForEach(u => u.UserId = userId);
+                    userEmailRepo.UpdateUserEmails(userDetail.userEmails.Where(t => t.Id > 0).ToList());
+                    userEmailRepo.AddUserEmails(userDetail.userEmails.Where(t => t.Id > 0).ToList());
+                }
+
+                if (userDetail.userSkills != null)
+                {
+                    userDetail.userSkills.ForEach(u => u.UserId = userId);
+                    userSkillRepo.UpdateUserSkills(userDetail.userSkills.Where(t => t.Id > 0).ToList());
+                    userSkillRepo.AddUserSkills(userDetail.userSkills.Where(t => t.Id > 0).ToList());
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<UserModel> GetUserById(int id)
+        {
+            UserModel userModel = new UserModel();
+            userModel.User =  GetByUserId(id);
+            userModel.UserContacts = await userContactRepo.GetUserContactsByUserId(id);
+            userModel.UserAddressDetails = await userAddressDetailRepo.GetUserAddressDetailsByUserId(id);
+            userModel.UserEmails = await userEmailRepo.GetUserEmailsByUserId(id);
+            userModel.UserCompanies
+ = await userCompanyRepo.GetUserCompaniesByUserId(id);
+            userModel.UserCourses = await repoUserCourse.GetUserCoursesByUserId(id);
+            userModel.UserEducationDetails = await userEducationDetailRepo.GetUserEducationDetailsByUserId(id);
+            userModel.UserSkills = await userSkillRepo.GetUserSkillsByUserId(id);
+            return userModel;
+        }
+
     }
 }

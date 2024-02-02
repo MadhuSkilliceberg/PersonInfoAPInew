@@ -8,17 +8,28 @@ namespace PersonsInfoV2Api.IRepository
 {
    public interface IUserEducationDetailRepo
     {
-        public List<UserEducationDetail> GetUsers();
-        public int InsertUser(UserEducationDetail user);
+        //This method used to get user education details 
+        public Task<List<UserEducationDetail>> GetUserEducationDetails();
 
-        public int UpdateUser(UserEducationDetail user);
+        public Task<List<UserEducationDetail>> GetUserEducationDetailsByUserId(int userId);
 
-        public int DeleteUser(int id);
+        //This method used to save one user education details 
+        public Task<int> InsertUserEducationDetail(UserEducationDetail userEducationDetail);
 
-        public UserEducationDetail GetByUserId(int id);
+        //This method used to save more than one user education details 
+        public Task<int> InsertUserEducationDetails(List<UserEducationDetail> userEducationDetail);
 
-        public bool AddUserEducationDetails(List<UserEducationDetail> userEducationDetails);
+        //This method used to update one user education details 
+        public Task<int> UpdateUserEducationDetail(UserEducationDetail userEducationDetail);
 
+        //This method used to update more than one user education details 
+        public Task<int> UpdateUserEducationDetails(List<UserEducationDetail> userEducationDetail);
+
+        //This method used to delete user education details 
+        public Task<int> DeleteUserEducationDetail(int id);
+
+        //This method used to get one user education details by Id
+        public Task<UserEducationDetail> GetUserEducationDetailsById(int id);
 
     }
 }

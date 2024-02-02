@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.IBussinessLogic
 {
-   public interface ICompanyBussinessLogic
+    public interface ICompanyBussinessLogic
     {
-        public List<Company> GetCompanys();
-        public int InsertCompany(Company company);
-
-        public int UpdateCompany(Company company);
-
-        public int DeleteCompany(int id);
-
-        public Company GetByCompanyId(int id);
-        public bool AddCompanyTables(CompanyModels companyModels);
-
-        public bool AddCompanyDetail(CompanyDetail companyDetail); 
-
+        public Task<List<Company>> GetCompanies();
+        public Task<int> AddCompany(Company company);
+        public Task<int> AddRangeCompany(List<Company> companies);
+        public Task<int> UpdateCompany(Company company);
+        public Task<int> UpdateRangeCompany(List<Company> companies);
+        public Task<bool> DeleteCompany(int id);
+        public Task<bool> DeleteRangeCompany(List<int> ids);
+        public Task<Company> GetCompanyById(int id);
+        public Task<bool> AddCompanyDetail(CompanyDetail companyDetail);
+        public Task<bool> AddCompanyTables(CompanyModels companyModels);
     }
 }

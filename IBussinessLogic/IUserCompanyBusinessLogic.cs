@@ -8,13 +8,20 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
     public interface IUserCompanyBusinessLogic
     {
-        public List<UserCompany> GetUsers();
-        public int InsertUser(UserCompany user);
 
-        public int UpdateUser(UserCompany user);
+        public Task<List<UserCompany>> GetUserCompanies();
 
-        public int DeleteUser(int id);
+        public Task<List<UserCompany>> GetUserCompaniesByUserId(int userId);
 
-        public UserCompany GetByUserId(int id);
+        public Task<int> AddUserCompany(UserCompany user);
+
+        public Task<int> UpdateUserCompany(UserCompany user);
+
+        public Task<UserCompany> GetUserCompanyById(int id);
+        public Task<int> DeleteUserCompanyById(int id);
+
+        public Task<int> AddUserCompanies(List<UserCompany> userCompanies);
+
+        public Task<int> UpdateUserCompanies(List<UserCompany> userCompanies);
     }
 }

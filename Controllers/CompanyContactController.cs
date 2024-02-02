@@ -18,56 +18,78 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class CompanyContactController : ControllerBase
     {
-        ICompanyContactBussinessLogic userRepository;
-        public CompanyContactController(ICompanyContactBussinessLogic Repo)
+        private readonly ICompanyContactBussinessLogic companyContactBussinessLogic;
+
+        public CompanyContactController(ICompanyContactBussinessLogic  companyContactBussinessLogic)
         {
-            userRepository = Repo;
+            this.companyContactBussinessLogic = companyContactBussinessLogic;
         }
 
 
-        [Route("DeleteCompanyContacts/{id}")]
+        [Route("DeleteCompanyContact/{id}")]
         [HttpDelete]
-        public int DeleteCompanyContact(int id)
+        public async Task<bool> DeleteCompanyContact(int id)
         {
-            return userRepository.DeleteCompanyContact(id);
+            return await companyContactBussinessLogic.DeleteCompanyContact(id);
+        }
+
+        [Route("DeleteRangeCompanyContact")]
+        [HttpDelete]
+        public async Task<bool> DeleteRangeCompanyContact(List<int> ids)
+        {
+            return await companyContactBussinessLogic.DeleteRangeCompanyContact(ids);
         }
 
 
         [Route("GetCompanyContacts")]
         [HttpGet]
-        public List<CompanyContact> GetCompanyContacts()
+        public async Task<List<CompanyContact> >GetCompanyContacts()
         {
-            return userRepository.GetCompanyContacts();
+            return await companyContactBussinessLogic.GetCompanyContacts();
         }
 
 
-        [Route("AddCompanyContacts")]
+        [Route("AddCompanyContact")]
         [HttpPost]
-        public int InsertCompanyContact(CompanyContact companyContact)
+        public async Task<int> AddCompanyContact(CompanyContact companyContact)
         {
-            return userRepository.InsertCompanyContact(companyContact);
+            return await companyContactBussinessLogic.AddCompanyContact(companyContact);
+        }
+
+        [Route("AddRangeCompanyContact")]
+        [HttpPost]
+        public async Task<int> AddRangeCompanyContact(List<CompanyContact> companyContacts)
+        {
+            return await companyContactBussinessLogic.AddRangeCompanyContact(companyContacts);
         }
 
 
-        [Route("UpdateCompanyContacts")]
+        [Route("UpdateCompanyContact")]
         [HttpPut]
-        public bool UpdateCompanyContact(CompanyContact companyContact)
+        public async Task<int> UpdateCompanyContact(CompanyContact companyContact)
         {
-            return userRepository.UpdateCompanyContact(companyContact);
+            return await companyContactBussinessLogic.UpdateCompanyContact(companyContact);
         }
 
-        [Route("GetCompanyContactsByCompanyAddressId/{companyaddressId}")]
-        [HttpGet]
-        public List<CompanyContact> GetCompanyContactsByCompanyAddressId(int companyaddressId)
+        [Route("UpdateRangeCompanyContact")]
+        [HttpPut]
+        public async Task<int> UpdateRangeCompanyContact(CompanyContact companyContact)
         {
-            return userRepository.GetCompanyContactsByCompanyAddressId(companyaddressId);
+            return await companyContactBussinessLogic.UpdateCompanyContact(companyContact);
         }
 
-        [Route("GetCompanyContactsById/{id}")]
+        [Route("GetCompanyContactByCompanyAddressId/{companyaddressId}")]
         [HttpGet]
-        public CompanyContact GetCompanyContactsById(int id)
+        public async Task<List<CompanyContact> >GetCompanyContactByCompanyAddressId(int companyaddressId)
         {
-            return userRepository.GetCompanyContactsById(id);
+            return await companyContactBussinessLogic.GetCompanyContactByCompanyAddressId(companyaddressId);
+        }
+
+        [Route("GetCompanyContactById/{id}")]
+        [HttpGet]
+        public async Task<CompanyContact> GetCompanyContactById(int id)
+        {
+            return await companyContactBussinessLogic.GetCompanyContactById(id);
         }
     }
 }

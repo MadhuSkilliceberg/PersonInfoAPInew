@@ -9,7 +9,10 @@ namespace PersonsInfoV2Api.Entities
     {
         public User()
         {
+            Chats = new HashSet<Chat>();
+            Events = new HashSet<Event>();
             Families = new HashSet<Family>();
+            News = new HashSet<News>();
             ReviewsComments = new HashSet<ReviewsComment>();
             TaskStates = new HashSet<TaskState>();
             UserAddressDetails = new HashSet<UserAddressDetail>();
@@ -46,7 +49,10 @@ namespace PersonsInfoV2Api.Entities
         public virtual Gender Gender { get; set; }
         public virtual MarritalStatus MarritalStatus { get; set; }
         public virtual UserType UserType { get; set; }
+        public virtual ICollection<Chat> Chats { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Family> Families { get; set; }
+        public virtual ICollection<News> News { get; set; }
         public virtual ICollection<ReviewsComment> ReviewsComments { get; set; }
         public virtual ICollection<TaskState> TaskStates { get; set; }
         public virtual ICollection<UserAddressDetail> UserAddressDetails { get; set; }

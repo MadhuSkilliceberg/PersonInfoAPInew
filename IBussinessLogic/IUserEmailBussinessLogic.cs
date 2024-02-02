@@ -8,13 +8,21 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
   public  interface IUserEmailBussinessLogic
     {
-        public List<UserEmail> GetUsers();
-        public bool InsertUser(UserEmail user);
+        public Task<List<UserEmail>> GetUserEmails();
 
-        public bool UpdateUser(UserEmail user);
+        public Task<List<UserEmail>> GetUserEmailsByUserId(int userId);
 
-        public int DeleteUser(int id);
+        public  Task<int> AddUserEmail(UserEmail userEmail);
 
-        public UserEmail GetByUserId(int id);
+
+        public Task<int> UpdateUserEmail(UserEmail userEmail);
+
+        public Task<int> AddUserEmails(List<UserEmail> userEmails);
+
+        public Task<int> UpdateUserEmails(List<UserEmail> userEmails);
+
+        public Task<int> DeleteUserEmails(int id);
+
+        public Task<UserEmail> GetUserEmailById(int id);
     }
 }

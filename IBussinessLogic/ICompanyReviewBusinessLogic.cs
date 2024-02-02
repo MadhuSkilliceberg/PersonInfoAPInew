@@ -9,19 +9,17 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
   public  interface ICompanyReviewBusinessLogic
     {
-        public List<CompanyReview> GetcompanyReviews();
-        public int InsertCompanyReview(CompanyReview companyReview);
-
-        public int UpdateCompanyReview(CompanyReview companyReview);
-
-        public int DeleteCompanyReview(int id);
-
-        public CompanyReview GetByCompanyReviewId(int id);
-
-        public List<CompanyReviewModel> GetByCompanyReviewComapanyId(int id);
-        public List<CompanyReview> GetByCompanyReviewComapanyId1(int id);
-        public List<CompanyReviewsCommentModel> GetByCompanyReviewComments(int reviewId);
-
-        public List<object> GetCompanyReviewTreeHierarchical(int reviewId);
+        public Task<List<CompanyReview>> GetcompanyReviews();
+        public Task<int> AddCompanyReview(CompanyReview companyReview);
+        public Task<int> AddRangeCompanyReview(List<CompanyReview> companyReviews);
+        public Task<int> UpdateCompanyReview(CompanyReview companyReview);
+        public Task<int> UpdateRangeCompanyReview(List<CompanyReview> companyReviews);
+        public Task<int> DeleteCompanyReview(int id);
+        public Task<int> DeleteRangeCompanyReview(List<int> ids);
+        public Task<CompanyReview> GetCompanyReviewById(int id);
+        public Task<List<CompanyReviewModel>> GetByCompanyReviewComapanyId(int companyId);
+        public Task<List<CompanyReview>> GetByCompanyReviewComapanyId1(int companyId);
+        public Task<List<object>> GetCompanyReviewTreeHierarchical(int reviewId);
+        public Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId);
     }
 }

@@ -10,37 +10,53 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class UserAddressDetailBusinessLogic: IUserAddressDetailBusinessLogic
     {
-        IUserAddressDetailRepo detailRepo;
+      private readonly  IUserAddressDetailRepository userAddressDetailRepository;
 
-      public  UserAddressDetailBusinessLogic(IUserAddressDetailRepo Repo)
+      public  UserAddressDetailBusinessLogic(IUserAddressDetailRepository Repo)
         {
-            detailRepo= Repo;
+            userAddressDetailRepository = Repo;
         }
 
-        public int DeleteUser(int id)
+        public async Task<int> AddUserAddressDetail(UserAddressDetail user)
         {
-            return detailRepo.DeleteUser(id);
-        }
-
-        public UserAddressDetail GetByUserId(int id)
-        {
-            return detailRepo.GetByUserId(id);
+          return  await userAddressDetailRepository.AddUserAddressDetail(user);
 
         }
 
-        public List<UserAddressDetail> GetUsers()
+        public Task<int> AddUserAddressDetails(List<UserAddressDetail> userAddressDetails)
         {
-            return detailRepo.GetUsers();
+            throw new NotImplementedException();
         }
 
-        public bool InsertUser(UserAddressDetail user)
+        public async Task<int> DeleteUserAddressDetailById(int id)
         {
-            return detailRepo.InsertUser(user);
+            return await userAddressDetailRepository.DeleteUserAddressDetailById(id);
         }
 
-        public bool UpdateUser(UserAddressDetail user)
+        
+        public async Task<UserAddressDetail> GetUserAddressDetailById(int id)
         {
-            return detailRepo.UpdateUser(user);
+            return await userAddressDetailRepository.GetUserAddressDetailsById(id);
+        }
+
+        public async Task<List<UserAddressDetail>> GetUserAddressDetails()
+        {
+            return await userAddressDetailRepository.GetUserAddressDetails();
+        }
+
+        public async Task<List<UserAddressDetail>> GetUserAddressDetailsByUserId(int userId)
+        {
+            return await userAddressDetailRepository.GetUserAddressDetailsByUserId(userId);
+        }
+
+        public async Task<int> UpdateUserAddressDetail(UserAddressDetail user)
+        {
+            return await userAddressDetailRepository.UpdateUserAddressDetail(user);
+        }
+
+        public async Task<int> UpdateUserAddressDetails(List<UserAddressDetail> userAddressDetails)
+        {
+            return await userAddressDetailRepository.UpdateUserAddressDetails(userAddressDetails);
         }
     }
 }

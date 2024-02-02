@@ -4,31 +4,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
-    public class CompanyAddressRepo : ICompanyAddressRepo
+    public class CompanyAddressRepo : ICompanyAddressRepository
     {
-        PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
+        private readonly PersonsInfoV3NewContext context;
 
-
-
-        public List<CompanyAddress> GetCompanyAddressIdByCompanyId(int companyid)
+        public CompanyAddressRepo(PersonsInfoV3NewContext personsInfoV3NewContext)
         {
-            var data = Context.CompanyAddresses.Where(a => a.CompanyId == companyid).ToList();
-            return data;
+            context = personsInfoV3NewContext;
         }
 
-
-        public List<int> AddCompanyAddress(List<CompanyAddress> companyAddresses)
+        //This method used for Get Company Addresses based on CompanyId
+        public async Task<List<CompanyAddress>> GetCompanyAddressesIdByCompanyId(int companyId)
         {
+            return await context.CompanyAddresses.Where(a => a.CompanyId == companyId).ToListAsync();
+        }
 
+        //This mmethod used for Add CompanyAddresses based on ther CompanyAddresses
+        public async Task<List<int>> AddRangeCompanyAddress(List<CompanyAddress> companyAddresses)
+        {
             try
             {
                 if (companyAddresses != null)
                 {
-                    Context.CompanyAddresses.AddRange(companyAddresses);
-                    Context.SaveChanges();
+                    await context.CompanyAddresses.AddRangeAsync(companyAddresses);
+                    await context.SaveChangesAsync();
                     return companyAddresses.Select(ca => ca.Id).ToList();
                 }
                 else
@@ -43,16 +46,15 @@ namespace PersonsInfoV2Api.Repository
 
         }
 
-
-        public bool UpdateCompanyAddress(List<CompanyAddress> companyAddresses)
+        //This method used for Update CompanyAddress based on the CompanyAddresses
+        public async Task<bool> UpdateRangeCompanyAddress(List<CompanyAddress> companyAddresses)
         {
-
             try
             {
                 if (companyAddresses != null)
                 {
-                    Context.CompanyAddresses.UpdateRange(companyAddresses);
-                    Context.SaveChanges();
+                    context.CompanyAddresses.UpdateRange(companyAddresses);
+                    await context.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -64,42 +66,50 @@ namespace PersonsInfoV2Api.Repository
             {
                 return false;
             }
-
         }
 
-
-
-
-        public int DeleteCompanyAddress(int id)
+        //This method used to Delete CompanyAddress based on companyAddressId
+        public async Task<int> DeleteCompanyAddress(int companyAddressId)
         {
-            var k = Context.CompanyAddresses.Where(a => a.Id == id).FirstOrDefault();
-            Context.CompanyAddresses.Remove(k);
-            Context.SaveChanges();
+            CompanyAddress companyAddress = await context.CompanyAddresses.Where(a => a.Id == companyAddressId).FirstOrDefaultAsync();
+            context.CompanyAddresses.Remove(companyAddress);
+            await context.SaveChangesAsync();
             return 1;
         }
 
-        public CompanyAddress GetByCompanyAddressId(int id)
+        //This method used to Delete CompanyAddress based on companyAddressIds
+        public async Task<int> DeleteRangeCompanyAddress(List<int> companyAddressIds)
         {
-            var k = Context.CompanyAddresses.Where(a => a.Id == id).FirstOrDefault();
-            return k;
+            context.CompanyAddresses.RemoveRange(await context.CompanyAddresses.Where(a => companyAddressIds.Contains(a.Id)).ToListAsync());
+            await context.SaveChangesAsync();
+            return 1;
         }
 
-        public List<CompanyAddress> GetCompanyAddresss()
+        //This method used to Get CompanyAddress based on companyAddressId
+        public async Task<CompanyAddress> GetCompanyAddressByCompanyAddressId(int companyAddressId)
         {
-            return Context.CompanyAddresses.ToList();
+            return await context.CompanyAddresses.Where(a => a.Id == companyAddressId).FirstOrDefaultAsync();
         }
 
-        public int InsertCompanyAddress(CompanyAddress companyAddress)
+        //This method used for Get CompanyAddresses 
+        public async Task<List<CompanyAddress>> GetCompanyAddresses()
         {
-            Context.CompanyAddresses.Add(companyAddress);
-            Context.SaveChanges();
+            return await context.CompanyAddresses.ToListAsync();
+        }
+
+        //This method used for Add CompanyAddress based on the companyAddress
+        public async Task<int> AddCompanyAddress(CompanyAddress companyAddress)
+        {
+            await context.CompanyAddresses.AddAsync(companyAddress);
+            await context.SaveChangesAsync();
             return companyAddress.Id;
         }
 
-        public bool UpdateCompanyAddress(CompanyAddress companyAddress)
+        //This method used for Update CompanyAddress based on the CompanyAddress
+        public async Task<bool> UpdateCompanyAddress(CompanyAddress companyAddress)
         {
-            Context.CompanyAddresses.Update(companyAddress);
-            Context.SaveChanges();
+            await context.CompanyAddresses.AddAsync(companyAddress);
+            await context.SaveChangesAsync();
             return true;
         }
     }

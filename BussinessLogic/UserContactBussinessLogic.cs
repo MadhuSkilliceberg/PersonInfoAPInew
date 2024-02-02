@@ -10,35 +10,50 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class UserContactBussinessLogic: IUserContactBussinessLogic
     {
-       public IUserContactRepo UserContactsRepository;
+       public IUserContactRepo userContactRepo;
         public UserContactBussinessLogic(IUserContactRepo Repo)
         {
-            UserContactsRepository = Repo;
+            userContactRepo = Repo;
         }
 
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserContactById(int id)
         {
-            return UserContactsRepository.DeleteUser(id);
+            return await userContactRepo.DeleteUserContactById(id);
         }
 
-        public UserContact GetByUserId(int id)
+        public async Task<List<UserContact>> GetUserContacts()
         {
-            return UserContactsRepository.GetByUserId(id);
+            return await userContactRepo.GetUserContacts();
         }
 
-        public List<UserContact> GetUsers()
+        public async Task<UserContact> GetUserContactById(int id)
         {
-            return UserContactsRepository.GetUsers();
+            return await userContactRepo.GetUserContactById(id);
         }
 
-        public bool InsertUser(UserContact user)
+        public async Task<int> AddUserContact(UserContact userContact)
         {
-            return UserContactsRepository.InsertUser(user);
+            return await userContactRepo.AddUserContact(userContact);
         }
 
-        public bool UpdateUser(UserContact user)
+        public async Task<int> AddUserContacts(List<UserContact> userContact)
         {
-            return UserContactsRepository.UpdateUser(user);
+            return await userContactRepo.AddUserContacts(userContact);
+        }
+
+        public async Task<int> UpdateUserContact(UserContact userContact)
+        {
+            return await userContactRepo.UpdateUserContact(userContact);
+        }
+
+        public async Task<int> UpdateUserContacts(List<UserContact> userContact)
+        {
+            return await userContactRepo.UpdateUserContacts(userContact);
+        }
+
+        public async Task<List<UserContact>> GetUserContactsByUserId(int userId)
+        {
+            return await userContactRepo.GetUserContactsByUserId(userId);
         }
     }
 }

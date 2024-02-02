@@ -10,41 +10,56 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class CompanyEmailBussinessLogic : ICompanyEmailBussinessLogic
     {
-        ICompanyEmailRepo userRepository;
-        public CompanyEmailBussinessLogic(ICompanyEmailRepo Repo)
+        private readonly ICompanyEmailRepository companyEmailRepository;
+
+        public CompanyEmailBussinessLogic(ICompanyEmailRepository companyEmailRepository)
         {
-            userRepository = Repo;
+            this.companyEmailRepository = companyEmailRepository;
         }
 
-
-
-        public CompanyEmail GetCompanyEmailById(int id)
+        public async Task<int> AddCompanyEmail(CompanyEmail companyEmail)
         {
-           return userRepository.GetCompanyEmailById(id);    
-        }
-        public int DeleteCompanyEmail(int id)
-        {
-            return userRepository.DeleteCompanyEmail(id);
+            return await companyEmailRepository.AddCompanyEmail(companyEmail);
         }
 
-        public List<CompanyEmail> GetCompanyEmailByCompanyAddressId(int companyaddressId)
+        public async Task<int> AddRangeCompanyEmail(List<CompanyEmail> companyEmails)
         {
-           return userRepository.GetCompanyEmailByCompanyAddressId(companyaddressId);
+            return await companyEmailRepository.AddRangeCompanyEmail(companyEmails);
         }
 
-        public List<CompanyEmail> GetCompanyEmails()
+        public async Task<int> DeleteCompanyEmail(int id)
         {
-            return userRepository.GetCompanyEmails();
+            return await companyEmailRepository.DeleteCompanyEmail(id);
         }
 
-        public int InsertCompanyEmail(CompanyEmail companyEmail)
+        public async Task<int> DeleteRangeCompanyEmail(List<int> ids)
         {
-            return userRepository.InsertCompanyEmail(companyEmail);
+            return await companyEmailRepository.DeleteRangeCompanyEmail(ids);
         }
 
-        public bool UpdateCompanyEmail(CompanyEmail companyEmail)
+        public async Task<List<CompanyEmail>> GetCompanyEmailByCompanyAddressId(int companyaddressId)
         {
-            return userRepository.UpdateCompanyEmail(companyEmail);
+            return await companyEmailRepository.GetCompanyEmailByCompanyAddressId(companyaddressId);
+        }
+
+        public async Task<CompanyEmail> GetCompanyEmailById(int id)
+        {
+            return await companyEmailRepository.GetCompanyEmailById(id);
+        }
+
+        public async Task<List<CompanyEmail>> GetCompanyEmails()
+        {
+            return await companyEmailRepository.GetCompanyEmails();
+        }
+
+        public async Task<int> UpdateCompanyEmail(CompanyEmail companyEmail)
+        {
+            return await companyEmailRepository.UpdateCompanyEmail(companyEmail);
+        }
+
+        public async Task<int> UpdateRangeCompanyEmail(List<CompanyEmail> companyEmails)
+        {
+            return await companyEmailRepository.UpdateRangeCompanyEmail(companyEmails);
         }
     }
 }

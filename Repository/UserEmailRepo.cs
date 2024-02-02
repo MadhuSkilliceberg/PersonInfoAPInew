@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PersonsInfoV2Api.Repository
 {
@@ -13,58 +14,81 @@ namespace PersonsInfoV2Api.Repository
 
         PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
 
-        public bool AddUserEmails(List<UserEmail> userEmails)
+        public async Task<int> AddUserEmails(List<UserEmail> userEmails)
         {
             try
             {
                 if (userEmails != null)
                 {
                     context.UserEmails.AddRange(userEmails);
-                    context.SaveChanges();
-                    return true;
+                    await context.SaveChangesAsync();
+                    return 1;
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
 
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserEmails(int id)
         {
             var k = context.UserEmails.Where(a => a.Id == id).FirstOrDefault();
             context.UserEmails.Remove(k);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return 1;
         }
 
-        public UserEmail GetByUserId(int id)
+
+
+        public async Task<UserEmail> GetUserEmailById(int id)
         {
-            var k = context.UserEmails.Where(a => a.Id == id).FirstOrDefault();
-            return k;
+            return await context.UserEmails.Where(a => a.Id == id).FirstOrDefaultAsync();
+          
         }
 
-        public List<UserEmail> GetUsers()
+        public async Task<List<UserEmail>> GetUserEmailByUserId(int userId)
         {
-            return context.UserEmails.ToList();
+            return await context.UserEmails.Where(a => a.Id == userId).ToListAsync();
         }
 
-        public bool InsertUser(UserEmail user)
+
+        public Task<List<UserEmail>> GetUserEmails()
         {
-            context.UserEmails.Add(user);
-            context.SaveChanges();
-            return true;
+            return context.UserEmails.ToListAsync();
         }
 
-        public bool UpdateUser(UserEmail user)
+        public async Task<List<UserEmail>> GetUserEmailsByUserId(int UserId)
+        {
+            return await context.UserEmails.Where(a => a.UserId == UserId).ToListAsync();
+        }
+
+        public async Task<int> AddUserEmail(UserEmail user)
+        {
+            await context.UserEmails.AddAsync(user);
+            await context.SaveChangesAsync();
+            return 1;
+        }
+
+        
+        public async Task<int> UpdateUserEmail(UserEmail user)
         {
             context.UserEmails.Update(user);
-            context.SaveChanges();
-            return true;
+            await context.SaveChangesAsync();
+            return 1;
         }
+
+        public async Task<int> UpdateUserEmails(List<UserEmail> userEmails)
+        {
+            context.UserEmails.UpdateRange(userEmails);
+            await context.SaveChangesAsync();
+            return 1;
+        }
+
+       
     }
 }

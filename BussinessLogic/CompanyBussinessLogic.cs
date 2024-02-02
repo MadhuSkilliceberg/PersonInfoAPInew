@@ -11,66 +11,38 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class CompanyBussinessLogic : ICompanyBussinessLogic
     {
-        private ICompanyRepo companyRepo;
-        ICompanyContactRepo companyContactRepo;
-        ICompanyAddressRepo companyAddressRepo;
-        ICompanyEmailRepo companyEmailRepo;
-        ICompanyReviewRepo companyReviewRepo;
-        IReviewRepo ReviewRepo;
-
+        private readonly ICompanyRepository companyRepository;
+        private readonly ICompanyContactRepository companyContactRepository;
+        private readonly ICompanyAddressRepository companyAddressRepo;
+        private readonly ICompanyEmailRepository companyEmailRepo;
+        private readonly ICompanyReviewRepository companyReviewRepo;
+        private readonly IReviewRepo reviewRepo;
 
         public CompanyBussinessLogic(
-            ICompanyRepo Repo,
-            ICompanyContactRepo companyContactRepo,
-            ICompanyAddressRepo companyAddressRepo,
-            ICompanyEmailRepo companyEmailRepo,
-            ICompanyReviewRepo companyReviewRepo,
+            ICompanyRepository companyRepository,
+            ICompanyContactRepository companyContactRepository,
+            ICompanyAddressRepository companyAddressRepo,
+            ICompanyEmailRepository companyEmailRepo,
+            ICompanyReviewRepository companyReviewRepo,
             IReviewRepo reviewRepo
         )
         {
-            companyRepo = Repo;
-            this.companyContactRepo = companyContactRepo;
+            this.companyRepository = companyRepository;
+            this.companyContactRepository = companyContactRepository;
             this.companyAddressRepo = companyAddressRepo;
             this.companyEmailRepo = companyEmailRepo;
             this.companyReviewRepo = companyReviewRepo;
-            this.ReviewRepo = reviewRepo;
-
+            this.reviewRepo = reviewRepo;
         }
 
-
-
-        public int DeleteCompany(int id)
+        public async Task<int> AddCompany(Company company)
         {
-            return companyRepo.DeleteCompany(id);
+            return await companyRepository.AddCompany(company);
         }
 
-
-        public Company GetByCompanyId(int id)
+        public async Task<bool> AddCompanyDetail(CompanyDetail companyDetail)
         {
-            return companyRepo.GetByCompanyId(id);
-
-        }
-
-
-        public List<Company> GetCompanys()
-        {
-            return companyRepo.GetCompany();
-        }
-
-        public int InsertCompany(Company company)
-        {
-            return companyRepo.InsertCompany(company);
-        }
-
-        public int UpdateCompany(Company company)
-        {
-            return companyRepo.UpdateCompany(company);
-        }
-
-
-        public bool AddCompanyDetail(CompanyDetail companyDetail)
-        {
-            int companyId = InsertCompany(companyDetail.company);
+            int companyId = await AddCompany(companyDetail.company);
             bool companyAddressResult = true;
             bool companyEmailsResult = true;
             bool companyContactsResult = true;
@@ -78,50 +50,43 @@ namespace PersonsInfoV2Api.BussinessLogic
             List<int> companyAddressInsertedIDs = new List<int>();
             if (companyId > 0)
             {
-
                 if (companyDetail.companyaddress != null)
                 {
                     companyDetail.companyaddress.ForEach(a => a.CompanyId = companyId);
-                    companyAddressInsertedIDs = companyAddressRepo.AddCompanyAddress(companyDetail.companyaddress);
+                    companyAddressInsertedIDs = await companyAddressRepo.AddRangeCompanyAddress(companyDetail.companyaddress);
                 }
-
 
                 if (companyDetail.companyEmails != null)
                 {
                     if (companyAddressInsertedIDs != null && companyAddressInsertedIDs.Count > 0)
                     {
-
                         foreach (var id in companyAddressInsertedIDs)
                         {
                             companyDetail.companyEmails.ForEach(a => a.CompanyAddressId = id);
                         }
-
-
-
                         companyDetail.companyEmails.ForEach(a => a.CompanyAddressId = companyId);
                     }
 
                     companyDetail.companyEmails.ForEach(a => a.CompanyAddressId = companyId);
-                    companyEmailsResult = companyEmailRepo.AddCompanyEmail(companyDetail.companyEmails);
+                    companyEmailsResult = await companyEmailRepo.AddRangeCompanyEmail(companyDetail.companyEmails) > 0;
                 }
                 if (companyDetail.companyContacts != null)
                 {
                     companyDetail.companyContacts.ForEach(a => a.CompanyAddressId = companyId);
-                    companyContactsResult = companyContactRepo.AddCompanyContact(companyDetail.companyContacts);
+                    companyContactsResult = await companyContactRepository.AddRangeCompanyContact(companyDetail.companyContacts) > 0;
                 }
                 if (companyDetail.companyReviews != null)
                 {
                     // companyDetail.companyReviews.ForEach(a => a.CompanyId = companyId);
-                    List<int> ids = ReviewRepo.InsertReviews(companyDetail.companyReviews);
+                    List<int> ids = reviewRepo.InsertReviews(companyDetail.companyReviews);
 
                     foreach (var id in ids)
                     {
                         var companyreview = new CompanyReview();
                         companyreview.CompanyId = companyId;
                         companyreview.ReviewId = id;
-                        companyReviewRepo.InsertCompanyReview(companyreview);
+                       await companyReviewRepo.AddCompanyReview(companyreview);
                     }
-
 
                 }
                 return companyAddressResult && companyEmailsResult && companyContactsResult && companyReviewsResult;
@@ -130,173 +95,32 @@ namespace PersonsInfoV2Api.BussinessLogic
             {
                 return false;
             }
-
-
         }
 
-        //        if (institutionDetails.institutionaddress != null)
-        //        {
-
-
-        //            institutionAddRepo.DeleteinstitutionAddressDetails(institutionDetails.institutionaddress.Where(n => n.IsDeleted == true).ToList());
-
-        //            foreach (var institutionadd in institutionDetails.institutionaddress)
-        //            {
-        //                var institutionAddressList = institutionAddRepo.GetInstitutionAddressByInstituteId(institutionadd.Id).Select(t => t.Id);
-
-        //                //institutionAddRepo.UpdateinstitutionAddressDetails(institutionDetails.institutionaddress.Where(n => n.Id > 0).ToList());
-
-        //                if (institutionadd.Id > 0)
-        //                    institutionAddRepo.UpdateinstitutionAddress(institutionadd);
-        //                else
-        //                    institutionAddRepo.InsertInstitutionAddress(institutionadd);
-
-
-
-        //                //Contacts start
-
-        //                var data1 = institutionContactRepo.GetInstitutionContactsByAddressId(institutionadd.Id).Select(t => t.Id);
-
-        //                institutionContactRepo.DeleteinstitutionContactsDetails(institutionadd.InstitutionContacts.Where(n => n.IsDeleted == true).ToList());
-
-
-        //                institutionContactRepo.UpdateinstitutionContactsDetails(institutionadd.InstitutionContacts.Where(n => n.Id > 0).ToList());
-
-        //                foreach (var InstitutionCont in institutionadd.InstitutionContacts.Where(n => n.Id < 1))
-        //                {
-        //                    InstitutionCont.InstitutionAddressId = institutionadd.Id;
-        //                    institutionContactRepo.InsertInstitutionContact(InstitutionCont);
-        //                }
-
-        //                //Contacts End 
-
-
-
-        //                //Email start
-        //                // institutionEmailRepo.DeleteinstitutionEmailDetails(institutionadd.InstitutionEmails.Where(n => n.IsDeleted == true).ToList());
-
-        //                var data = institutionEmailRepo.GetInstitutionEmailsByAddressId(institutionadd.Id).Select(t => t.Id);
-
-        //                institutionEmailRepo.DeleteinstitutionEmailDetails(institutionadd.InstitutionEmails.Where(n => !data.Contains(n.Id)).ToList());
-
-        //                institutionEmailRepo.UpdateinstitutionEmailDetails(institutionadd.InstitutionEmails.Where(n => n.Id > 0).ToList());
-
-        //                foreach (var InstitutionEmail in institutionadd.InstitutionEmails.Where(n => n.Id < 1))
-        //                {
-        //                    InstitutionEmail.InstitutionAddressId = institutionadd.Id;
-        //                    institutionEmailRepo.InsertInstitutionEmail(InstitutionEmail);
-        //                }
-
-        //                //Email End
-
-        //            }
-
-
-
-        //            //institutionAddRepo.UpdateinstitutionAddressDetails(institutionDetails.institutionaddress.Where(n => n.Id > 0).ToList());
-
-        //            //foreach (var institutionadd in institutionDetails.institutionaddress.Where(n => n.Id < 1))
-        //            //{
-        //            //    institutionadd.InstitutionId = institutionId;
-        //            //}
-        //            //institutionAddRepo.AddinstitutionAddressDetails(institutionDetails.institutionaddress);
-
-
-
-
-        //        }
-        //        //if (institutionDetails.institutioncontacts != null)
-        //        //{
-        //        //    institutionDetails.institutioncontacts.ForEach(i => i.InstitutionAddressId = institutionId);
-        //        //    institutionContactRepo.institutionContactsDetails(institutionDetails.institutioncontacts);
-        //        //}
-        //        //if (institutionDetails.institutionCourses != null)
-        //        //{
-        //        //    institutionDetails.institutionCourses.ForEach(i => i.InstitutionId = institutionId);
-        //        //    repoInstitutionCourse.institutionCourseDetails(institutionDetails.institutionCourses);
-        //        //}
-        //        //if (institutionDetails.institutionemail != null)
-        //        //{
-        //        //    institutionDetails.institutionemail.ForEach(i => i.InstitutionAddressId = institutionId);
-        //        //    institutionEmailRepo.institutionEmailDetails(institutionDetails.institutionemail);
-        //        //}
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-
-
-
-
-
-
-
-
-        //public bool GetCompanyDetail(CompanyDetail companyDetail)
-        //{
-        //    int companyId = InsertCompany(companyDetail.company);
-        //    bool companyAddressResult = false;
-        //    bool companyEmailsResult = false;
-        //    bool companyContactsResult = false;
-        //    bool companyReviewsResult = false;
-        //    if (companyId > 0)
-        //    {
-
-
-
-        //        if (companyDetail.companyaddress != null)
-        //        {
-
-        //            companyDetail.companyaddress = companyDetail.companyaddress.Where(a => a.CompanyId == companyId).ToList();
-        //        }
-        //        if (companyDetail.companyEmails != null)
-        //        {
-        //            companyDetail.companyEmails.ForEach(a => a.CompanyAddressId = companyId); 
-        //        }
-        //        if (companyDetail.companyContacts != null)
-        //        {
-        //            companyDetail.companyContacts.ForEach(a => a.CompanyAddressId = companyId);
-        //        }
-        //        if (companyDetail.companyReviews != null)
-        //        {
-        //            companyDetail.companyReviews.ForEach(a => a.CompanyReviews = companyId);
-        //        }
-        //        return companyAddressResult && companyEmailsResult && companyContactsResult && companyReviewsResult;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-
-
-        public bool AddCompanyTables(CompanyModels companyModels)
+        public async Task<bool> AddCompanyTables(CompanyModels companyModels)
         {
-            int companyId = InsertCompany(companyModels.company);
+            int companyId = await AddCompany(companyModels.company);
             if (companyId > 0)
             {
                 if (companyModels.companyAddress != null)
                 {
                     companyModels.companyAddress.CompanyId = companyId;
-                    companyAddressRepo.InsertCompanyAddress(companyModels.companyAddress);
+                    await companyAddressRepo.AddCompanyAddress(companyModels.companyAddress);
                 }
                 if (companyModels.CompanyContact != null)
                 {
                     companyModels.CompanyContact.ContactTypeId = companyId;
-                    companyContactRepo.InsertCompanyContact(companyModels.CompanyContact);
+                    await companyContactRepository.AddCompanyContact(companyModels.CompanyContact);
                 }
                 if (companyModels.companyEmail != null)
                 {
                     companyModels.companyEmail.ContactTypeId = companyId;
-                    companyEmailRepo.InsertCompanyEmail(companyModels.companyEmail);
+                    await companyEmailRepo.AddCompanyEmail(companyModels.companyEmail);
                 }
                 if (companyModels.companyReview != null)
                 {
                     companyModels.companyReview.CompanyId = companyId;
-                    companyReviewRepo.InsertCompanyReview(companyModels.companyReview);
+                   await companyReviewRepo.AddCompanyReview(companyModels.companyReview);
                 }
                 return true;
             }
@@ -304,9 +128,41 @@ namespace PersonsInfoV2Api.BussinessLogic
             {
                 return false;
             }
-
         }
 
+        public async Task<int> AddRangeCompany(List<Company> companies)
+        {
+            return await companyRepository.AddRangeCompany(companies);
+        }
 
+        public async Task<bool> DeleteCompany(int id)
+        {
+            return await companyRepository.DeleteCompany(id);
+        }
+
+        public async Task<bool> DeleteRangeCompany(List<int> ids)
+        {
+            return await companyRepository.DeleteRangeCompany(ids);
+        }
+
+        public async Task<List<Company>> GetCompanies()
+        {
+            return await companyRepository.GetCompanies();
+        }
+
+        public async Task<Company> GetCompanyById(int id)
+        {
+            return await companyRepository.GetCompanyById(id);
+        }
+
+        public async Task<int> UpdateCompany(Company company)
+        {
+            return await companyRepository.UpdateCompany(company);
+        }
+
+        public async Task<int> UpdateRangeCompany(List<Company> companies)
+        {
+            return await companyRepository.UpdateRangeCompany(companies);
+        }
     }
 }

@@ -17,54 +17,75 @@ namespace PersonsInfoV2Api.Controllers
     [ApiController]
     public class CompanyEmailController : ControllerBase
     {
-        ICompanyEmailBussinessLogic userRepository;
-        public CompanyEmailController(ICompanyEmailBussinessLogic Repo)
+        private readonly ICompanyEmailBussinessLogic companyEmailBussinessLogic;
+
+        public CompanyEmailController(ICompanyEmailBussinessLogic companyEmailBussinessLogic)
         {
-            userRepository = Repo;
+            this.companyEmailBussinessLogic = companyEmailBussinessLogic;
         }
 
         [Route("GetCompanyEmailById/{id}")]
         [HttpGet]
-        public CompanyEmail GetCompanyEmailById(int id)
+        public async Task<CompanyEmail> GetCompanyEmailById(int id)
         {
-            return userRepository.GetCompanyEmailById(id);
+            return await companyEmailBussinessLogic.GetCompanyEmailById(id);
         }
 
-        [Route("DeleteCompanyEmails/{id}")]
+        [Route("DeleteCompanyEmail/{id}")]
         [HttpDelete]
-        public int DeleteCompanyEmail(int id)
+        public async Task<int> DeleteCompanyEmail(int id)
         {
-            return userRepository.DeleteCompanyEmail(id);
+            return await companyEmailBussinessLogic.DeleteCompanyEmail(id);
+        }
+
+        [Route("DeleteRangeCompanyEmail")]
+        [HttpDelete]
+        public async Task<int> DeleteRangeCompanyEmail(List<int> ids)
+        {
+            return await companyEmailBussinessLogic.DeleteRangeCompanyEmail(ids);
         }
 
         [Route("GetCompanyEmailByCompanyAddressId/{companyaddressId}")]
         [HttpGet]
-        public List<CompanyEmail> GetCompanyEmailByCompanyAddressId(int companyaddressId)
+        public async Task<List<CompanyEmail>> GetCompanyEmailByCompanyAddressId(int companyaddressId)
         {
-            return userRepository.GetCompanyEmailByCompanyAddressId(companyaddressId);
+            return await companyEmailBussinessLogic.GetCompanyEmailByCompanyAddressId(companyaddressId);
         }
 
         [Route("GetCompanyEmails")]
         [HttpGet]
-        public List<CompanyEmail> GetCompanyEmails()
+        public async Task<List<CompanyEmail>> GetCompanyEmails()
         {
-            return userRepository.GetCompanyEmails();
+            return await companyEmailBussinessLogic.GetCompanyEmails();
         }
-
 
         [Route("AddCompanyEmail")]
         [HttpPost]
-        public int AddCompanyEmail(CompanyEmail companyEmail)
+        public async Task<int> AddCompanyEmail(CompanyEmail companyEmail)
         {
-            return userRepository.InsertCompanyEmail(companyEmail);
+            return await companyEmailBussinessLogic.AddCompanyEmail(companyEmail);
+        }
+
+        [Route("AddRangeCompanyEmail")]
+        [HttpPost]
+        public async Task<int> AddRangeCompanyEmail(List<CompanyEmail> companyEmails)
+        {
+            return await companyEmailBussinessLogic.AddRangeCompanyEmail(companyEmails);
         }
 
 
         [Route("UpdateCompanyEmail")]
         [HttpPut]
-        public bool UpdateCompanyEmail(CompanyEmail companyEmail)
+        public async Task<int> UpdateCompanyEmail(CompanyEmail companyEmail)
         {
-            return userRepository.UpdateCompanyEmail(companyEmail);
+            return await companyEmailBussinessLogic.UpdateCompanyEmail(companyEmail);
+        }
+
+        [Route("UpdateRangeCompanyEmail")]
+        [HttpPut]
+        public async Task<int> UpdateRangeCompanyEmail(List<CompanyEmail> companyEmails)
+        {
+            return await companyEmailBussinessLogic.UpdateRangeCompanyEmail(companyEmails);
         }
 
     }

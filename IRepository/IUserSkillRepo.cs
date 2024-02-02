@@ -8,15 +8,21 @@ namespace PersonsInfoV2Api.IRepository
 {
     public interface IUserSkillRepo
     {
-        public List<UserSkill> GetUsers();
-        public int InsertUser(UserSkill user);
+        public Task<List<UserSkill>> GetUserSkills();
 
-        public int UpdateUser(UserSkill user);
+        public Task<List<UserSkill>> GetUserSkillsByUserId(int UserId);
 
-        public int DeleteUser(int id);
+        public Task<int> AddUserSkill(UserSkill user);
 
-        public UserSkill GetByUserId(int id);
-        public bool AddUserSkills(List<UserSkill> userSkills);
+        public Task<int> UpdateUserSkill(UserSkill user);
+
+        public Task<UserSkill> GetUserSkillById(int id);
+
+        public Task<int> DeleteUserSkillById(int id);
+
+        public Task<int> AddUserSkills(List<UserSkill> userSkills);
+
+        public Task<int> UpdateUserSkills(List<UserSkill> userSkills);
 
     }
 }

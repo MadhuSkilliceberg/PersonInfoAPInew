@@ -5,43 +5,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PersonsInfoV2Api.Repository;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
     public class UserCompanyBusinessLogic : IUserCompanyBusinessLogic
     {
-        IUserCompanyRepo company;
+        private readonly IUserCompanyRepo userCompanyRepo;
 
         public  UserCompanyBusinessLogic(IUserCompanyRepo Repo)
         {
-            company = Repo;
+            userCompanyRepo = Repo;
              
         }
-
-
-        public int DeleteUser(int id)
+        public async Task<int> DeleteUserCompanyById(int id)
         {
-            return company.DeleteUser(id);
+            return await userCompanyRepo.DeleteUserCompanyById(id);
         }
 
-        public UserCompany GetByUserId(int id)
+        public async Task<List<UserCompany>> GetUserCompanies()
         {
-            return company.GetByUserId(id);
+            return await userCompanyRepo.GetUserCompanies();
         }
 
-        public List<UserCompany> GetUsers()
+        public async Task<UserCompany> GetUserCompanyById(int id)
         {
-            return company.GetUsers();
+            return await userCompanyRepo.GetUserCompanyById(id);
         }
 
-        public int InsertUser(UserCompany user)
+        public async Task<int> AddUserCompany(UserCompany userCompany)
         {
-            return company.InsertUser(user);
+            return await userCompanyRepo.AddUserCompany(userCompany);
         }
 
-        public int UpdateUser(UserCompany user)
+        public async Task<int> AddUserCompanies(List<UserCompany> userCompany)
         {
-            return company.UpdateUser(user);
+            return await userCompanyRepo.AddUserCompanies(userCompany);
+        }
+
+        public async Task<int> UpdateUserCompany(UserCompany userCompany)
+        {
+            return await userCompanyRepo.UpdateUserCompany(userCompany);
+        }
+
+        public async Task<int> UpdateUserCompanies(List<UserCompany> userCompany)
+        {
+            return await userCompanyRepo.UpdateUserCompanies(userCompany);
+        }
+
+        public async Task<List<UserCompany>> GetUserCompaniesByUserId(int userId)
+        {
+            return await userCompanyRepo.GetUserCompaniesByUserId(userId);
         }
     }
 }
+
