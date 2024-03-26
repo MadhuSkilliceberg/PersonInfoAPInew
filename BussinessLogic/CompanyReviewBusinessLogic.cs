@@ -71,31 +71,48 @@ namespace PersonsInfoV2Api.BussinessLogic
             return await companyReviewRepository.GetByCompanyReviewComments(reviewId);
         }
 
+        public async Task<List<Comment>> GetCompanyReviewCommentByParentId(int commentId)
+        {
+            return await companyReviewRepository.GetCompanyReviewCommentByParentId(commentId);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task<List<object>> GetCompanyReviewTreeHierarchical(int reviewId)
         {
-            List<CompanyReviewsCommentModel> categories = await GetByCompanyReviewComments(reviewId);
+            List<CompanyReviewsCommentModel> companyReviewsComments  = await GetByCompanyReviewComments(reviewId);
 
-            List<CompanyReviewsCommentModel> rootCategories = categories.Where(c => !c.ParentId.HasValue).ToList();
+            List<CompanyReviewsCommentModel> rootCategories = companyReviewsComments.Where(c => !c.ParentId.HasValue).ToList();
             List<object> result = new List<object>();
 
             foreach (CompanyReviewsCommentModel rootCategory in rootCategories)
             {
-                result.Add(BuildCategoryTree(rootCategory, categories));
+                result.Add(BuildCategoryTree(rootCategory, companyReviewsComments));
             }
             return result;
         }
 
-        private async Task<object> BuildCategoryTree(CompanyReviewsCommentModel category, List<CompanyReviewsCommentModel> categories)
+        private async Task<object> BuildCategoryTree(CompanyReviewsCommentModel rootCategory, List<CompanyReviewsCommentModel> categories)
         {
-            var children = categories.Where(c => c.ParentId == category.Id).ToList();
+            var children = categories.Where(c => c.ParentId == rootCategory.Id).ToList();
             if (children.Count == 0)
             {
                 return new
                 {
 
-                    description = category.Description,
-                    title = category.Heading,
-                    id = category.Id,
+                    description = rootCategory.Description,
+                    title = rootCategory.Heading,
+                    id = rootCategory.Id,
                     children = new List<object>()
                 };
             }
@@ -109,13 +126,70 @@ namespace PersonsInfoV2Api.BussinessLogic
 
                 return new
                 {
-                    description = category.Description,
-                    title = category.Heading,
-                    id = category.Id,
+                    description = rootCategory.Description,
+                    title = rootCategory.Heading,
+                    id = rootCategory.Id,
                     children = childNodes
                 };
             }
         }
+
+
+
+        public List<object> TreeHierarchical1(List<int> parentIds)
+        {
+
+            Func<int, List<Comment>> categoryLoader = parentId =>
+            {
+                // Fetch child categories for a given parent ID
+                return companyReviewRepository.GetComments().Where(c => c.ParentId == parentId).ToList();
+            };
+
+
+            
+           
+            List<Comment> rootCategories = companyReviewRepository.GetComments().Where(c => parentIds.Contains(c.Id)).ToList();
+            List<object> result = new List<object>();
+
+            foreach (Comment rootCategory in rootCategories)
+            {
+                result.Add(BuildCategoryTree1(rootCategory, categoryLoader));
+            }
+            return result;
+        }
+        private object BuildCategoryTree1(Comment category, Func<int, List<Comment>> categoryLoader)
+        {
+            var children = categoryLoader(category.Id);
+
+            if (children == null || children.Count == 0)
+            {
+                return new
+                {
+                    Id = category.Id,
+                    Heading = category.Heading,
+                    Description = category.Description,
+                    title = category.Id,
+                    children = new List<object>()
+                };
+            }
+            else
+            {
+                var childNodes = new List<object>();
+                foreach (var child in children)
+                {
+                    childNodes.Add(BuildCategoryTree1(child, categoryLoader));
+                }
+
+                return new
+                {
+                    Id = category.Id,
+                    Heading = category.Heading,
+                    Description = category.Description,
+                    children = childNodes
+                };
+            }
+        }
+
     }
 }
 

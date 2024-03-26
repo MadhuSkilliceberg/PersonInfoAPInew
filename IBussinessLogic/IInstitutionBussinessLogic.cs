@@ -33,7 +33,7 @@ namespace PersonsInfoV2Api.IBussinessLogic
 
         public Task<Institution> GetInstitutionByInstitutionId(int institutionId);
 
-
+        public Task<List<Institution>> GetUniversities(int id);
 
     }
 }

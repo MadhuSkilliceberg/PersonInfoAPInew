@@ -104,10 +104,13 @@ namespace PersonsInfoV2Api.Repository
 
             var k = await context.CompanyReviews.Where(a => a.CompanyId == companyId).ToListAsync();
 
-            var reviews = (from c in await context.CompanyReviews.ToListAsync()
+            var reviews = (from c in await context.CompanyReviews.Where(a => a.CompanyId == companyId).ToListAsync()
                            join o in await context.Reviews.ToListAsync()
 
                            on c.ReviewId equals o.Id
+                           join u in await context.Users.ToListAsync()
+
+                        on c.CreatedBy equals u.Id
                            select new CompanyReviewModel
                            {
                                CompanyId = c.CompanyId,
@@ -123,6 +126,7 @@ namespace PersonsInfoV2Api.Repository
                                CreatedBy = c.CreatedBy,
                                UpdatedOn = c.UpdatedOn,
                                UpdatedBy = c.UpdatedBy,
+                               CreatedByName = u.FirstName,
                                TotalComments = 15
 
                            }).ToList();
@@ -176,7 +180,44 @@ namespace PersonsInfoV2Api.Repository
                                      UpdatedOn = o.UpdatedOn,
                                      UpdatedBy = o.UpdatedBy
                                  }).ToList();
+            //List<CompanyReviewsCommentModel> childresult = List<CompanyReviewsCommentModel>();
+            //foreach (var c in partialResult)
+            //{
+            //    context.Comments.Where(c=>c.ParentId)
+            //    new CompanyReviewsCommentModel
+            //    {
+            //        //   ReviewId= c.ReviewId,
+            //        Id = o.Id,
+            //        Heading = o.Heading,
+            //        Description = o.Description,
+            //        Rating = o.Rating,
+            //        IsActive = o.IsActive,
+            //        IsPublic = o.IsPublic,
+            //        AccessLevel = o.AccessLevel,
+            //        CreatedOn = o.CreatedOn,
+            //        CreatedBy = o.CreatedBy,
+            //        UpdatedOn = o.UpdatedOn,
+            //        UpdatedBy = o.UpdatedBy
+            //    }
+            //}
             return partialResult;
         }
+
+        public async Task<List<Comment>> GetCompanyReviewCommentByParentId(int id)
+        {
+            return await context.Comments.Where(a => a.Id == id).ToListAsync();
+        }
+
+        public List<Comment> GetCommentsById(int id)
+        {
+            var data=   context.Comments.Where(a => a.ParentId == id).ToList();
+            return data;
+        }
+
+        public List<Comment> GetComments()
+        {
+            return context.Comments.ToList();
+        }
+
     }
 }

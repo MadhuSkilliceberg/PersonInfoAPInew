@@ -10,40 +10,40 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class CategoryBussinessLogic: ICategoryBussinessLogic
     {
-        ICategoryRepo userRepository;
+        ICategoryRepo CategoryRepository;
         public CategoryBussinessLogic(ICategoryRepo Repo)
         {
-            userRepository = Repo;
+            CategoryRepository = Repo;
         }
 
-        public int DeleteUser(int id)
+        public int DeleteCategory(int id)
         {
-            return userRepository.DeleteUser(id);
+            return CategoryRepository.DeleteCategory(id);
         }
 
-        public Category GetByUserId(int id)
+        public Category GetCategoryById(int id)
         {
-            return userRepository.GetByUserId(id);
+            return CategoryRepository.GetCategoryById(id);
         }
 
-        public List<Category> GetUsers()
+        public List<Category> GetCategories()
         {
-            return userRepository.GetUsers();
+            return CategoryRepository.GetCategories();
         }
 
-        public int InsertUser(Category user)
+        public int SaveCategory(Category Category)
         {
-            return userRepository.InsertUser(user);
+            return CategoryRepository.SaveCategory(Category);
         }
 
-        public bool UpdateUser(Category user)
+        public bool UpdateCategory(Category Category)
         {
-            return userRepository.UpdateUser(user);
+            return CategoryRepository.UpdateCategory(Category);
         }
 
         public List<object> TreeHierarchical()
         {
-            List<Category> categories =  GetUsers();
+            List<Category> categories =  GetCategories();
 
             List<Category> rootCategories = categories.Where(c => !c.ParentCategoryId.HasValue).ToList();
             List<object> result = new List<object>();
@@ -85,5 +85,55 @@ namespace PersonsInfoV2Api.BussinessLogic
                 };
             }
         }
+
+        public List<object> TreeHierarchical1(List<int> parentIds)
+        {
+
+            Func<int, List<Category>> categoryLoader = parentId =>
+            {
+                // Fetch child categories for a given parent ID
+                return GetCategories().Where(c => c.ParentCategoryId == parentId).ToList();
+            };
+
+            List<Category> rootCategories = GetCategories().Where(c => parentIds.Contains(c.Id)).ToList();
+            List<object> result = new List<object>();
+
+            foreach (Category rootCategory in rootCategories)
+            {
+                result.Add(BuildCategoryTree1(rootCategory, categoryLoader));
+            }
+            return result;
+        }
+        private object BuildCategoryTree1(Category category, Func<int, List<Category>> categoryLoader)
+        {
+            var children = categoryLoader(category.Id);
+
+            if (children == null || children.Count == 0)
+            {
+                return new
+                {
+                    name = category.Name,
+                    title = category.Id,
+                    children = new List<object>()
+                };
+            }
+            else
+            {
+                var childNodes = new List<object>();
+                foreach (var child in children)
+                {
+                    childNodes.Add(BuildCategoryTree1(child, categoryLoader));
+                }
+
+                return new
+                {
+                    name = category.Name,
+                    title = category.Id,
+                    children = childNodes
+                };
+            }
+        }
+
+
     }
 }

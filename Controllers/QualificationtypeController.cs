@@ -26,41 +26,41 @@ namespace PersonsInfoV2Api.Controllers
         }
         [Route("DeleteQulificationType/{Id}")]
         [HttpDelete]
-        public int DeleteUser(int id)
+        public int DeleteQulificationType(int id)
         {
-            return qualification.DeleteUser(id);
+            return qualification.DeleteQulificationType(id);
         }
 
 
         [Route("GetQulificationTypeById/{Id}")]
         [HttpGet]
-        public QulificationType GetByUserId(int id)
+        public QulificationType GetQulificationTypeById(int id)
         {
-            return qualification.GetByUserId(id);
+            return qualification.GetQulificationTypeById(id);
         }
 
 
-        [Route("GetQulificationType")]
+        [Route("GetQulificationTypes")]
         [HttpGet]
-        public List<QulificationType> GetUsers()
+        public List<QulificationType> GetQulificationTypes()
         {
-            return qualification.GetUsers();
+            return qualification.GetQulificationTypes();
         }
 
 
         [Route("AddQulificationType")]
         [HttpPost]
-        public int InsertUser(QulificationType qualificationtype)
+        public int InsertQulificationType(QulificationType qualificationtype)
         {
-            return qualification.InsertUser(qualificationtype);
+            return qualification.InsertQulificationType(qualificationtype);
         }
 
 
         [Route("UpdateQulificationType")]
         [HttpPut]
-        public int UpdateUser(QulificationType qualificationtype)
+        public int UpdateQulificationType(QulificationType qualificationtype)
         {
-            return qualification.UpdateUser(qualificationtype);
+            return qualification.UpdateQulificationType(qualificationtype);
         }
 
 

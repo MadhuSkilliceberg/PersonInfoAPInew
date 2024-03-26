@@ -8,13 +8,13 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
   public  interface ISkillBussinessLogic
     {
-        public List<Skill> GetUsers();
-        public int InsertUser(Skill user);
+        public List<Skill> GetSkills();
+        public int InsertSkill(Skill question);
 
-        public int UpdateUser(Skill user);
+        public int UpdateSkill(Skill question);
 
-        public int DeleteUser(int id);
+        public int DeleteSkill(int id);
 
-        public Skill GetByUserId(int id);
+        public Skill GetSkillById(int id);
     }
 }

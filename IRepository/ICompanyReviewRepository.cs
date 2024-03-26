@@ -20,6 +20,13 @@ namespace PersonsInfoV2Api.IRepository
         public Task<CompanyReview> GetCompanyReviewById(int id);
         public Task<List<CompanyReviewModel>> GetByCompanyReviewComapanyId(int companyId);
         public Task<List<CompanyReview>> GetByCompanyReviewComapanyId1(int companyId);
+
         public Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId);
+
+        public   Task<List<Comment>> GetCompanyReviewCommentByParentId(int id);
+
+        public List<Comment> GetCommentsById(int id);
+
+        public List<Comment> GetComments();
     }
 }

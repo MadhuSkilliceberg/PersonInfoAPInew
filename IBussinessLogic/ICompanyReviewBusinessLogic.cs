@@ -21,5 +21,7 @@ namespace PersonsInfoV2Api.IBussinessLogic
         public Task<List<CompanyReview>> GetByCompanyReviewComapanyId1(int companyId);
         public Task<List<object>> GetCompanyReviewTreeHierarchical(int reviewId);
         public Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId);
+
+        public List<object> TreeHierarchical1(List<int> parentIds);
     }
 }

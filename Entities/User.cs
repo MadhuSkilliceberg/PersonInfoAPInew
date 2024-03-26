@@ -21,6 +21,9 @@ namespace PersonsInfoV2Api.Entities
             UserCourses = new HashSet<UserCourse>();
             UserEducationDetails = new HashSet<UserEducationDetail>();
             UserEmails = new HashSet<UserEmail>();
+            UserExamQuestions = new HashSet<UserExamQuestion>();
+            UserExamQuestionsAudits = new HashSet<UserExamQuestionsAudit>();
+            UserExams = new HashSet<UserExam>();
             UserSkills = new HashSet<UserSkill>();
             VacancyCreatedByNavigations = new HashSet<Vacancy>();
             VacancyUpdatedByNavigations = new HashSet<Vacancy>();
@@ -61,6 +64,9 @@ namespace PersonsInfoV2Api.Entities
         public virtual ICollection<UserCourse> UserCourses { get; set; }
         public virtual ICollection<UserEducationDetail> UserEducationDetails { get; set; }
         public virtual ICollection<UserEmail> UserEmails { get; set; }
+        public virtual ICollection<UserExamQuestion> UserExamQuestions { get; set; }
+        public virtual ICollection<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
+        public virtual ICollection<UserExam> UserExams { get; set; }
         public virtual ICollection<UserSkill> UserSkills { get; set; }
         public virtual ICollection<Vacancy> VacancyCreatedByNavigations { get; set; }
         public virtual ICollection<Vacancy> VacancyUpdatedByNavigations { get; set; }

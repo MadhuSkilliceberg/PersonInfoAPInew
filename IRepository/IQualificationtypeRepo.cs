@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.IRepository
 {
- public   interface IQualificationtypeRepo
+    public interface IQualificationTypeRepo
     {
-        public List<QulificationType> GetUsers();
-        public int InsertUser(QulificationType qualificationtype);
+        public List<QulificationType> GetQualificationTypes();
+        public int InsertQualificationType(QulificationType qualificationtype);
 
-        public int UpdateUser(QulificationType qualificationtype);
+        public int UpdateQualificationType(QulificationType qualificationtype);
 
-        public int DeleteUser(int id);
+        public int DeleteQualificationType(int id);
 
-        public QulificationType GetByUserId(int id);
+        public QulificationType GetQualificationTypeById(int id);
 
 
     }

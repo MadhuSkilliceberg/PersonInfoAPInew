@@ -36,10 +36,10 @@ namespace PersonsInfoV2Api.IRepository
         public List<string> GetUserByputfamilycontact(long cont);
 
         public List<string> GetAllUserdetailesByUser(string User);
-        
-      //  public List<string> GetUserByPutState(string statename);
 
+        //  public List<string> GetUserByPutState(string statename);
 
+        public List<User> GetByUserRefernceCode(string refferalCode);
 
 
     }

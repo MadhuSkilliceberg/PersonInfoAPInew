@@ -98,8 +98,8 @@ namespace PersonsInfoV2Api.Controllers
             return await companyReviewBusinessLogic.UpdateRangeCompanyReview(CompanyReviews);
         }
 
-        [Route("GetByCompanyReviewComments")]
-        [HttpPut]
+        [Route("GetByCompanyReviewComments/{reviewId}")]
+        [HttpGet]
         public async Task<List<CompanyReviewsCommentModel>> GetByCompanyReviewComments(int reviewId)
         {
             return await companyReviewBusinessLogic.GetByCompanyReviewComments(reviewId);
@@ -110,6 +110,15 @@ namespace PersonsInfoV2Api.Controllers
         public async Task<List<object>> GetCompanyReviewTreeHierarchical(int id)
         {
             return await companyReviewBusinessLogic.GetCompanyReviewTreeHierarchical(id);
+
+        }
+
+        [Route("GetCommentsTreeHierarchical")]
+        [HttpPost]
+        public List<object> GetCommentsTreeHierarchical(List<int> id)
+        {
+            
+            return companyReviewBusinessLogic.TreeHierarchical1(id);
 
         }
 

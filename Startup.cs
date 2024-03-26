@@ -213,7 +213,7 @@ namespace PersonsInfoV2Api
             services.AddScoped<IMediumRepo, MediumRepo>();
             services.AddScoped<IMediumBussinessLogic, MediumBussinessLogic>();
 
-            services.AddScoped<IQualificationtypeRepo, Qualificationtyperepo>();
+            services.AddScoped<IQualificationTypeRepo, QualificationTyperepo>();
             services.AddScoped<IQualificationtypeBussinessLogic, QualificationtypeBussinessLogic>();
 
             services.AddScoped<IRelationTypeRepo, RelationTypeRepository>();
@@ -335,6 +335,19 @@ namespace PersonsInfoV2Api
 
             services.AddScoped<ILookUpValueRepo, LookUpValueRepo>();
             services.AddScoped<ILookUpValueBussinessLogic, LookUpValueBussinessLogic>();
+
+
+            services.AddScoped<IReferralRepo, ReferralRepo>();
+            services.AddScoped<IReferralBussinessLogic, ReferralsBussinessLogic>();
+
+
+            services.AddScoped<IQuestionRepo, QuestionRepo>();
+            services.AddScoped<IQuestionBussinessLogic, QuestionBussinessLogic>();
+
+            services.AddScoped<IQuestionCategoryRepo, QuestionCategoryRepo>();
+            services.AddScoped<IQuestionCategoryBussinessLogic, QuestionCategoryBussinessLogic>();
+
+
             #endregion
 
             //services.AddSession(options =>

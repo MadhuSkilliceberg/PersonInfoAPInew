@@ -10,39 +10,41 @@ namespace PersonsInfoV2Api.BussinessLogic
 {
     public class SkillBussinessLogic : ISkillBussinessLogic
     {
-        ISkillRepo userRepository;
+        ISkillRepo skillRepository;
         public SkillBussinessLogic(ISkillRepo Repo)
         {
-            userRepository = Repo;
+            skillRepository = Repo;
         }
 
-        public int DeleteUser(int id)
+        public int DeleteSkill(int id)
         {
-            return userRepository.DeleteUser(id);
+            return skillRepository.DeleteSkill(id);
         }
 
-        public Skill GetByUserId(int id)
+        public Skill GetSkillById(int id)
         {
 
-            return userRepository.GetByUserId(id);
+            return skillRepository.GetSkillById(id);
         }
 
-        public List<Skill> GetUsers()
+        public List<Skill> GetSkills()
         {
-            return userRepository.GetUsers();
+            return skillRepository.GetSkills();
         }
 
-        public int InsertUser(Skill user)
+        public int InsertSkill(Skill Skill)
         {
-            return userRepository.InsertUser(user);
+            return skillRepository.InsertSkill(Skill);
         }
 
-        public int UpdateUser(Skill user)
+        public int UpdateSkill(Skill Skill)
         {
-            return userRepository.UpdateUser(user);
-            
+            return skillRepository.UpdateSkill(Skill);
+
         }
 
-     
+
+
+
     }
 }

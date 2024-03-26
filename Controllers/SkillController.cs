@@ -26,41 +26,41 @@ namespace PersonsInfoV2Api.Controllers
 
         [Route("DeleteSkills/{Id}")]
         [HttpDelete]
-        public int DeleteUser(int id)
+        public int DeleteSkill(int id)
         {
-            return userRepository.DeleteUser(id);
+            return userRepository.DeleteSkill(id);
         }
 
 
         [Route("GetSkillsById/{Id}")]
         [HttpGet]
-        public Skill GetByUserId(int id)
+        public Skill GetBySkillId(int id)
         {
-            return userRepository.GetByUserId(id);
+            return userRepository.GetSkillById(id);
         }
 
 
         [Route("GetSkills")]
         [HttpGet]
-        public List<Skill> GetUsers()
+        public List<Skill> GetSkills()
         {
-            return userRepository.GetUsers();
+            return userRepository.GetSkills();
         }
 
 
         [Route("AddSkills")]
         [HttpPost]
-        public int InsertUser(Skill user)
+        public int InsertSkill(Skill user)
         {
-            return userRepository.InsertUser(user);
+            return userRepository.InsertSkill(user);
         }
 
 
         [Route("UpdateSkills")]
         [HttpPut]
-        public int UpdateUser(Skill user)
+        public int UpdateSkill(Skill user)
         {
-            return userRepository.UpdateUser(user);
+            return userRepository.UpdateSkill(user);
         }
     }
 }

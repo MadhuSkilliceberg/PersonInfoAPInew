@@ -48,6 +48,13 @@ namespace PersonsInfoV2Api.Controllers
             return Logic.GetByUserId(id);
         }
 
+        [Route("GetUsersByReferenceCode/{id}")]
+        [HttpGet]
+        public List<User> GetByUserReferenceCode(int id)
+        {
+            return Logic.GetByUserRefernceCode(id);
+        }
+
 
         [Route("GetUsers")]
         [HttpGet]

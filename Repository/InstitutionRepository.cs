@@ -22,19 +22,32 @@ namespace PersonsInfoV2Api.Repository
         {
             var k = context.Institutions.Where(a => a.Id == institutionId).FirstOrDefault();
             context.Institutions.Remove(k);
-           await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return 1;
         }
 
         public async Task<Institution> GetInstitutionByInstitutionId(int institutionId)
         {
-            var k =await context.Institutions.Where(a => a.Id == institutionId).FirstOrDefaultAsync();
+            var k = await context.Institutions.Where(a => a.Id == institutionId).FirstOrDefaultAsync();
             return k;
         }
 
         public async Task<List<Institution>> GetInstitutions()
         {
-            return await context.Institutions.ToListAsync();
+            var query =
+   from Institution in context.Institutions
+   join qulificationTypes in context.QulificationTypes on Institution.QulificationTypeId equals qulificationTypes.Id
+   join mediam in context.Media on Institution.MediumId equals mediam.Id
+   //  where post.ID == id
+   select new Institution
+   {
+       Id = Institution.Id,
+       InstitutionName = Institution.InstitutionName,
+       //   QulificationTypeName = qulificationTypes.Name,
+       // MediumName = mediam.Name,
+   };
+            return query.ToList();
+            // return await context.Institutions.ToListAsync();
         }
 
         public async Task<int> AddInstitution(Institution institution)
@@ -42,25 +55,31 @@ namespace PersonsInfoV2Api.Repository
             try
             {
                 context.Institutions.Add(institution);
-               await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return institution.Id;
             }
-            catch(Exception ex)
+            catch 
             {
                 return 0;
             }
-           
+
         }
 
         public async Task<int> UpdateInstitution(Institution institution)
         {
             context.Institutions.Update(institution);
-          await  context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return institution.Id;
         }
 
-       
 
+        public async Task<List<Institution>> GetUniversities(int id)
+        {
+            if (id > 0)
+                return await context.Institutions.Where(i =>  i.ParentId == id).ToListAsync();
+            else
+                return await context.Institutions.Where(i => i.ParentId==null).ToListAsync();
+        }
 
 
         //public int InsertInstitutionlist(Qualificationcs qualificationcsss)

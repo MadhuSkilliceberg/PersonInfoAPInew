@@ -1,26 +1,30 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using PersonsInfoV2Api.Entities;
-using PersonsInfoV2Api.Repository;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace PersonsInfoV2Api.Entities
 {
     public partial class User
     {
-        [NotMapped]
-        public string UserTypeName
-        {
-            get
-            {
-                if (UserTypeId != null)
-                return new LookUpValueRepo().GetLookUpValueNameById((int)UserTypeId);
-                else return null;
-            }
-            set
-            {
 
-            }
-        }
+       
+
+        //public long? MobileNumber { get; set; }
+        //public long? AadharNumber { get; set; }
+        //public string VoterId { get; set; }
+        //public string PanCardNumber { get; set; }
+        //public int? UserTypeId { get; set; }
+        //public DateTime? CreatedOn { get; set; }
+        //public int? CreatedBy { get; set; }
+        //public DateTime? UpdatedOn { get; set; }
+        //public int? UpdatedBy { get; set; }
+        //public string Username { get; set; }
+        //public string Password { get; set; }
+        //public string Email { get; set; }
+        //public string RefferalCode { get; set; }
+
+
 
     }
 }

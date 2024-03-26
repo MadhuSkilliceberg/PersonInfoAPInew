@@ -16,5 +16,7 @@ namespace PersonsInfoV2Api.IBussinessLogic
         public int DeleteLookUpValue(int id);
 
         public LookUpValue GetByLookUpValueId(int id);
+
+        public List<LookUpValue> GetLookUpValueByCode(List<string> codes);
     }
 }

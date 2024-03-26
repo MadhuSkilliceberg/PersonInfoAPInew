@@ -45,6 +45,9 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<EmployeeCount> EmployeeCounts { get; set; }
         public virtual DbSet<EmploymentType> EmploymentTypes { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Exam> Exams { get; set; }
+        public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
+        public virtual DbSet<ExaminationSession> ExaminationSessions { get; set; }
         public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<FamilyContact> FamilyContacts { get; set; }
         public virtual DbSet<FamilyEducationDetail> FamilyEducationDetails { get; set; }
@@ -56,8 +59,10 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<InstitutionAddress> InstitutionAddresses { get; set; }
         public virtual DbSet<InstitutionContact> InstitutionContacts { get; set; }
         public virtual DbSet<InstitutionCourse> InstitutionCourses { get; set; }
+        public virtual DbSet<InstitutionEducationProgramType> InstitutionEducationProgramTypes { get; set; }
         public virtual DbSet<InstitutionEmail> InstitutionEmails { get; set; }
         public virtual DbSet<InstitutionJob> InstitutionJobs { get; set; }
+        public virtual DbSet<InstitutionMedium> InstitutionMedia { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<JobJobType> JobJobTypes { get; set; }
         public virtual DbSet<JobSchedule> JobSchedules { get; set; }
@@ -73,6 +78,10 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuestionCategory> QuestionCategories { get; set; }
+        public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
+        public virtual DbSet<QuestionType> QuestionTypes { get; set; }
         public virtual DbSet<QulificationType> QulificationTypes { get; set; }
         public virtual DbSet<Referral> Referrals { get; set; }
         public virtual DbSet<RelationType> RelationTypes { get; set; }
@@ -94,6 +103,7 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<TaskState> TaskStates { get; set; }
         public virtual DbSet<Template> Templates { get; set; }
         public virtual DbSet<TemplateType> TemplateTypes { get; set; }
+        public virtual DbSet<TimeLine> TimeLines { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddressDetail> UserAddressDetails { get; set; }
         public virtual DbSet<UserCompany> UserCompanies { get; set; }
@@ -101,10 +111,15 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<UserCourse> UserCourses { get; set; }
         public virtual DbSet<UserEducationDetail> UserEducationDetails { get; set; }
         public virtual DbSet<UserEmail> UserEmails { get; set; }
+        public virtual DbSet<UserExam> UserExams { get; set; }
+        public virtual DbSet<UserExamQuestion> UserExamQuestions { get; set; }
+        public virtual DbSet<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
+        public virtual DbSet<UserProfileQuestion> UserProfileQuestions { get; set; }
         public virtual DbSet<UserSkill> UserSkills { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<VacanciesSkill> VacanciesSkills { get; set; }
         public virtual DbSet<Vacancy> Vacancies { get; set; }
+        public virtual DbSet<VerificationCenterExamination> VerificationCenterExaminations { get; set; }
         public virtual DbSet<YearSemester> YearSemesters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -641,6 +656,94 @@ namespace PersonsInfoV2Api.Entities
                     .HasConstraintName("FK__Events__ToUserId__26CFC035");
             });
 
+            modelBuilder.Entity<Exam>(entity =>
+            {
+                entity.ToTable("Exam");
+
+                entity.Property(e => e.CloseOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.IsPublish)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StartOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Updatedon).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ExamQuestion>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Exam)
+                    .WithMany(p => p.ExamQuestions)
+                    .HasForeignKey(d => d.ExamId)
+                    .HasConstraintName("FK_ExamQuestions_Exam");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.ExamQuestions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .HasConstraintName("FK_ExamQuestions_Question");
+            });
+
+            modelBuilder.Entity<ExaminationSession>(entity =>
+            {
+                entity.ToTable("ExaminationSession");
+
+                entity.HasIndex(e => e.Guid, "UQ__Examinat__A2B5777D9EE92BB0")
+                    .IsUnique();
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.IsExamActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SessionJson)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SessionTime).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<Family>(entity =>
             {
                 entity.ToTable("Family");
@@ -865,6 +968,27 @@ namespace PersonsInfoV2Api.Entities
                     .HasConstraintName("FK__Instituti__Insti__44CA3770");
             });
 
+            modelBuilder.Entity<InstitutionEducationProgramType>(entity =>
+            {
+                entity.ToTable("InstitutionEducationProgramType");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Institution)
+                    .WithMany(p => p.InstitutionEducationProgramTypes)
+                    .HasForeignKey(d => d.InstitutionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InstitutionEducationProgramType_InstitutionId");
+
+                entity.HasOne(d => d.LookUp)
+                    .WithMany(p => p.InstitutionEducationProgramTypes)
+                    .HasForeignKey(d => d.LookUpId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InstitutionEducationProgramType_LookUpId");
+            });
+
             modelBuilder.Entity<InstitutionEmail>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -896,6 +1020,27 @@ namespace PersonsInfoV2Api.Entities
                     .HasForeignKey(d => d.JobId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_InstitutionJobs_JobId");
+            });
+
+            modelBuilder.Entity<InstitutionMedium>(entity =>
+            {
+                entity.ToTable("InstitutionMedium");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Institution)
+                    .WithMany(p => p.InstitutionMedia)
+                    .HasForeignKey(d => d.InstitutionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InstitutionMedium_InstitutionId");
+
+                entity.HasOne(d => d.LookUp)
+                    .WithMany(p => p.InstitutionMedia)
+                    .HasForeignKey(d => d.LookUpId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InstitutionMedium_LookUpId");
             });
 
             modelBuilder.Entity<Job>(entity =>
@@ -1219,6 +1364,128 @@ namespace PersonsInfoV2Api.Entities
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<Question>(entity =>
+            {
+                entity.ToTable("Question");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.IsPublish)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDt).HasColumnType("datetime");
+
+                entity.Property(e => e.Question1)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasColumnName("Question");
+            });
+
+            modelBuilder.Entity<QuestionCategory>(entity =>
+            {
+                entity.ToTable("QuestionCategory");
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D0AE310CF")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D659BA0DB")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D88201741")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D8D1BAA27")
+                    .IsUnique();
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QuestionCategory1)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("QuestionCategory");
+            });
+
+            modelBuilder.Entity<QuestionOption>(entity =>
+            {
+                entity.ToTable("QuestionOption");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Option).IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.QuestionOptions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .HasConstraintName("FK_QuestionOption_QuestionId");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.QuestionOptions)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_QuestionOption_StatusId");
+            });
+
+            modelBuilder.Entity<QuestionType>(entity =>
+            {
+                entity.ToTable("QuestionType");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.QuestionType1)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("QuestionType");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedDt).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<QulificationType>(entity =>
             {
                 entity.ToTable("QulificationType");
@@ -1244,7 +1511,7 @@ namespace PersonsInfoV2Api.Entities
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FullName)
+                entity.Property(e => e.FirstName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
@@ -1609,6 +1876,24 @@ namespace PersonsInfoV2Api.Entities
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<TimeLine>(entity =>
+            {
+                entity.ToTable("TimeLine");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Heading)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Heading ");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -1774,6 +2059,10 @@ namespace PersonsInfoV2Api.Entities
             {
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.YearOfpassout).HasColumnName("YearOFPassout");
@@ -1781,17 +2070,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Institution)
                     .WithMany(p => p.UserEducationDetails)
                     .HasForeignKey(d => d.InstitutionId)
-                    .HasConstraintName("FK__UserEduca__Insti__0662F0A3");
+                    .HasConstraintName("FK__UserEduca__Insti__2F650636");
 
                 entity.HasOne(d => d.Qulificationtype)
                     .WithMany(p => p.UserEducationDetails)
                     .HasForeignKey(d => d.QulificationtypeId)
-                    .HasConstraintName("FK__UserEduca__Qulif__5CA1C101");
+                    .HasConstraintName("FK__UserEduca__Qulif__30592A6F");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserEducationDetails)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserEduca__UserI__5D95E53A");
+                    .HasConstraintName("FK__UserEduca__UserI__314D4EA8");
             });
 
             modelBuilder.Entity<UserEmail>(entity =>
@@ -1811,6 +2100,126 @@ namespace PersonsInfoV2Api.Entities
                     .WithMany(p => p.UserEmails)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK__UserEmail__UserI__5F7E2DAC");
+            });
+
+            modelBuilder.Entity<UserExam>(entity =>
+            {
+                entity.ToTable("UserExam");
+
+                entity.Property(e => e.CloseOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StartOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Updatedon).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Exam)
+                    .WithMany(p => p.UserExams)
+                    .HasForeignKey(d => d.ExamId)
+                    .HasConstraintName("FK_UserExams_ExamId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserExams)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_UserExams_UserId");
+            });
+
+            modelBuilder.Entity<UserExamQuestion>(entity =>
+            {
+                entity.Property(e => e.Answer).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Exam)
+                    .WithMany(p => p.UserExamQuestions)
+                    .HasForeignKey(d => d.ExamId)
+                    .HasConstraintName("FK_UserExamQuestions_Exam");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.UserExamQuestions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .HasConstraintName("FK_UserExamQuestions_Question");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserExamQuestions)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_UserExamQuestions_User");
+            });
+
+            modelBuilder.Entity<UserExamQuestionsAudit>(entity =>
+            {
+                entity.ToTable("UserExamQuestionsAudit");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.UserExamQuestionsAudits)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_UserExamQuestionsAudit_StatusId");
+
+                entity.HasOne(d => d.UserExamQuestion)
+                    .WithMany(p => p.UserExamQuestionsAudits)
+                    .HasForeignKey(d => d.UserExamQuestionId)
+                    .HasConstraintName("FK_UserExamQuestionsAudit_UserExamQuestionId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserExamQuestionsAudits)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_UserExamQuestionsAudit_UserId");
+            });
+
+            modelBuilder.Entity<UserProfileQuestion>(entity =>
+            {
+                entity.ToTable("UserProfileQuestion");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.MarkForReview).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDt).HasColumnType("datetime");
+
+                entity.Property(e => e.NotAnswered).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.OptionText).IsUnicode(false);
+
+                entity.Property(e => e.Visited).HasDefaultValueSql("((0))");
             });
 
             modelBuilder.Entity<UserSkill>(entity =>
@@ -1920,6 +2329,26 @@ namespace PersonsInfoV2Api.Entities
                     .WithMany(p => p.VacancyUpdatedByNavigations)
                     .HasForeignKey(d => d.UpdatedBy)
                     .HasConstraintName("FK_Vacancies_UpdatedBy");
+            });
+
+            modelBuilder.Entity<VerificationCenterExamination>(entity =>
+            {
+                entity.ToTable("VerificationCenterExamination");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDt).HasColumnType("datetime");
+
+                entity.Property(e => e.ExaminationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<YearSemester>(entity =>

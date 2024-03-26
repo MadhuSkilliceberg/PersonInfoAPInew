@@ -18,7 +18,7 @@ namespace PersonsInfoV2Api.IRepository
 
         public Task<Institution> GetInstitutionByInstitutionId(int institutionId);
 
-
+        public  Task<List<Institution>> GetUniversities(int id);
 
     }
 }

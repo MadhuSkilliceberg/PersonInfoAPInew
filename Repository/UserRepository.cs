@@ -144,6 +144,13 @@ namespace PersonsInfoV2Api.Repository
             return Context.Users.Where(a => a.Id == id).FirstOrDefault();
         }
 
+        public List<User> GetByUserRefernceCode(string refferalCode)
+        {
+            return Context.Users.Where(a => a.RefferalCode == refferalCode).ToList();
+        }
+
+       
+
         public List<string> GetUserByPutMedium(string mediumname)
         {
             List<string> Rose = new List<string>();

@@ -19,7 +19,7 @@ namespace PersonsInfoV2Api.Repository
 
 
 
-        public int DeleteUser(int id)
+        public int DeleteCategory(int id)
         {
             var k = Context.Categories.Where(a => a.Id == id).FirstOrDefault();
             Context.Categories.Remove(k);
@@ -27,27 +27,27 @@ namespace PersonsInfoV2Api.Repository
             return 1;
         }
 
-        public Category GetByUserId(int id)
+        public Category GetCategoryById(int id)
         {
             var k = Context.Categories.Where(a => a.Id == id).FirstOrDefault();
             return k;
         }
 
-        public List<Category> GetUsers()
+        public List<Category> GetCategories()
         {
             return Context.Categories.ToList();
         }
 
-        public int InsertUser(Category user)
+        public int SaveCategory(Category Category)
         {
-            Context.Categories.Add(user);
+            Context.Categories.Add(Category);
             Context.SaveChanges();
-            return user.Id;
+            return Category.Id;
         }
 
-        public bool UpdateUser(Category user)
+        public bool UpdateCategory(Category Category)
         {
-            Context.Categories.Update(user);
+            Context.Categories.Update(Category);
             Context.SaveChanges();
             return true;
         }

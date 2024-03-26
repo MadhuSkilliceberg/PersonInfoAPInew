@@ -62,5 +62,12 @@ namespace PersonsInfoV2Api.Controllers
         {
             return LookUpValueRepository.UpdateLookUpValue(LookUpValue);
         }
+
+        [Route("GetLookUpValueByCode")]
+        [HttpPost]
+        public List<LookUpValue> GetLookUpValueByCode(List<string> codes)
+        {
+            return LookUpValueRepository.GetLookUpValueByCode(codes);
+        }
     }
 }

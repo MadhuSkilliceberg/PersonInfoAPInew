@@ -40,7 +40,7 @@ namespace PersonsInfoV2Api.IBussinessLogic
 
         public Task<UserModel> GetUserById(int id);
 
-
+        public List<User> GetByUserRefernceCode(int id);
 
 
     }

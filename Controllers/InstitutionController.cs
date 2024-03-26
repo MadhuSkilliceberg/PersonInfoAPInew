@@ -46,7 +46,6 @@ namespace PersonsInfoV2Api.Controllers
         [Route("GetInstitutions")]
         [HttpGet]
         public async Task<List<Institution>> GetInstitutions()
-
         {
             return await _institutionBussinessLogic.GetInstitutions();
         }
@@ -93,5 +92,11 @@ namespace PersonsInfoV2Api.Controllers
             return await _institutionBussinessLogic.InstitutionDetails(institutionDetails);
         }
 
+        [Route("GetUniversities/{id}")]
+        [HttpGet]
+        public async Task<List<Institution>> GetUniversities(int id)
+        {
+            return await _institutionBussinessLogic.GetUniversities(id);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace PersonsInfoV2Api.BussinessLogic
     public class InstitutionBussinessLogic : IInstitutionBussinessLogic
     {
         private readonly IInstitutionRepository _institutionRepository;
-        private readonly IQualificationtypeRepo _qualificationtype;
+        private readonly IQualificationTypeRepo _qualificationtype;
         private readonly IMediumRepo _mediumRepo;
         private readonly IInstitutionAddressRepository _institutionAddressRepository;
         private readonly IInstitutionContactRepository _institutionContactRepository;
@@ -22,7 +22,7 @@ namespace PersonsInfoV2Api.BussinessLogic
 
         public InstitutionBussinessLogic(
             IInstitutionRepository institutionRepository,
-            IQualificationtypeRepo qualificationtypes,
+            IQualificationTypeRepo qualificationtypes,
             IMediumRepo mediumRepos,
             IInstitutionAddressRepository institutionAddressRepository,
             IInstitutionContactRepository institutionContactRepository,
@@ -77,7 +77,7 @@ namespace PersonsInfoV2Api.BussinessLogic
         {
             //List<Qualificationcs> qualificationcs = new List<Qualificationcs>();
             var institutionData = await _institutionRepository.GetInstitutions();
-            var qualificationData = _qualificationtype.GetUsers();
+            var qualificationData = _qualificationtype.GetQualificationTypes();
             var mediumData = _mediumRepo.GetUsers();
 
 
@@ -241,7 +241,28 @@ namespace PersonsInfoV2Api.BussinessLogic
                 }
             }
 
-
+        public async Task<List<Institution>> GetUniversities(int id)
+        {
+            return await _institutionRepository.GetUniversities(id);
         }
+
+
+ //       public async Task<UserModel> GetUserById(int id)
+ //       {
+ //           UserModel userModel = new UserModel();
+ //           userModel.User = GetByUserId(id);
+ //           userModel.UserContacts = await userContactRepo.GetUserContactsByUserId(id);
+ //           userModel.UserAddressDetails = await userAddressDetailRepo.GetUserAddressDetailsByUserId(id);
+ //           userModel.UserEmails = await userEmailRepo.GetUserEmailsByUserId(id);
+ //           userModel.UserCompanies
+ //= await userCompanyRepo.GetUserCompaniesByUserId(id);
+ //           userModel.UserCourses = await repoUserCourse.GetUserCoursesByUserId(id);
+ //           userModel.UserEducationDetails = await userEducationDetailRepo.GetUserEducationDetailsByUserId(id);
+ //           userModel.UserSkills = await userSkillRepo.GetUserSkillsByUserId(id);
+ //           return userModel;
+ //       }
+
+
     }
+}
 

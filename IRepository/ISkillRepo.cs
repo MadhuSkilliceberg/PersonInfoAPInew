@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.IRepository
 {
-  public  interface ISkillRepo
+  public  interface IReferralRepo
     {
-        public List<Skill> GetUsers();
-        public int InsertUser(Skill user);
+        public List<Referral> GetReferrals();
+        public int InsertReferral(Referral user);
 
-        public int UpdateUser(Skill user);
+        public int UpdateReferral(Referral user);
 
-        public int DeleteUser(int id);
+        public int DeleteReferral(int id);
 
-        public Skill GetByUserId(int id);
+        public Referral GetReferralById(int id);
+
+        public Task<List<Referral>> GetReferralByRefferedCode(string code);
     }
 }

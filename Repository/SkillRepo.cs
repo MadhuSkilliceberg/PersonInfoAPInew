@@ -11,7 +11,7 @@ namespace PersonsInfoV2Api.Repository
     {
         PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
 
-        public int DeleteUser(int id)
+        public int DeleteSkill(int id)
         {
             var k = Context.Skills.Where(a => a.Id == id).FirstOrDefault();
             Context.Skills.Remove(k);
@@ -19,25 +19,25 @@ namespace PersonsInfoV2Api.Repository
             return 1;
         }
 
-        public Skill GetByUserId(int id)
+        public Skill GetSkillById(int id)
         {
             var k = Context.Skills.Where(a => a.Id == id).FirstOrDefault();
             return k;
         }
 
-        public List<Skill> GetUsers()
+        public List<Skill> GetSkills()
         {
             return Context.Skills.ToList();
         }
 
-        public int InsertUser(Skill user)
+        public int InsertSkill(Skill user)
         {
             Context.Skills.Add(user);
             Context.SaveChanges();
             return user.Id;
         }
 
-        public int UpdateUser(Skill user)
+        public int UpdateSkill(Skill user)
         {
             Context.Skills.Update(user);
             Context.SaveChanges();

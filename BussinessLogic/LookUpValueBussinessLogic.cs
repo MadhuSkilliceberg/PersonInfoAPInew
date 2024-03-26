@@ -31,6 +31,11 @@ namespace PersonsInfoV2Api.BussinessLogic
             return LookUpValueRepository.GetLookUpValues();
         }
 
+        public List<LookUpValue> GetLookUpValueByCode(List<string> codes)
+        {
+            return LookUpValueRepository.GetLookUpValueByCode(codes);
+        }
+
         public bool InsertLookUpValue(LookUpValue LookUpValue)
         {
             return LookUpValueRepository.InsertLookUpValue(LookUpValue);

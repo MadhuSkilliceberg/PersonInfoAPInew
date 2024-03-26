@@ -11,40 +11,40 @@ namespace PersonsInfoV2Api.BussinessLogic
     public class QualificationtypeBussinessLogic: IQualificationtypeBussinessLogic
     {
 
-        IQualificationtypeRepo qualificatio;
+        IQualificationTypeRepo qualificationTypeRepo     ;
 
-      public   QualificationtypeBussinessLogic(IQualificationtypeRepo Repo)
+      public   QualificationtypeBussinessLogic(IQualificationTypeRepo Repo)
         {
-            qualificatio = Repo;
+            qualificationTypeRepo = Repo;
         }
 
-        public int DeleteUser(int id)
+        public int DeleteQulificationType(int id)
         {
-            return qualificatio.DeleteUser(id);
+            return qualificationTypeRepo.DeleteQualificationType(id);
         }
 
-        public QulificationType GetByUserId(int id)
+        public QulificationType GetQulificationTypeById(int id)
         {
 
-            return qualificatio.GetByUserId(id);
+            return qualificationTypeRepo.GetQualificationTypeById(id);
         }
 
-        public List<QulificationType> GetUsers()
+        public List<QulificationType> GetQulificationTypes()
         {
 
-            return qualificatio.GetUsers();
+            return qualificationTypeRepo.GetQualificationTypes();
         }
 
-        public int InsertUser(QulificationType qualificationtype)
+        public int InsertQulificationType(QulificationType qualificationTypeRepontype)
         {
 
-            return qualificatio.InsertUser(qualificationtype);
+            return qualificationTypeRepo.InsertQualificationType(qualificationTypeRepontype);
         }
 
-        public int UpdateUser(QulificationType qualificationtype)
+        public int UpdateQulificationType(QulificationType qualificationTypeRepontype)
         {
 
-            return qualificatio.UpdateUser(qualificationtype);
+            return qualificationTypeRepo.UpdateQualificationType(qualificationTypeRepontype);
         }
     }
 }

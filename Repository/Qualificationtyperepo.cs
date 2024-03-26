@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace PersonsInfoV2Api.Repository
 {
    
-    public class Qualificationtyperepo : IQualificationtypeRepo
+    public class QualificationTyperepo : IQualificationTypeRepo
     {
         PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
-        public int DeleteUser(int id)
+        public int DeleteQualificationType(int id)
         {
             var k = Context.QulificationTypes.Where(a => a.Id == id).FirstOrDefault();
             Context.QulificationTypes.Remove(k);
@@ -19,25 +19,25 @@ namespace PersonsInfoV2Api.Repository
             return 1;
         }
 
-        public QulificationType GetByUserId(int id)
+        public QulificationType GetQualificationTypeById(int id)
         {
             var k = Context.QulificationTypes.Where(a => a.Id == id).FirstOrDefault();
             return k;
         }
 
-        public List<QulificationType> GetUsers()
+        public List<QulificationType> GetQualificationTypes()
         {
             return Context.QulificationTypes.ToList();
         }
 
-        public int InsertUser(QulificationType  qualificationtype)
+        public int InsertQualificationType(QulificationType  qualificationtype)
         {
             Context.QulificationTypes.Add(qualificationtype);
             Context.SaveChanges();
             return qualificationtype.Id;
         }
 
-        public int UpdateUser(QulificationType qualificationtype)
+        public int UpdateQualificationType(QulificationType qualificationtype)
         {
             Context.QulificationTypes.Update(qualificationtype);
             Context.SaveChanges();

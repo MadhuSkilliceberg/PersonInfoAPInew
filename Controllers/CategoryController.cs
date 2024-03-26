@@ -25,41 +25,41 @@ namespace PersonsInfoV2Api.Controllers
 
         [Route("DeleteCategory/{id}")]
         [HttpDelete]
-        public int DeleteUser(int id)
+        public int DeleteCategory(int id)
         {
-            return categoryBussinessLogic.DeleteUser(id);
+            return categoryBussinessLogic.DeleteCategory(id);
         }
 
 
         [Route("GetCategoryById/{id}")]
         [HttpGet]
-        public Category GetByUserId(int id)
+        public Category GetCategoryById(int id)
         {
-            return categoryBussinessLogic.GetByUserId(id);
+            return categoryBussinessLogic.GetCategoryById(id);
         }
 
 
         [Route("GetCategory")]
         [HttpGet]
-        public List<Category> GetUsers()
+        public List<Category> GetCategories()
         {
-            return categoryBussinessLogic.GetUsers();
+            return categoryBussinessLogic.GetCategories();
         }
 
 
         [Route("AddCategory")]
         [HttpPost]
-        public int InsertUser(Category user)
+        public int SaveCategory(Category user)
         {
-            return categoryBussinessLogic.InsertUser(user);
+            return categoryBussinessLogic.SaveCategory(user);
         }
 
 
         [Route("UpdateCategory")]
         [HttpPut]
-        public bool UpdateUser(Category user)
+        public bool UpdateCategory(Category user)
         {
-            return categoryBussinessLogic.UpdateUser(user);
+            return categoryBussinessLogic.UpdateCategory(user);
         }
 
         [Route("TreeHierarchical")]
@@ -68,6 +68,14 @@ namespace PersonsInfoV2Api.Controllers
         {
             return categoryBussinessLogic.TreeHierarchical();
         }
+        [Route("TreeHierarchical1")]
+        [HttpPost]
+        public List<object> TreeHierarchical1(List<int> ids)
+        {
+            return categoryBussinessLogic.TreeHierarchical1(ids);
+        }
+
+        
 
     }
 }

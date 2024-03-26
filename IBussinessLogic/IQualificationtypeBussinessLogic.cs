@@ -8,13 +8,13 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
     public interface IQualificationtypeBussinessLogic
     {
-        public List<QulificationType> GetUsers();
-        public int InsertUser(QulificationType qualificationtype);
+        public List<QulificationType> GetQulificationTypes();
+        public int InsertQulificationType(QulificationType qualificationtype);
 
-        public int UpdateUser(QulificationType user);
+        public int UpdateQulificationType(QulificationType qulificationType);
 
-        public int DeleteUser(int id);
+        public int DeleteQulificationType(int id);
 
-        public QulificationType GetByUserId(int id);
+        public QulificationType GetQulificationTypeById(int id);
     }
 }

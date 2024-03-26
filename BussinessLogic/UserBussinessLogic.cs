@@ -61,6 +61,17 @@ namespace PersonsInfoV2Api.BussinessLogic
             return user;
         }
 
+        public List<User> GetByUserRefernceCode(int id)
+        {
+            User user = new User();
+            user = userRepository.GetByUserId(id);
+            if (user == null)
+            {
+                return    userRepository.GetByUserRefernceCode(user.RefferalCode);
+            }
+            return null;
+        }
+
         public List<User> GetUsers()
         {
             return userRepository.GetUsers();
