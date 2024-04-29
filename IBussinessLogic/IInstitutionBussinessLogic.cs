@@ -17,7 +17,7 @@ namespace PersonsInfoV2Api.IBussinessLogic
         //public Task<int> DeleteInstitution(int id);
 
         //public Task<Institution> GetByInstitutionId(int id);
-        public Task<List<Qualificationcs>> GetQualificationcs();
+        //public Task<List<Qualificationcs>> GetQualificationcs();
 
         public Task<bool> InstitutionModel (InstitutionModels institutionModels);
         public Task<bool> InstitutionDetails (InstitutionDetails institutionDetails);

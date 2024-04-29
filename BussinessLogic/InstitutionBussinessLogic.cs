@@ -73,31 +73,31 @@ namespace PersonsInfoV2Api.BussinessLogic
             return _institutionRepository.UpdateInstitution(institution);
         }
 
-        public async Task<List<Qualificationcs>> GetQualificationcs()
-        {
-            //List<Qualificationcs> qualificationcs = new List<Qualificationcs>();
-            var institutionData = await _institutionRepository.GetInstitutions();
-            var qualificationData = _qualificationtype.GetQualificationTypes();
-            var mediumData = _mediumRepo.GetUsers();
+        //public async Task<List<Qualificationcs>> GetQualificationcs()
+        //{
+        //    //List<Qualificationcs> qualificationcs = new List<Qualificationcs>();
+        //    var institutionData = await _institutionRepository.GetInstitutions();
+        //    var qualificationData = _qualificationtype.GetQualificationTypes();
+        //    var mediumData = _mediumRepo.GetUsers();
 
 
-            var data = from i in institutionData
-                       join
-                       s in qualificationData on
-                       i.QulificationTypeId equals s.Id
-                       join
-                       m in mediumData on
-                       i.MediumId equals m.Id
-                       select new Qualificationcs
-                       {
-                           Id = i.Id,
-                           InstitutionName = i.InstitutionName,
-                           QulificationName = s.Name,
-                           Medium1 = m.Name
+        //    var data = from i in institutionData
+        //               join
+        //               s in qualificationData on
+        //               i.QulificationTypeId equals s.Id
+        //               join
+        //               m in mediumData on
+        //               i.MediumId equals m.Id
+        //               select new Qualificationcs
+        //               {
+        //                   Id = i.Id,
+        //                   InstitutionName = i.InstitutionName,
+        //                   QulificationName = s.Name,
+        //                   Medium1 = m.Name
 
-                       };
-            return data.ToList();
-        }
+        //               };
+        //    return data.ToList();
+        //}
 
         public async Task<bool> InstitutionModel(InstitutionModels institutionModels)
         {

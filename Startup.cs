@@ -341,14 +341,27 @@ namespace PersonsInfoV2Api
             services.AddScoped<IReferralBussinessLogic, ReferralsBussinessLogic>();
 
 
-            services.AddScoped<IQuestionRepo, QuestionRepo>();
-            services.AddScoped<IQuestionBussinessLogic, QuestionBussinessLogic>();
+            //services.AddScoped<IQuestionRepo, QuestionRepo>();
+            //services.AddScoped<IQuestionBussinessLogic, QuestionBussinessLogic>();
 
             services.AddScoped<IQuestionCategoryRepo, QuestionCategoryRepo>();
             services.AddScoped<IQuestionCategoryBussinessLogic, QuestionCategoryBussinessLogic>();
 
+            services.AddScoped<IJobRepo,JobRepository>();
+            services.AddScoped<IJobBusinessLogic, JobBusinessLogic>();
+
+            services.AddScoped<ILocationRepo, LocationRepository>();
+            services.AddScoped<ILocationBusinessLogic, LocationBusinessLogic>();
+
 
             #endregion
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
 
             //services.AddSession(options =>
             //{

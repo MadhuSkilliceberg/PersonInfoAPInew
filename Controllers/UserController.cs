@@ -233,8 +233,8 @@ namespace PersonsInfoV2Api.Controllers
                      QulificationtypeId = ed.QulificationtypeId,
                      QulificationtypeName = ed.Qulificationtype.Name,
                      YearOFPassout = ed.YearOfpassout,
-                     StartYear = ed.StartDate,
-                     EndYear = ed.EndDate,
+                     //StartYear = ed.StartDate,
+                     //EndYear = ed.EndDate,
                      InstitutionId = ed.InstitutionId,
                      Institution = ed.InstitutionId,
                      Percentage = ed.Percentage

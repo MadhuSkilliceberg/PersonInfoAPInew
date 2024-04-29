@@ -16,50 +16,50 @@ namespace PersonsInfoV2Api.Controllers
 
             IQuestionCategoryBussinessLogic QuestionCategoryRepository;
 
-    public QuestionCategoryController(IQuestionCategoryBussinessLogic Repo)
-    {
-        QuestionCategoryRepository = Repo;
-    }
+    //public QuestionCategoryController(IQuestionCategoryBussinessLogic Repo)
+    //{
+    //    QuestionCategoryRepository = Repo;
+    //}
 
 
-    [Route("DeleteQuestionCategorys/{Id}")]
-    [HttpDelete]
-    public int DeleteQuestionCategory(int id)
-    {
-        return QuestionCategoryRepository.DeleteQuestionCategory(id);
-    }
+    //[Route("DeleteQuestionCategorys/{Id}")]
+    //[HttpDelete]
+    //public int DeleteQuestionCategory(int id)
+    //{
+    //    return QuestionCategoryRepository.DeleteQuestionCategory(id);
+    //}
 
 
-    [Route("GetQuestionCategorysById/{Id}")]
-    [HttpGet]
-    public QuestionCategory GetByQuestionCategoryId(int id)
-    {
-        return QuestionCategoryRepository.GetQuestionCategoryById(id);
-    }
+    //[Route("GetQuestionCategorysById/{Id}")]
+    //[HttpGet]
+    //public QuestionCategory GetByQuestionCategoryId(int id)
+    //{
+    //    return QuestionCategoryRepository.GetQuestionCategoryById(id);
+    //}
 
 
-    [Route("GetQuestionCategories")]
-    [HttpGet]
-    public List<QuestionCategory> GetQuestionCategories()
-    {
-        return QuestionCategoryRepository.GetQuestionCategories();
-    }
+    //[Route("GetQuestionCategories")]
+    //[HttpGet]
+    //public List<QuestionCategory> GetQuestionCategories()
+    //{
+    //    return QuestionCategoryRepository.GetQuestionCategories();
+    //}
 
 
-    [Route("AddGetQuestionCategories")]
-    [HttpPost]
-    public int AddGetQuestionCategories(QuestionCategory QuestionCategory)
-    {
-        return QuestionCategoryRepository.InsertQuestionCategory(QuestionCategory);
-    }
+    //[Route("AddGetQuestionCategories")]
+    //[HttpPost]
+    //public int AddGetQuestionCategories(QuestionCategory QuestionCategory)
+    //{
+    //    return QuestionCategoryRepository.InsertQuestionCategory(QuestionCategory);
+    //}
 
 
-    [Route("UpdateGetQuestionCategories")]
-    [HttpPut]
-    public int UpdateGetQuestionCategories(QuestionCategory QuestionCategory)
-    {
-        return QuestionCategoryRepository.UpdateQuestionCategory(QuestionCategory);
-    }
+    //[Route("UpdateGetQuestionCategories")]
+    //[HttpPut]
+    //public int UpdateGetQuestionCategories(QuestionCategory QuestionCategory)
+    //{
+    //    return QuestionCategoryRepository.UpdateQuestionCategory(QuestionCategory);
+    //}
 }
 }
 

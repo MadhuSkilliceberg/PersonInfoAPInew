@@ -69,5 +69,6 @@ namespace PersonsInfoV2Api.Controllers
         {
             return LookUpRepository.UpdateLookUp(LookUp);
         }
+
     }
 }

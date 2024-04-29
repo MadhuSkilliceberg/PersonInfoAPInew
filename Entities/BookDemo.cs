@@ -19,8 +19,5 @@ namespace PersonsInfoV2Api.Entities
         public int? CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
-
-        public virtual QulificationType EducationQualification { get; set; }
-        public virtual State State { get; set; }
     }
 }

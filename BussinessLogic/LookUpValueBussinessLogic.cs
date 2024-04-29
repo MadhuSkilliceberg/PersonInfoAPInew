@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PersonsInfoV2Api.Models;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
@@ -45,5 +46,15 @@ namespace PersonsInfoV2Api.BussinessLogic
         {
             return LookUpValueRepository.UpdateLookUpValue(LookUpValue);
         }
-    }
+
+        public List<LookUpValue> GetLookUpValueByRoleCategory(int DepartmentId)
+        {
+            return LookUpValueRepository.GetLookUpValueByRoleCategory(DepartmentId);
+        }
+
+        public List<LookUpValue> GetLookUpSearch(LookUpSearch lookUpSearch)
+        {
+            return LookUpValueRepository.GetLookUpSearch(lookUpSearch);
+        }
+}
 }

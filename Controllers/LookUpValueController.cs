@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using PersonsInfoV2Api.Models;
 
 namespace PersonsInfoV2Api.Controllers
 {
@@ -69,5 +70,20 @@ namespace PersonsInfoV2Api.Controllers
         {
             return LookUpValueRepository.GetLookUpValueByCode(codes);
         }
+
+        [Route("GetLookUpValueByRoleCategory/{DepartmentId}")]
+        [HttpGet]
+        public List<LookUpValue> GetLookUpValueByRoleCategory(int DepartmentId)
+        {
+            return LookUpValueRepository.GetLookUpValueByRoleCategory(DepartmentId);
+        }
+
+        [Route("GetLookUpSearch")]
+        [HttpPost]
+        public List<LookUpValue> GetLookUpSearch(LookUpSearch lookUpSearch)
+        {
+            return LookUpValueRepository.GetLookUpSearch(lookUpSearch);
+        }
+
     }
 }

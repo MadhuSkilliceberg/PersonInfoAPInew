@@ -168,7 +168,7 @@ namespace PersonsInfoV2Api.Repository
                         foreach (var stu in pqr)
                         {
                             var vwx = ($"{stu.FirstName} {stu.LastName} {stu.Dob} {stu.VoterId} {stu.PanCardNumber} {stu.AadharNumber}" +
-                                $" {ghi.Name} {abc.InstitutionName} {teddy.Name} {mno.StartDate}  {mno.EndDate} " +
+                                $" {ghi.Name} {abc.InstitutionName} {teddy.Name} " +
                                 $" {mno.Percentage} ");
                             Rose.Add(vwx);
                         }
@@ -249,7 +249,7 @@ namespace PersonsInfoV2Api.Repository
                             foreach (var uvw in stu)
                             {
                                 var wxy = ($"{uvw.FirstName}  {uvw.LastName} {uvw.VoterId} {uvw.Dob} {uvw.MobileNumber} {uvw.PanCardNumber} " +
-                                    $"{jkl.InstitutionName}  {mno.Name}  {ghi.Name} {qrs.StartDate} {qrs.EndDate}" +
+                                    $"{jkl.InstitutionName}  {mno.Name}  {ghi.Name} " +
                                     $" {qrs.Percentage} ");
                                 Rose.Add(wxy);
                             }

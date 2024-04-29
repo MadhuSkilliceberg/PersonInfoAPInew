@@ -17,8 +17,6 @@ namespace PersonsInfoV2Api.Entities
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
-        public virtual LookUpValue Status { get; set; }
-        public virtual User User { get; set; }
         public virtual UserExamQuestion UserExamQuestion { get; set; }
     }
 }

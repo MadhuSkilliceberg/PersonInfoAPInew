@@ -8,14 +8,14 @@ namespace PersonsInfoV2Api.IRepository
 {
   public  interface IQuestionCategoryRepo
     {
-        public List<QuestionCategory> GetQuestionCategories();
-        public int InsertQuestionCategory(QuestionCategory user);
+        //public List<QuestionCategory> GetQuestionCategories();
+        //public int InsertQuestionCategory(QuestionCategory user);
 
-        public int UpdateQuestionCategory(QuestionCategory user);
+        //public int UpdateQuestionCategory(QuestionCategory user);
 
-        public int DeleteQuestionCategory(int id);
+        //public int DeleteQuestionCategory(int id);
 
-        public QuestionCategory GetQuestionCategoryById(int id);
+        //public QuestionCategory GetQuestionCategoryById(int id);
 
         //public Task<List<QuestionCategory>> GetQuestionCategoryByRefferedCode(string code);
     }

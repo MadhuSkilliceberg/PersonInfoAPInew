@@ -8,13 +8,13 @@ namespace PersonsInfoV2Api.IBussinessLogic
 {
   public  interface IQuestionCategoryBussinessLogic
     {
-        public List<QuestionCategory> GetQuestionCategories();
-        public int InsertQuestionCategory(QuestionCategory questionCategory);
+        //public List<QuestionCategory> GetQuestionCategories();
+        //public int InsertQuestionCategory(QuestionCategory questionCategory);
 
-        public int UpdateQuestionCategory(QuestionCategory questionCategory);
+        //public int UpdateQuestionCategory(QuestionCategory questionCategory);
 
-        public int DeleteQuestionCategory(int id);
+        //public int DeleteQuestionCategory(int id);
 
-        public QuestionCategory GetQuestionCategoryById(int id);
+        //public QuestionCategory GetQuestionCategoryById(int id);
     }
 }

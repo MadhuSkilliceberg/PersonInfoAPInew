@@ -9,7 +9,6 @@ namespace PersonsInfoV2Api.Entities
     {
         public Question()
         {
-            ExamQuestions = new HashSet<ExamQuestion>();
             QuestionOptions = new HashSet<QuestionOption>();
             UserExamQuestions = new HashSet<UserExamQuestion>();
         }
@@ -35,7 +34,6 @@ namespace PersonsInfoV2Api.Entities
         public string ModifiedBy { get; set; }
         public bool? ShowEditor { get; set; }
 
-        public virtual ICollection<ExamQuestion> ExamQuestions { get; set; }
         public virtual ICollection<QuestionOption> QuestionOptions { get; set; }
         public virtual ICollection<UserExamQuestion> UserExamQuestions { get; set; }
     }
