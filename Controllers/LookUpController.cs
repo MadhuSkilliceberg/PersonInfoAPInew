@@ -40,7 +40,7 @@ namespace PersonsInfoV2Api.Controllers
         }
 
 
-        [Route("GetLookUp")]
+        [Route("GetLookUps")]
         [HttpGet]
         public List<LookUp> GetLookUps()
         {

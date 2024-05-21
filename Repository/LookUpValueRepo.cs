@@ -76,7 +76,35 @@ namespace PersonsInfoV2Api.Repository
       LookUpCode = lookUp.Code,
   };
             return query.ToList();
-           // return data;
+            // return data;
         }
+
+        public List<LookUpValue> GetLookUpValueByLId(int Id)
+        {
+
+            var query =
+  from lookUp in Context.LookUps.Where(a => a.Id == Id).ToList()
+  join value in Context.LookUpValues on lookUp.Id equals value.LookUpId
+
+  //  where post.ID == id
+  select new LookUpValue
+  {
+      Id = value.Id,
+      LookUpId = value.LookUpId,
+      Name = value.Name,
+      Code = value.Code,
+      IsDeleted = value.IsDeleted,
+      CreatedOn = value.CreatedOn,
+      CreatedBy = value.CreatedBy,
+      UpdatedOn = value.UpdatedOn,
+      UpdatedBy = value.UpdatedBy,
+      LookUpCode = lookUp.Code,
+  };
+            return query.ToList();
+            // return data;
+        }
+
+
     }
+
 }

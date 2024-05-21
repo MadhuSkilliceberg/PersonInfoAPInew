@@ -40,7 +40,7 @@ namespace PersonsInfoV2Api.Controllers
         }
 
 
-        [Route("GetLookUpValue")]
+        [Route("GetLookUpValues")]
         [HttpGet]
         public List<LookUpValue> GetLookUpValues()
         {
@@ -68,6 +68,12 @@ namespace PersonsInfoV2Api.Controllers
         public List<LookUpValue> GetLookUpValueByCode(List<string> codes)
         {
             return LookUpValueRepository.GetLookUpValueByCode(codes);
+        }
+        [Route("GetLookUpValueByLId/{Id}")]
+        [HttpGet]
+        public List<LookUpValue> GetLookUpValueByLId(int Id)
+        {
+            return LookUpValueRepository.GetLookUpValueByLId(Id);
         }
     }
 }

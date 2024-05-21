@@ -18,5 +18,7 @@ namespace PersonsInfoV2Api.IRepository
         public LookUpValue GetByLookUpValueId(int id);
 
         public List<LookUpValue> GetLookUpValueByCode(List<string> codes);
+
+        public List<LookUpValue> GetLookUpValueByLId(int Id);
     }
 }
