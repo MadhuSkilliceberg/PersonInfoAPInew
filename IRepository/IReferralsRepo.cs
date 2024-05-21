@@ -16,5 +16,7 @@ namespace PersonsInfoV2Api.IRepository
         public int DeleteSkill(int id);
 
         public Skill GetSkillById(int id);
+
+        public List<Skill> GetSkillsSearch(string name);
     }
 }

@@ -76,9 +76,9 @@ namespace PersonsInfoV2Api.Repository
         public async Task<List<Institution>> GetUniversities(int id)
         {
             if (id > 0)
-                return await context.Institutions.Where(i =>  i.ParentId == id).ToListAsync();
+                return await context.Institutions.Where(i =>  i.Id == id).ToListAsync();
             else
-                return await context.Institutions.Where(i => i.ParentId==null).ToListAsync();
+                return await context.Institutions.Where(i => i.Id==null).ToListAsync();
         }
 
 

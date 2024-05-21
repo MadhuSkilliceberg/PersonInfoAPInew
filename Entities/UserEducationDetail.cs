@@ -11,8 +11,8 @@ namespace PersonsInfoV2Api.Entities
         public int? UserId { get; set; }
         public int? QulificationtypeId { get; set; }
         public int? YearOfpassout { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public int? StartYear { get; set; }
+        public int? EndYear { get; set; }
         public int? InstitutionId { get; set; }
         public int? Percentage { get; set; }
         public DateTime? CreatedOn { get; set; }

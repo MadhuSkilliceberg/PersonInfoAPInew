@@ -19,8 +19,5 @@ namespace PersonsInfoV2Api.Entities
         public string UpdatedBy { get; set; }
         public DateTime StartOn { get; set; }
         public DateTime CloseOn { get; set; }
-
-        public virtual Exam Exam { get; set; }
-        public virtual User User { get; set; }
     }
 }

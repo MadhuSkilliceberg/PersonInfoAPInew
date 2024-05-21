@@ -42,8 +42,11 @@ namespace PersonsInfoV2Api.BussinessLogic
             return skillRepository.UpdateSkill(Skill);
 
         }
+        public List<Skill> GetSkillsSearch(string name)
+        {
+            return skillRepository.GetSkillsSearch(name);
 
-
+        }
 
 
     }

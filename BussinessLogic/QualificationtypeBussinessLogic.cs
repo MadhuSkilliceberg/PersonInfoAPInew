@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.BussinessLogic
 {
-    public class QualificationtypeBussinessLogic: IQualificationtypeBussinessLogic
+    public class QualificationtypeBussinessLogic : IQualificationtypeBussinessLogic
     {
 
         IQualificationTypeRepo qualificationTypeRepo     ;
 
-      public   QualificationtypeBussinessLogic(IQualificationTypeRepo Repo)
+        public QualificationtypeBussinessLogic(IQualificationTypeRepo Repo)
         {
             qualificationTypeRepo = Repo;
         }

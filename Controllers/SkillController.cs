@@ -40,6 +40,7 @@ namespace PersonsInfoV2Api.Controllers
         }
 
 
+
         [Route("GetSkills")]
         [HttpGet]
         public List<Skill> GetSkills()
@@ -62,5 +63,15 @@ namespace PersonsInfoV2Api.Controllers
         {
             return userRepository.UpdateSkill(user);
         }
+
+        [Route("GetSkillsSearch/{name}")]
+        [HttpGet]
+        public List<Skill> GetSkillsSearch(string name)
+        {
+            return userRepository.GetSkillsSearch(name);
+        }
+
+       
+
     }
 }

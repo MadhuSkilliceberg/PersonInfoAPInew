@@ -45,9 +45,6 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<EmployeeCount> EmployeeCounts { get; set; }
         public virtual DbSet<EmploymentType> EmploymentTypes { get; set; }
         public virtual DbSet<Event> Events { get; set; }
-        public virtual DbSet<Exam> Exams { get; set; }
-        public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
-        public virtual DbSet<ExaminationSession> ExaminationSessions { get; set; }
         public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<FamilyContact> FamilyContacts { get; set; }
         public virtual DbSet<FamilyEducationDetail> FamilyEducationDetails { get; set; }
@@ -59,10 +56,8 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<InstitutionAddress> InstitutionAddresses { get; set; }
         public virtual DbSet<InstitutionContact> InstitutionContacts { get; set; }
         public virtual DbSet<InstitutionCourse> InstitutionCourses { get; set; }
-        public virtual DbSet<InstitutionEducationProgramType> InstitutionEducationProgramTypes { get; set; }
         public virtual DbSet<InstitutionEmail> InstitutionEmails { get; set; }
         public virtual DbSet<InstitutionJob> InstitutionJobs { get; set; }
-        public virtual DbSet<InstitutionMedium> InstitutionMedia { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<JobJobType> JobJobTypes { get; set; }
         public virtual DbSet<JobSchedule> JobSchedules { get; set; }
@@ -78,10 +73,6 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
-        public virtual DbSet<QuestionCategory> QuestionCategories { get; set; }
-        public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
-        public virtual DbSet<QuestionType> QuestionTypes { get; set; }
         public virtual DbSet<QulificationType> QulificationTypes { get; set; }
         public virtual DbSet<Referral> Referrals { get; set; }
         public virtual DbSet<RelationType> RelationTypes { get; set; }
@@ -103,7 +94,6 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<TaskState> TaskStates { get; set; }
         public virtual DbSet<Template> Templates { get; set; }
         public virtual DbSet<TemplateType> TemplateTypes { get; set; }
-        public virtual DbSet<TimeLine> TimeLines { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddressDetail> UserAddressDetails { get; set; }
         public virtual DbSet<UserCompany> UserCompanies { get; set; }
@@ -111,15 +101,10 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<UserCourse> UserCourses { get; set; }
         public virtual DbSet<UserEducationDetail> UserEducationDetails { get; set; }
         public virtual DbSet<UserEmail> UserEmails { get; set; }
-        public virtual DbSet<UserExam> UserExams { get; set; }
-        public virtual DbSet<UserExamQuestion> UserExamQuestions { get; set; }
-        public virtual DbSet<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
-        public virtual DbSet<UserProfileQuestion> UserProfileQuestions { get; set; }
         public virtual DbSet<UserSkill> UserSkills { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<VacanciesSkill> VacanciesSkills { get; set; }
         public virtual DbSet<Vacancy> Vacancies { get; set; }
-        public virtual DbSet<VerificationCenterExamination> VerificationCenterExaminations { get; set; }
         public virtual DbSet<YearSemester> YearSemesters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -127,7 +112,7 @@ namespace PersonsInfoV2Api.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=LAPTOP-CS8AKO34\\SQLEXPRESS;Database=PersonsInfoV3New;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("server=SIC_PC1\\SQLEXPRESS;Database=PersonsInfoV3New;Trusted_Connection=True;");
             }
         }
 
@@ -155,15 +140,15 @@ namespace PersonsInfoV2Api.Entities
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.EducationQualification)
-                    .WithMany(p => p.BookDemos)
-                    .HasForeignKey(d => d.EducationQualificationId)
-                    .HasConstraintName("FK__BookDemo__Educat__7720AD13");
+                //entity.HasOne(d => d.EducationQualification)
+                //    .WithMany(p => p.BookDemos)
+                //    .HasForeignKey(d => d.EducationQualificationId)
+                //    .HasConstraintName("FK__BookDemo__Educat__719CDDE7");
 
-                entity.HasOne(d => d.State)
-                    .WithMany(p => p.BookDemos)
-                    .HasForeignKey(d => d.StateId)
-                    .HasConstraintName("FK__BookDemo__StateI__7814D14C");
+                //entity.HasOne(d => d.State)
+                //    .WithMany(p => p.BookDemos)
+                //    .HasForeignKey(d => d.StateId)
+                //    .HasConstraintName("FK__BookDemo__StateI__72910220");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -178,7 +163,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.ParentCategory)
                     .WithMany(p => p.InverseParentCategory)
                     .HasForeignKey(d => d.ParentCategoryId)
-                    .HasConstraintName("FK__Categorie__Paren__2CF2ADDF");
+                    .HasConstraintName("FK__Categorie__Paren__73852659");
             });
 
             modelBuilder.Entity<Chat>(entity =>
@@ -196,17 +181,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.Chats)
                     .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK__Chat__GroupId__1C5231C2");
+                    .HasConstraintName("FK__Chat__GroupId__74794A92");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK__Chat__ParentId__1E3A7A34");
+                    .HasConstraintName("FK__Chat__ParentId__756D6ECB");
 
                 entity.HasOne(d => d.ToUser)
                     .WithMany(p => p.Chats)
                     .HasForeignKey(d => d.ToUserId)
-                    .HasConstraintName("FK__Chat__ToUserId__1D4655FB");
+                    .HasConstraintName("FK__Chat__ToUserId__76619304");
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -285,17 +270,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.CompanyAddresses)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__CompanyAd__Compa__2DE6D218");
+                    .HasConstraintName("FK__CompanyAd__Compa__793DFFAF");
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.CompanyAddresses)
                     .HasForeignKey(d => d.CountryId)
-                    .HasConstraintName("FK__CompanyAd__Count__2EDAF651");
+                    .HasConstraintName("FK__CompanyAd__Count__7A3223E8");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.CompanyAddresses)
                     .HasForeignKey(d => d.StateId)
-                    .HasConstraintName("FK__CompanyAd__State__2FCF1A8A");
+                    .HasConstraintName("FK__CompanyAd__State__7B264821");
             });
 
             modelBuilder.Entity<CompanyBenefit>(entity =>
@@ -326,7 +311,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.ContactType)
                     .WithMany(p => p.CompanyContacts)
                     .HasForeignKey(d => d.ContactTypeId)
-                    .HasConstraintName("FK__CompanyCo__Conta__30C33EC3");
+                    .HasConstraintName("FK__CompanyCo__Conta__7E02B4CC");
             });
 
             modelBuilder.Entity<CompanyEmail>(entity =>
@@ -340,7 +325,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.ContactType)
                     .WithMany(p => p.CompanyEmails)
                     .HasForeignKey(d => d.ContactTypeId)
-                    .HasConstraintName("FK__CompanyEm__Conta__31B762FC");
+                    .HasConstraintName("FK__CompanyEm__Conta__7EF6D905");
             });
 
             modelBuilder.Entity<CompanyJob>(entity =>
@@ -475,12 +460,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.CourseYears)
                     .HasForeignKey(d => d.CourseId)
-                    .HasConstraintName("FK__CourseYea__Cours__3493CFA7");
+                    .HasConstraintName("FK__CourseYea__Cours__05A3D694");
 
                 entity.HasOne(d => d.Cyears)
                     .WithMany(p => p.CourseYears)
                     .HasForeignKey(d => d.CyearsId)
-                    .HasConstraintName("FK__CourseYea__CYear__3587F3E0");
+                    .HasConstraintName("FK__CourseYea__CYear__0697FACD");
             });
 
             modelBuilder.Entity<CoutryState>(entity =>
@@ -492,12 +477,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.CoutryStates)
                     .HasForeignKey(d => d.CountryId)
-                    .HasConstraintName("FK__CoutrySta__Count__367C1819");
+                    .HasConstraintName("FK__CoutrySta__Count__078C1F06");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.CoutryStates)
                     .HasForeignKey(d => d.StateId)
-                    .HasConstraintName("FK__CoutrySta__State__37703C52");
+                    .HasConstraintName("FK__CoutrySta__State__0880433F");
             });
 
             modelBuilder.Entity<Cyear>(entity =>
@@ -643,105 +628,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.Events)
                     .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK__Events__GroupId__25DB9BFC");
+                    .HasConstraintName("FK__Events__GroupId__09746778");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK__Events__ParentId__27C3E46E");
+                    .HasConstraintName("FK__Events__ParentId__0A688BB1");
 
                 entity.HasOne(d => d.ToUser)
                     .WithMany(p => p.Events)
                     .HasForeignKey(d => d.ToUserId)
-                    .HasConstraintName("FK__Events__ToUserId__26CFC035");
-            });
-
-            modelBuilder.Entity<Exam>(entity =>
-            {
-                entity.ToTable("Exam");
-
-                entity.Property(e => e.CloseOn).HasColumnType("datetime");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsPublish)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .IsUnicode(false);
-
-                entity.Property(e => e.StartOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Updatedon).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<ExamQuestion>(entity =>
-            {
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Exam)
-                    .WithMany(p => p.ExamQuestions)
-                    .HasForeignKey(d => d.ExamId)
-                    .HasConstraintName("FK_ExamQuestions_Exam");
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.ExamQuestions)
-                    .HasForeignKey(d => d.QuestionId)
-                    .HasConstraintName("FK_ExamQuestions_Question");
-            });
-
-            modelBuilder.Entity<ExaminationSession>(entity =>
-            {
-                entity.ToTable("ExaminationSession");
-
-                entity.HasIndex(e => e.Guid, "UQ__Examinat__A2B5777D9EE92BB0")
-                    .IsUnique();
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.CreatedDt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsExamActive)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SessionJson)
-                    .IsRequired()
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SessionTime).HasColumnType("datetime");
+                    .HasConstraintName("FK__Events__ToUserId__0B5CAFEA");
             });
 
             modelBuilder.Entity<Family>(entity =>
@@ -763,12 +660,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.RelationType)
                     .WithMany(p => p.Families)
                     .HasForeignKey(d => d.RelationTypeId)
-                    .HasConstraintName("FK__Family__Relation__3864608B");
+                    .HasConstraintName("FK__Family__Relation__0C50D423");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Families)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Family__UserId__395884C4");
+                    .HasConstraintName("FK__Family__UserId__0D44F85C");
             });
 
             modelBuilder.Entity<FamilyContact>(entity =>
@@ -780,7 +677,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Family)
                     .WithMany(p => p.FamilyContacts)
                     .HasForeignKey(d => d.FamilyId)
-                    .HasConstraintName("FK__FamilyCon__Famil__3A4CA8FD");
+                    .HasConstraintName("FK__FamilyCon__Famil__0E391C95");
             });
 
             modelBuilder.Entity<FamilyEducationDetail>(entity =>
@@ -794,17 +691,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Family)
                     .WithMany(p => p.FamilyEducationDetails)
                     .HasForeignKey(d => d.FamilyId)
-                    .HasConstraintName("FK__FamilyEdu__Famil__3B40CD36");
+                    .HasConstraintName("FK__FamilyEdu__Famil__0F2D40CE");
 
                 entity.HasOne(d => d.Institution)
                     .WithMany(p => p.FamilyEducationDetails)
                     .HasForeignKey(d => d.InstitutionId)
-                    .HasConstraintName("FK__FamilyEdu__Insti__3C34F16F");
+                    .HasConstraintName("FK__FamilyEdu__Insti__10216507");
 
                 entity.HasOne(d => d.Qulificationtype)
                     .WithMany(p => p.FamilyEducationDetails)
                     .HasForeignKey(d => d.QulificationtypeId)
-                    .HasConstraintName("FK__FamilyEdu__Qulif__3D2915A8");
+                    .HasConstraintName("FK__FamilyEdu__Qulif__11158940");
             });
 
             modelBuilder.Entity<FamilyEmail>(entity =>
@@ -816,7 +713,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.InstitutionAddress)
                     .WithMany(p => p.FamilyEmails)
                     .HasForeignKey(d => d.InstitutionAddressId)
-                    .HasConstraintName("FK__FamilyEma__Insti__3E1D39E1");
+                    .HasConstraintName("FK__FamilyEma__Insti__1209AD79");
             });
 
             modelBuilder.Entity<Gender>(entity =>
@@ -882,12 +779,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Medium)
                     .WithMany(p => p.Institutions)
                     .HasForeignKey(d => d.MediumId)
-                    .HasConstraintName("FK__Instituti__Mediu__46B27FE2");
+                    .HasConstraintName("FK__Instituti__Mediu__1C873BEC");
 
                 entity.HasOne(d => d.QulificationType)
                     .WithMany(p => p.Institutions)
                     .HasForeignKey(d => d.QulificationTypeId)
-                    .HasConstraintName("FK__Instituti__Qulif__47A6A41B");
+                    .HasConstraintName("FK__Instituti__Qulif__1D7B6025");
             });
 
             modelBuilder.Entity<InstitutionAddress>(entity =>
@@ -917,22 +814,22 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.InstitutionAddresses)
                     .HasForeignKey(d => d.CountryId)
-                    .HasConstraintName("FK__Instituti__Count__3F115E1A");
+                    .HasConstraintName("FK__Instituti__Count__12FDD1B2");
 
                 entity.HasOne(d => d.Institution)
                     .WithMany(p => p.InstitutionAddressInstitutions)
                     .HasForeignKey(d => d.InstitutionId)
-                    .HasConstraintName("FK__Instituti__Insti__40058253");
+                    .HasConstraintName("FK__Instituti__Insti__13F1F5EB");
 
                 entity.HasOne(d => d.Meduim)
                     .WithMany(p => p.InstitutionAddresses)
                     .HasForeignKey(d => d.MeduimId)
-                    .HasConstraintName("FK__Instituti__Medui__40F9A68C");
+                    .HasConstraintName("FK__Instituti__Medui__14E61A24");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.InstitutionAddressStates)
                     .HasForeignKey(d => d.StateId)
-                    .HasConstraintName("FK__Instituti__State__41EDCAC5");
+                    .HasConstraintName("FK__Instituti__State__15DA3E5D");
             });
 
             modelBuilder.Entity<InstitutionContact>(entity =>
@@ -944,7 +841,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.InstitutionAddress)
                     .WithMany(p => p.InstitutionContacts)
                     .HasForeignKey(d => d.InstitutionAddressId)
-                    .HasConstraintName("FK__Instituti__Insti__42E1EEFE");
+                    .HasConstraintName("FK__Instituti__Insti__16CE6296");
             });
 
             modelBuilder.Entity<InstitutionCourse>(entity =>
@@ -960,33 +857,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.InstitutionCourses)
                     .HasForeignKey(d => d.CourseId)
-                    .HasConstraintName("FK__Instituti__Cours__43D61337");
+                    .HasConstraintName("FK__Instituti__Cours__17C286CF");
 
                 entity.HasOne(d => d.Institution)
                     .WithMany(p => p.InstitutionCourses)
                     .HasForeignKey(d => d.InstitutionId)
-                    .HasConstraintName("FK__Instituti__Insti__44CA3770");
-            });
-
-            modelBuilder.Entity<InstitutionEducationProgramType>(entity =>
-            {
-                entity.ToTable("InstitutionEducationProgramType");
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Institution)
-                    .WithMany(p => p.InstitutionEducationProgramTypes)
-                    .HasForeignKey(d => d.InstitutionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_InstitutionEducationProgramType_InstitutionId");
-
-                entity.HasOne(d => d.LookUp)
-                    .WithMany(p => p.InstitutionEducationProgramTypes)
-                    .HasForeignKey(d => d.LookUpId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_InstitutionEducationProgramType_LookUpId");
+                    .HasConstraintName("FK__Instituti__Insti__18B6AB08");
             });
 
             modelBuilder.Entity<InstitutionEmail>(entity =>
@@ -1000,7 +876,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.InstitutionAddress)
                     .WithMany(p => p.InstitutionEmails)
                     .HasForeignKey(d => d.InstitutionAddressId)
-                    .HasConstraintName("FK__Instituti__Insti__45BE5BA9");
+                    .HasConstraintName("FK__Instituti__Insti__19AACF41");
             });
 
             modelBuilder.Entity<InstitutionJob>(entity =>
@@ -1020,27 +896,6 @@ namespace PersonsInfoV2Api.Entities
                     .HasForeignKey(d => d.JobId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_InstitutionJobs_JobId");
-            });
-
-            modelBuilder.Entity<InstitutionMedium>(entity =>
-            {
-                entity.ToTable("InstitutionMedium");
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Institution)
-                    .WithMany(p => p.InstitutionMedia)
-                    .HasForeignKey(d => d.InstitutionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_InstitutionMedium_InstitutionId");
-
-                entity.HasOne(d => d.LookUp)
-                    .WithMany(p => p.InstitutionMedia)
-                    .HasForeignKey(d => d.LookUpId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_InstitutionMedium_LookUpId");
             });
 
             modelBuilder.Entity<Job>(entity =>
@@ -1308,17 +1163,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK__News__GroupId__2116E6DF");
+                    .HasConstraintName("FK__News__GroupId__2610A626");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK__News__ParentId__22FF2F51");
+                    .HasConstraintName("FK__News__ParentId__2704CA5F");
 
                 entity.HasOne(d => d.ToUser)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.ToUserId)
-                    .HasConstraintName("FK__News__ToUserId__220B0B18");
+                    .HasConstraintName("FK__News__ToUserId__27F8EE98");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -1330,13 +1185,13 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.PersonId)
-                    .HasConstraintName("FK__Orders__PersonID__489AC854");
+                    .HasConstraintName("FK__Orders__PersonID__28ED12D1");
             });
 
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.HasKey(e => e.Pid)
-                    .HasName("PK__persons__C5775540E4AA0E9D");
+                    .HasName("PK__persons__C5775540B2D59D71");
 
                 entity.ToTable("persons");
 
@@ -1364,128 +1219,6 @@ namespace PersonsInfoV2Api.Entities
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<Question>(entity =>
-            {
-                entity.ToTable("Question");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.CreatedDt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.IsPublish)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDt).HasColumnType("datetime");
-
-                entity.Property(e => e.Question1)
-                    .IsRequired()
-                    .IsUnicode(false)
-                    .HasColumnName("Question");
-            });
-
-            modelBuilder.Entity<QuestionCategory>(entity =>
-            {
-                entity.ToTable("QuestionCategory");
-
-                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D0AE310CF")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D659BA0DB")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D88201741")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D8D1BAA27")
-                    .IsUnique();
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.CreatedDt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.QuestionCategory1)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("QuestionCategory");
-            });
-
-            modelBuilder.Entity<QuestionOption>(entity =>
-            {
-                entity.ToTable("QuestionOption");
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.Option).IsUnicode(false);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.QuestionOptions)
-                    .HasForeignKey(d => d.QuestionId)
-                    .HasConstraintName("FK_QuestionOption_QuestionId");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.QuestionOptions)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_QuestionOption_StatusId");
-            });
-
-            modelBuilder.Entity<QuestionType>(entity =>
-            {
-                entity.ToTable("QuestionType");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedDt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.QuestionType1)
-                    .IsRequired()
-                    .HasMaxLength(250)
-                    .IsUnicode(false)
-                    .HasColumnName("QuestionType");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdatedDt).HasColumnType("datetime");
-            });
-
             modelBuilder.Entity<QulificationType>(entity =>
             {
                 entity.ToTable("QulificationType");
@@ -1511,7 +1244,7 @@ namespace PersonsInfoV2Api.Entities
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FirstName)
+                entity.Property(e => e.FullName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
@@ -1528,12 +1261,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.EducationQualification)
                     .WithMany(p => p.Referrals)
                     .HasForeignKey(d => d.EducationQualificationId)
-                    .HasConstraintName("FK__Referrals__Educa__7EC1CEDB");
+                    .HasConstraintName("FK__Referrals__Educa__29E1370A");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.Referrals)
                     .HasForeignKey(d => d.StateId)
-                    .HasConstraintName("FK__Referrals__State__7FB5F314");
+                    .HasConstraintName("FK__Referrals__State__2AD55B43");
             });
 
             modelBuilder.Entity<RelationType>(entity =>
@@ -1856,7 +1589,7 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.Templates)
                     .HasForeignKey(d => d.TypeId)
-                    .HasConstraintName("FK__Template__TypeId__5224328E");
+                    .HasConstraintName("FK__Template__TypeId__373B3228");
             });
 
             modelBuilder.Entity<TemplateType>(entity =>
@@ -1872,24 +1605,6 @@ namespace PersonsInfoV2Api.Entities
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<TimeLine>(entity =>
-            {
-                entity.ToTable("TimeLine");
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Heading)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("Heading ");
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
@@ -1931,17 +1646,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Gender)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.GenderId)
-                    .HasConstraintName("FK__Users__GenderId__607251E5");
+                    .HasConstraintName("FK__Users__GenderId__477199F1");
 
                 entity.HasOne(d => d.MarritalStatus)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.MarritalStatusId)
-                    .HasConstraintName("FK__Users__MarritalS__6166761E");
+                    .HasConstraintName("FK__Users__MarritalS__4865BE2A");
 
                 entity.HasOne(d => d.UserType)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.UserTypeId)
-                    .HasConstraintName("FK__Users__UserTypeI__625A9A57");
+                    .HasConstraintName("FK__Users__UserTypeI__4959E263");
             });
 
             modelBuilder.Entity<UserAddressDetail>(entity =>
@@ -1969,22 +1684,22 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.UserAddressDetails)
                     .HasForeignKey(d => d.CountryId)
-                    .HasConstraintName("FK__UserAddre__Count__531856C7");
+                    .HasConstraintName("FK__UserAddre__Count__382F5661");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.UserAddressDetails)
                     .HasForeignKey(d => d.StateId)
-                    .HasConstraintName("FK__UserAddre__State__540C7B00");
+                    .HasConstraintName("FK__UserAddre__State__39237A9A");
 
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.UserAddressDetails)
                     .HasForeignKey(d => d.TypeId)
-                    .HasConstraintName("FK__UserAddre__TypeI__075714DC");
+                    .HasConstraintName("FK__UserAddre__TypeI__3A179ED3");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserAddressDetails)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserAddre__UserI__55009F39");
+                    .HasConstraintName("FK__UserAddre__UserI__3B0BC30C");
             });
 
             modelBuilder.Entity<UserCompany>(entity =>
@@ -2008,17 +1723,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.UserCompanies)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__UserCompa__Compa__2AA05119");
+                    .HasConstraintName("FK__UserCompa__Compa__3BFFE745");
 
                 entity.HasOne(d => d.Designation)
                     .WithMany(p => p.UserCompanies)
                     .HasForeignKey(d => d.DesignationId)
-                    .HasConstraintName("FK__UserCompa__Desig__2B947552");
+                    .HasConstraintName("FK__UserCompa__Desig__3CF40B7E");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserCompanies)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserCompa__UserI__2C88998B");
+                    .HasConstraintName("FK__UserCompa__UserI__3DE82FB7");
             });
 
             modelBuilder.Entity<UserContact>(entity =>
@@ -2030,12 +1745,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.ContactType)
                     .WithMany(p => p.UserContacts)
                     .HasForeignKey(d => d.ContactTypeId)
-                    .HasConstraintName("FK__UserConta__Conta__58D1301D");
+                    .HasConstraintName("FK__UserConta__Conta__3EDC53F0");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserContacts)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserConta__UserI__59C55456");
+                    .HasConstraintName("FK__UserConta__UserI__3FD07829");
             });
 
             modelBuilder.Entity<UserCourse>(entity =>
@@ -2047,21 +1762,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.UserCourses)
                     .HasForeignKey(d => d.CourseId)
-                    .HasConstraintName("FK__UserCours__Cours__5AB9788F");
+                    .HasConstraintName("FK__UserCours__Cours__40C49C62");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserCourses)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserCours__UserI__5BAD9CC8");
+                    .HasConstraintName("FK__UserCours__UserI__41B8C09B");
             });
 
             modelBuilder.Entity<UserEducationDetail>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.EndDate).HasColumnType("datetime");
-
-                entity.Property(e => e.StartDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
@@ -2070,17 +1781,17 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Institution)
                     .WithMany(p => p.UserEducationDetails)
                     .HasForeignKey(d => d.InstitutionId)
-                    .HasConstraintName("FK__UserEduca__Insti__2F650636");
+                    .HasConstraintName("FK__UserEduca__Insti__42ACE4D4");
 
                 entity.HasOne(d => d.Qulificationtype)
                     .WithMany(p => p.UserEducationDetails)
                     .HasForeignKey(d => d.QulificationtypeId)
-                    .HasConstraintName("FK__UserEduca__Qulif__30592A6F");
+                    .HasConstraintName("FK__UserEduca__Qulif__43A1090D");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserEducationDetails)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserEduca__UserI__314D4EA8");
+                    .HasConstraintName("FK__UserEduca__UserI__44952D46");
             });
 
             modelBuilder.Entity<UserEmail>(entity =>
@@ -2094,132 +1805,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.UserEmails)
                     .HasForeignKey(d => d.TypeId)
-                    .HasConstraintName("FK__UserEmail__TypeI__5E8A0973");
+                    .HasConstraintName("FK__UserEmail__TypeI__4589517F");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserEmails)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserEmail__UserI__5F7E2DAC");
-            });
-
-            modelBuilder.Entity<UserExam>(entity =>
-            {
-                entity.ToTable("UserExam");
-
-                entity.Property(e => e.CloseOn).HasColumnType("datetime");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .IsUnicode(false);
-
-                entity.Property(e => e.StartOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Updatedon).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Exam)
-                    .WithMany(p => p.UserExams)
-                    .HasForeignKey(d => d.ExamId)
-                    .HasConstraintName("FK_UserExams_ExamId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserExams)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UserExams_UserId");
-            });
-
-            modelBuilder.Entity<UserExamQuestion>(entity =>
-            {
-                entity.Property(e => e.Answer).IsUnicode(false);
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Exam)
-                    .WithMany(p => p.UserExamQuestions)
-                    .HasForeignKey(d => d.ExamId)
-                    .HasConstraintName("FK_UserExamQuestions_Exam");
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.UserExamQuestions)
-                    .HasForeignKey(d => d.QuestionId)
-                    .HasConstraintName("FK_UserExamQuestions_Question");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserExamQuestions)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UserExamQuestions_User");
-            });
-
-            modelBuilder.Entity<UserExamQuestionsAudit>(entity =>
-            {
-                entity.ToTable("UserExamQuestionsAudit");
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.UserExamQuestionsAudits)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_UserExamQuestionsAudit_StatusId");
-
-                entity.HasOne(d => d.UserExamQuestion)
-                    .WithMany(p => p.UserExamQuestionsAudits)
-                    .HasForeignKey(d => d.UserExamQuestionId)
-                    .HasConstraintName("FK_UserExamQuestionsAudit_UserExamQuestionId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserExamQuestionsAudits)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UserExamQuestionsAudit_UserId");
-            });
-
-            modelBuilder.Entity<UserProfileQuestion>(entity =>
-            {
-                entity.ToTable("UserProfileQuestion");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.CreatedDt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.MarkForReview).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDt).HasColumnType("datetime");
-
-                entity.Property(e => e.NotAnswered).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.OptionText).IsUnicode(false);
-
-                entity.Property(e => e.Visited).HasDefaultValueSql("((0))");
+                    .HasConstraintName("FK__UserEmail__UserI__467D75B8");
             });
 
             modelBuilder.Entity<UserSkill>(entity =>
@@ -2231,12 +1822,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Skill)
                     .WithMany(p => p.UserSkills)
                     .HasForeignKey(d => d.SkillId)
-                    .HasConstraintName("FK__UserSkill__Skill__634EBE90");
+                    .HasConstraintName("FK__UserSkill__Skill__4A4E069C");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserSkills)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserSkill__UserI__6442E2C9");
+                    .HasConstraintName("FK__UserSkill__UserI__4B422AD5");
             });
 
             modelBuilder.Entity<UserType>(entity =>
@@ -2331,26 +1922,6 @@ namespace PersonsInfoV2Api.Entities
                     .HasConstraintName("FK_Vacancies_UpdatedBy");
             });
 
-            modelBuilder.Entity<VerificationCenterExamination>(entity =>
-            {
-                entity.ToTable("VerificationCenterExamination");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedDt).HasColumnType("datetime");
-
-                entity.Property(e => e.ExaminationDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<YearSemester>(entity =>
             {
                 entity.ToTable("YearSemester");
@@ -2364,12 +1935,12 @@ namespace PersonsInfoV2Api.Entities
                 entity.HasOne(d => d.Cyears)
                     .WithMany(p => p.YearSemesters)
                     .HasForeignKey(d => d.CyearsId)
-                    .HasConstraintName("FK__YearSemes__CYear__6FB49575");
+                    .HasConstraintName("FK__YearSemes__CYear__56B3DD81");
 
                 entity.HasOne(d => d.Semester)
                     .WithMany(p => p.YearSemesters)
                     .HasForeignKey(d => d.SemesterId)
-                    .HasConstraintName("FK__YearSemes__Semes__70A8B9AE");
+                    .HasConstraintName("FK__YearSemes__Semes__57A801BA");
             });
 
             OnModelCreatingPartial(modelBuilder);

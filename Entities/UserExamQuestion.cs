@@ -24,9 +24,7 @@ namespace PersonsInfoV2Api.Entities
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
-        public virtual Exam Exam { get; set; }
         public virtual Question Question { get; set; }
-        public virtual User User { get; set; }
         public virtual ICollection<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PersonsInfoV2Api.Repository
 {
-    public class SkillRepo: ISkillRepo
+    public class SkillRepo : ISkillRepo
     {
         PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
 
@@ -42,6 +42,12 @@ namespace PersonsInfoV2Api.Repository
             Context.Skills.Update(user);
             Context.SaveChanges();
             return user.Id;
+        }
+
+        public List<Skill> GetSkillsSearch(string name)
+        {
+            var k = Context.Skills.Where(a => a.Name.Contains(name)).ToList();
+            return k;
         }
     }
 }

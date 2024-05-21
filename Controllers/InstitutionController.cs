@@ -69,13 +69,13 @@ namespace PersonsInfoV2Api.Controllers
         }
 
 
-        [Route("GetQualificationcs")]
-        [HttpGet]
-        public async Task<List<Qualificationcs>> GetQualificationcs()
+        //[Route("GetQualificationcs")]
+        //[HttpGet]
+        //public async Task<List<Qualificationcs>> GetQualificationcs()
 
-        {
-            return await _institutionBussinessLogic.GetQualificationcs();
-        }
+        //{
+        //    return await _institutionBussinessLogic.GetQualificationcs();
+        //}
 
         [Route("AddInstitutionModel")]
         [HttpPost]

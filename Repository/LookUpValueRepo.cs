@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using PersonsInfoV2Api.Models;
 
 namespace PersonsInfoV2Api.Repository
 {
@@ -54,27 +55,28 @@ namespace PersonsInfoV2Api.Repository
 
         public List<LookUpValue> GetLookUpValueByCode(List<string> codes)
         {
-            var data = Context.LookUpValues.Where(a => codes.Contains(a.Code)).ToList();
+            var data = Context.LookUps.Where(a => codes.Contains(a.Code)).ToList();
 
 
             var query =
-  from lookUp in Context.LookUps.Where(a => codes.Contains(a.Code)).ToList()
-  join value in Context.LookUpValues on lookUp.Id equals value.LookUpId
+               from lookUp in Context.LookUps.Where(a => codes.Contains(a.Code)).ToList()
+               join value in Context.LookUpValues on lookUp.Id equals value.LookUpId
 
-  //  where post.ID == id
-  select new LookUpValue
-  {
-      Id = value.Id,
-      LookUpId = value.LookUpId,
-      Name = value.Name,
-      Code = value.Code,
-      IsDeleted = value.IsDeleted,
-      CreatedOn = value.CreatedOn,
-      CreatedBy = value.CreatedBy,
-      UpdatedOn = value.UpdatedOn,
-      UpdatedBy = value.UpdatedBy,
-      LookUpCode = lookUp.Code,
-  };
+               //  where post.ID == id
+               select new LookUpValue
+               {
+                   Id = value.Id,
+                   LookUpId = value.LookUpId,
+                   Name = value.Name,
+                   Code = value.Code,
+                   IsDeleted = value.IsDeleted,
+                   CreatedOn = value.CreatedOn,
+                   CreatedBy = value.CreatedBy,
+                   UpdatedOn = value.UpdatedOn,
+                   UpdatedBy = value.UpdatedBy,
+                   LookUpCode = lookUp.Code,
+                   ParentId = value.ParentId
+               };
             return query.ToList();
             // return data;
         }
@@ -105,6 +107,37 @@ namespace PersonsInfoV2Api.Repository
         }
 
 
+
+        public List<LookUpValue> GetLookUpValueByRoleCategory(int DepartmentId)
+        {
+             var query =
+               from lookUp in Context.LookUpValues.Where(a => a.LookUpId == DepartmentId).ToList()
+               join value in Context.LookUpValues on lookUp.Id equals value.LookUpId
+
+               //  where post.ID == id
+               select new LookUpValue
+               {
+                   Id = value.Id,
+                   LookUpId = value.LookUpId,
+                   Name = value.Name,
+                   Code = value.Code,
+                   IsDeleted = value.IsDeleted,
+                   CreatedOn = value.CreatedOn,
+                   CreatedBy = value.CreatedBy,
+                   UpdatedOn = value.UpdatedOn,
+                   UpdatedBy = value.UpdatedBy,
+                   LookUpCode = lookUp.Code,
+               };
+            return query.ToList();
+            // return data;
+        }
+
+
+        public List<LookUpValue> GetLookUpSearch(LookUpSearch lookUpSearch)
+        {
+            var k = Context.LookUpValues.Where(a => a.Name.Contains(lookUpSearch.Name) && lookUpSearch.Ids.Contains(a.LookUpId)).ToList();
+            return k;
+        }
     }
 
 }
