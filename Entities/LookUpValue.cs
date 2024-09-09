@@ -15,6 +15,7 @@ namespace PersonsInfoV2Api.Entities
             JobSchedules = new HashSet<JobSchedule>();
             JobSupplementalPays = new HashSet<JobSupplementalPay>();
             UserAddressDetails = new HashSet<UserAddressDetail>();
+            UserExamQuestionsAudits = new HashSet<UserExamQuestionsAudit>();
         }
 
         public int Id { get; set; }
@@ -34,5 +35,6 @@ namespace PersonsInfoV2Api.Entities
         public virtual ICollection<JobSchedule> JobSchedules { get; set; }
         public virtual ICollection<JobSupplementalPay> JobSupplementalPays { get; set; }
         public virtual ICollection<UserAddressDetail> UserAddressDetails { get; set; }
+        public virtual ICollection<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
     }
 }

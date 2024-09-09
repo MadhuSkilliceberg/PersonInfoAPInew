@@ -17,5 +17,6 @@ namespace PersonsInfoV2Api.Entities
         public int? UpdatedBy { get; set; }
 
         public virtual Question Question { get; set; }
+        public virtual Status Status { get; set; }
     }
 }

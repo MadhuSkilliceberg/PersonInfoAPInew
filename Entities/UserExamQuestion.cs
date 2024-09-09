@@ -25,6 +25,7 @@ namespace PersonsInfoV2Api.Entities
         public int? UpdatedBy { get; set; }
 
         public virtual Question Question { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
     }
 }

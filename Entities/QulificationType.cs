@@ -9,6 +9,7 @@ namespace PersonsInfoV2Api.Entities
     {
         public QulificationType()
         {
+            BookDemos = new HashSet<BookDemo>();
             FamilyEducationDetails = new HashSet<FamilyEducationDetail>();
             Institutions = new HashSet<Institution>();
             Referrals = new HashSet<Referral>();
@@ -23,6 +24,7 @@ namespace PersonsInfoV2Api.Entities
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
+        public virtual ICollection<BookDemo> BookDemos { get; set; }
         public virtual ICollection<FamilyEducationDetail> FamilyEducationDetails { get; set; }
         public virtual ICollection<Institution> Institutions { get; set; }
         public virtual ICollection<Referral> Referrals { get; set; }

@@ -9,6 +9,7 @@ namespace PersonsInfoV2Api.Entities
     {
         public State()
         {
+            BookDemos = new HashSet<BookDemo>();
             CompanyAddresses = new HashSet<CompanyAddress>();
             CoutryStates = new HashSet<CoutryState>();
             Referrals = new HashSet<Referral>();
@@ -23,6 +24,7 @@ namespace PersonsInfoV2Api.Entities
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
+        public virtual ICollection<BookDemo> BookDemos { get; set; }
         public virtual ICollection<CompanyAddress> CompanyAddresses { get; set; }
         public virtual ICollection<CoutryState> CoutryStates { get; set; }
         public virtual ICollection<Referral> Referrals { get; set; }

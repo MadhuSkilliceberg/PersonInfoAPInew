@@ -9,6 +9,7 @@ namespace PersonsInfoV2Api.Entities
     {
         public Status()
         {
+            QuestionOptions = new HashSet<QuestionOption>();
             SprintTasks = new HashSet<SprintTask>();
             Vacancies = new HashSet<Vacancy>();
         }
@@ -22,6 +23,7 @@ namespace PersonsInfoV2Api.Entities
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
+        public virtual ICollection<QuestionOption> QuestionOptions { get; set; }
         public virtual ICollection<SprintTask> SprintTasks { get; set; }
         public virtual ICollection<Vacancy> Vacancies { get; set; }
     }

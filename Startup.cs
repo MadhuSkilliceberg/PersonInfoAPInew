@@ -21,7 +21,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Session;
- 
+using IdentityServer4;
+using IdentityServer4.Models;
+
+
 using PersonsInfoV2Api.Filters;
 
 namespace PersonsInfoV2Api
@@ -83,9 +86,34 @@ namespace PersonsInfoV2Api
         options.UseSqlServer(Configuration.GetConnectionString("PersonsInfo1Connection")));
 
 
-            services.AddControllers().AddJsonOptions(o => {
+
+            #region Identity Server4
+
+            //    services.AddIdentityServer()
+            //.AddDeveloperSigningCredential()
+            //.AddInMemoryClients(Clients.Get())
+            //.AddInMemoryApiResources(ApiResources.Get())
+            //.AddInMemoryIdentityResources(IdentityResources.Get())
+            //.AddInMemoryApiScopes(ApiScopes.Get());
+
+            //    services.AddAuthentication(options =>
+            //    {
+            //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    })
+            //    .AddIdentityServerAuthentication(options =>
+            //    {
+            //        options.Authority = "https://localhost:5001";
+            //        options.RequireHttpsMetadata = false;
+            //        options.ApiName = "api1";
+            //    });
+
+            #endregion
+
+
+            services.AddControllers().AddJsonOptions(o =>
+            {
                 o.JsonSerializerOptions.PropertyNamingPolicy = null;
-             //   o.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                //   o.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
             });
 
             services.AddLogging(builder =>
@@ -129,7 +157,7 @@ namespace PersonsInfoV2Api
                 return new Auth(context, key);
             });
 
-         
+
 
             //services.AddControllers(options =>
             //{
@@ -347,11 +375,17 @@ namespace PersonsInfoV2Api
             services.AddScoped<IQuestionCategoryRepo, QuestionCategoryRepo>();
             services.AddScoped<IQuestionCategoryBussinessLogic, QuestionCategoryBussinessLogic>();
 
-            services.AddScoped<IJobRepo,JobRepository>();
+            services.AddScoped<IJobRepo, JobRepository>();
             services.AddScoped<IJobBusinessLogic, JobBusinessLogic>();
 
             services.AddScoped<ILocationRepo, LocationRepository>();
             services.AddScoped<ILocationBusinessLogic, LocationBusinessLogic>();
+
+            services.AddScoped<IAdAttendanceRepository, AdAttendanceRepository>();
+            services.AddScoped<IAdAttendanceBusinessLogic, AdAttendanceBusinessLogic>();
+
+            services.AddScoped<IAdattendanceApprovalRepository, AdattendanceApprovalRepository>();
+            services.AddScoped<IAdattendanceApprovalBusinessLogic, AdattendanceApprovalBusinessLogic>();
 
 
             #endregion
@@ -393,7 +427,7 @@ namespace PersonsInfoV2Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-           
+
 
             if (env.IsDevelopment())
             {
@@ -414,12 +448,93 @@ namespace PersonsInfoV2Api
 
             app.UseAuthorization();
 
-            
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
+
+
+
     }
+
+    public static class Clients
+    {
+        public static IEnumerable<Client> Get()
+        {
+            return new List<Client>
+    {
+        new Client
+        {
+            ClientId = "client_id", // Unique identifier for the client application
+            ClientName = "Sample Client", // Human-readable name for the client
+            Description = "This is a sample client for demonstration purposes.", // Optional description
+            AllowedGrantTypes = GrantTypes.Code, // Defines the allowed OAuth2 flows for the client
+            RequireClientSecret = true, // Specifies whether the client must send a secret to authenticate
+            ClientSecrets =
+            {
+                new Secret("client_secret".Sha256()) // Secret used for client authentication (hashed for security)
+            },
+            RedirectUris =
+            {
+                "https://localhost:5001/signin-oidc" // List of URIs that the client can redirect to after successful login
+            },
+            PostLogoutRedirectUris =
+            {
+                "https://localhost:5001/signout-callback-oidc" // List of URIs that the client can redirect to after logout
+            },
+            AllowedScopes = new List<string>
+            {
+                IdentityServerConstants.StandardScopes.OpenId, // Allows OIDC (OpenID Connect)
+                IdentityServerConstants.StandardScopes.Profile, // Allows profile information such as name and email
+                "api1" // Custom API scope that the client can access
+            },
+            RequirePkce = true, // Enforces Proof Key for Code Exchange (PKCE) for added security
+            AllowOfflineAccess = true, // Allows requesting refresh tokens
+            AccessTokenLifetime = 3600, // Lifetime of the access token in seconds (1 hour)
+            AbsoluteRefreshTokenLifetime = 2592000, // Lifetime of the refresh token (30 days)
+            RefreshTokenUsage = TokenUsage.ReUse, // Specifies if the same refresh token can be reused or must be rotated
+            RefreshTokenExpiration = TokenExpiration.Sliding, // Refresh token expiration policy
+            AlwaysIncludeUserClaimsInIdToken = true, // Forces user claims to be included in the ID token
+            RequireConsent = false, // Skips the consent screen for trusted clients
+            AllowAccessTokensViaBrowser = true, // Allows the access token to be returned via the browser (for implicit flow)
+            AllowedCorsOrigins =
+            {
+                "https://localhost:5001" // CORS allowed origins to enable cross-origin requests
+            },
+            EnableLocalLogin = true, // Allows logging in with local accounts (username/password)
+            IdentityTokenLifetime = 300, // Lifetime of the identity token (5 minutes)
+            SlidingRefreshTokenLifetime = 1296000, // Sliding expiration for refresh tokens (15 days)
+            BackChannelLogoutUri = "https://localhost:5001/logout-callback", // URI to notify on back-channel logout
+            FrontChannelLogoutUri = "https://localhost:5001/logout-frontend" // URI to notify on front-channel logout
+        }
+    };
+        }
+
+    }
+
+    public static class ApiScopes
+    {
+        public static IEnumerable<ApiScope> Get()
+        {
+            return new List<ApiScope>
+        {
+            new ApiScope("api1", "My API")
+        };
+        }
+    }
+
+    //    public static class IdentityResources
+    //    {
+    //        public static IEnumerable<IdentityResource> Get()
+    //        {
+    //            return new List<IdentityResource>
+    //        {
+    //            new IdentityResource.OpenId(),
+    //            new IdentityResource.Profile()
+    //        };
+    //        }
+    //    }
 }

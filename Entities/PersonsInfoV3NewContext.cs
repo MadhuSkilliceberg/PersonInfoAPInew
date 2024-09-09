@@ -17,6 +17,12 @@ namespace PersonsInfoV2Api.Entities
         {
         }
 
+        public virtual DbSet<Adattendance> Adattendances { get; set; }
+        public virtual DbSet<AdattendanceApproval> AdattendanceApprovals { get; set; }
+        public virtual DbSet<Adholiday> Adholidays { get; set; }
+        public virtual DbSet<AdleaveBalance> AdleaveBalances { get; set; }
+        public virtual DbSet<AdleaveRequest> AdleaveRequests { get; set; }
+        public virtual DbSet<AdleaveType> AdleaveTypes { get; set; }
         public virtual DbSet<BookDemo> BookDemos { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Chat> Chats { get; set; }
@@ -73,6 +79,10 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuestionCategory> QuestionCategories { get; set; }
+        public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
+        public virtual DbSet<QuestionType> QuestionTypes { get; set; }
         public virtual DbSet<QulificationType> QulificationTypes { get; set; }
         public virtual DbSet<Referral> Referrals { get; set; }
         public virtual DbSet<RelationType> RelationTypes { get; set; }
@@ -101,7 +111,12 @@ namespace PersonsInfoV2Api.Entities
         public virtual DbSet<UserCourse> UserCourses { get; set; }
         public virtual DbSet<UserEducationDetail> UserEducationDetails { get; set; }
         public virtual DbSet<UserEmail> UserEmails { get; set; }
+        public virtual DbSet<UserExam> UserExams { get; set; }
+        public virtual DbSet<UserExamQuestion> UserExamQuestions { get; set; }
+        public virtual DbSet<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
+        public virtual DbSet<UserProfileQuestion> UserProfileQuestions { get; set; }
         public virtual DbSet<UserSkill> UserSkills { get; set; }
+        public virtual DbSet<UserTokenSession> UserTokenSessions { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<VacanciesSkill> VacanciesSkills { get; set; }
         public virtual DbSet<Vacancy> Vacancies { get; set; }
@@ -112,13 +127,159 @@ namespace PersonsInfoV2Api.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=SIC_PC1\\SQLEXPRESS;Database=PersonsInfoV3New;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=RAAZ2024\\SQLEXPRESS;Database=PersonsInfoV3New;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Adattendance>(entity =>
+            {
+                entity.HasKey(e => e.AttendanceId)
+                    .HasName("PK__ADAttend__8B69261CB055ABB2");
+
+                entity.ToTable("ADAttendance");
+
+                entity.Property(e => e.AttendanceDate).HasColumnType("date");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.HoursWorked).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.OvertimeHours)
+                    .HasColumnType("decimal(5, 2)")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.Property(e => e.TimeIn).HasColumnType("datetime");
+
+                entity.Property(e => e.TimeOut).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Adattendances)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Attendance_User");
+            });
+
+            modelBuilder.Entity<AdattendanceApproval>(entity =>
+            {
+                entity.HasKey(e => e.AttendanceApprovalId)
+                    .HasName("PK__ADAttend__F2E0C95DD45198A1");
+
+                entity.ToTable("ADAttendanceApproval");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AdattendanceApprovals)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_AttendanceApproval_User");
+            });
+
+            modelBuilder.Entity<Adholiday>(entity =>
+            {
+                entity.HasKey(e => e.HolidayId)
+                    .HasName("PK__ADHolida__2D35D57AB64B87C4");
+
+                entity.ToTable("ADHoliday");
+
+                entity.Property(e => e.Description).HasMaxLength(255);
+
+                entity.Property(e => e.HolidayDate).HasColumnType("date");
+
+                entity.Property(e => e.HolidayName).HasMaxLength(100);
+
+                entity.Property(e => e.IsMandatory).HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<AdleaveBalance>(entity =>
+            {
+                entity.HasKey(e => e.LeaveBalanceId)
+                    .HasName("PK__ADLeaveB__8A68C4A24E48E50B");
+
+                entity.ToTable("ADLeaveBalance");
+
+                entity.Property(e => e.AdleaveBalance1)
+                    .HasColumnType("decimal(5, 2)")
+                    .HasColumnName("ADLeaveBalance");
+
+                entity.Property(e => e.LastUpdated).HasColumnType("datetime");
+
+                entity.HasOne(d => d.LeaveType)
+                    .WithMany(p => p.AdleaveBalances)
+                    .HasForeignKey(d => d.LeaveTypeId)
+                    .HasConstraintName("FK_LeaveBalance_LeaveType");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AdleaveBalances)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_LeaveBalance_User");
+            });
+
+            modelBuilder.Entity<AdleaveRequest>(entity =>
+            {
+                entity.HasKey(e => e.LeaveRequestId)
+                    .HasName("PK__ADLeaveR__609421EE6259E057");
+
+                entity.ToTable("ADLeaveRequest");
+
+                entity.Property(e => e.AppliedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.EndDate).HasColumnType("date");
+
+                entity.Property(e => e.Reason).HasMaxLength(255);
+
+                entity.Property(e => e.ReviewedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("date");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.LeaveType)
+                    .WithMany(p => p.AdleaveRequests)
+                    .HasForeignKey(d => d.LeaveTypeId)
+                    .HasConstraintName("FK_LeaveRequest_LeaveType");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AdleaveRequests)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_LeaveRequest_User");
+            });
+
+            modelBuilder.Entity<AdleaveType>(entity =>
+            {
+                entity.HasKey(e => e.LeaveTypeId)
+                    .HasName("PK__ADLeaveT__43BE8F14497272A5");
+
+                entity.ToTable("ADLeaveType");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LeaveTypeName).HasMaxLength(100);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            });
 
             modelBuilder.Entity<BookDemo>(entity =>
             {
@@ -140,15 +301,15 @@ namespace PersonsInfoV2Api.Entities
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-                //entity.HasOne(d => d.EducationQualification)
-                //    .WithMany(p => p.BookDemos)
-                //    .HasForeignKey(d => d.EducationQualificationId)
-                //    .HasConstraintName("FK__BookDemo__Educat__719CDDE7");
+                entity.HasOne(d => d.EducationQualification)
+                    .WithMany(p => p.BookDemos)
+                    .HasForeignKey(d => d.EducationQualificationId)
+                    .HasConstraintName("FK__BookDemo__Educat__719CDDE7");
 
-                //entity.HasOne(d => d.State)
-                //    .WithMany(p => p.BookDemos)
-                //    .HasForeignKey(d => d.StateId)
-                //    .HasConstraintName("FK__BookDemo__StateI__72910220");
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.BookDemos)
+                    .HasForeignKey(d => d.StateId)
+                    .HasConstraintName("FK__BookDemo__StateI__72910220");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -1191,7 +1352,7 @@ namespace PersonsInfoV2Api.Entities
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.HasKey(e => e.Pid)
-                    .HasName("PK__persons__C5775540B2D59D71");
+                    .HasName("PK__persons__C577554068089528");
 
                 entity.ToTable("persons");
 
@@ -1217,6 +1378,128 @@ namespace PersonsInfoV2Api.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Question>(entity =>
+            {
+                entity.ToTable("Question");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.IsPublish)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDt).HasColumnType("datetime");
+
+                entity.Property(e => e.Question1)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasColumnName("Question");
+            });
+
+            modelBuilder.Entity<QuestionCategory>(entity =>
+            {
+                entity.ToTable("QuestionCategory");
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D5C02E3BE")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777D65EC9684")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777DB96B26B9")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Guid, "UQ__Question__A2B5777DBB34F98B")
+                    .IsUnique();
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.ModifieDt).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QuestionCategory1)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("QuestionCategory");
+            });
+
+            modelBuilder.Entity<QuestionOption>(entity =>
+            {
+                entity.ToTable("QuestionOption");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Option).IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.QuestionOptions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .HasConstraintName("FK_QuestionOption_QuestionId");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.QuestionOptions)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_QuestionOption_StatusId");
+            });
+
+            modelBuilder.Entity<QuestionType>(entity =>
+            {
+                entity.ToTable("QuestionType");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.QuestionType1)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("QuestionType");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedDt).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<QulificationType>(entity =>
@@ -1813,6 +2096,116 @@ namespace PersonsInfoV2Api.Entities
                     .HasConstraintName("FK__UserEmail__UserI__467D75B8");
             });
 
+            modelBuilder.Entity<UserExam>(entity =>
+            {
+                entity.ToTable("UserExam");
+
+                entity.Property(e => e.CloseOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StartOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Updatedon).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserExams)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_UserExams_UserId");
+            });
+
+            modelBuilder.Entity<UserExamQuestion>(entity =>
+            {
+                entity.Property(e => e.Answer).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.UserExamQuestions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .HasConstraintName("FK_UserExamQuestions_Question");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserExamQuestions)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_UserExamQuestions_User");
+            });
+
+            modelBuilder.Entity<UserExamQuestionsAudit>(entity =>
+            {
+                entity.ToTable("UserExamQuestionsAudit");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.UserExamQuestionsAudits)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_UserExamQuestionsAudit_StatusId");
+
+                entity.HasOne(d => d.UserExamQuestion)
+                    .WithMany(p => p.UserExamQuestionsAudits)
+                    .HasForeignKey(d => d.UserExamQuestionId)
+                    .HasConstraintName("FK_UserExamQuestionsAudit_UserExamQuestionId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserExamQuestionsAudits)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_UserExamQuestionsAudit_UserId");
+            });
+
+            modelBuilder.Entity<UserProfileQuestion>(entity =>
+            {
+                entity.ToTable("UserProfileQuestion");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.CreatedDt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.MarkForReview).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDt).HasColumnType("datetime");
+
+                entity.Property(e => e.NotAnswered).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.OptionText).IsUnicode(false);
+
+                entity.Property(e => e.Visited).HasDefaultValueSql("((0))");
+            });
+
             modelBuilder.Entity<UserSkill>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -1828,6 +2221,31 @@ namespace PersonsInfoV2Api.Entities
                     .WithMany(p => p.UserSkills)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK__UserSkill__UserI__4B422AD5");
+            });
+
+            modelBuilder.Entity<UserTokenSession>(entity =>
+            {
+                entity.ToTable("UserTokenSession");
+
+                entity.Property(e => e.BrowserInfo).HasMaxLength(250);
+
+                entity.Property(e => e.DeviceType).HasMaxLength(50);
+
+                entity.Property(e => e.IpAddress).HasMaxLength(50);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.LoginTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.OperatingSystem).HasMaxLength(100);
+
+                entity.Property(e => e.SessionId).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.TokenExpires).HasColumnType("datetime");
+
+                entity.Property(e => e.UserId).HasMaxLength(450);
             });
 
             modelBuilder.Entity<UserType>(entity =>

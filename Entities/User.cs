@@ -9,6 +9,10 @@ namespace PersonsInfoV2Api.Entities
     {
         public User()
         {
+            AdattendanceApprovals = new HashSet<AdattendanceApproval>();
+            Adattendances = new HashSet<Adattendance>();
+            AdleaveBalances = new HashSet<AdleaveBalance>();
+            AdleaveRequests = new HashSet<AdleaveRequest>();
             Chats = new HashSet<Chat>();
             Events = new HashSet<Event>();
             Families = new HashSet<Family>();
@@ -21,6 +25,9 @@ namespace PersonsInfoV2Api.Entities
             UserCourses = new HashSet<UserCourse>();
             UserEducationDetails = new HashSet<UserEducationDetail>();
             UserEmails = new HashSet<UserEmail>();
+            UserExamQuestions = new HashSet<UserExamQuestion>();
+            UserExamQuestionsAudits = new HashSet<UserExamQuestionsAudit>();
+            UserExams = new HashSet<UserExam>();
             UserSkills = new HashSet<UserSkill>();
             VacancyCreatedByNavigations = new HashSet<Vacancy>();
             VacancyUpdatedByNavigations = new HashSet<Vacancy>();
@@ -49,6 +56,10 @@ namespace PersonsInfoV2Api.Entities
         public virtual Gender Gender { get; set; }
         public virtual MarritalStatus MarritalStatus { get; set; }
         public virtual UserType UserType { get; set; }
+        public virtual ICollection<AdattendanceApproval> AdattendanceApprovals { get; set; }
+        public virtual ICollection<Adattendance> Adattendances { get; set; }
+        public virtual ICollection<AdleaveBalance> AdleaveBalances { get; set; }
+        public virtual ICollection<AdleaveRequest> AdleaveRequests { get; set; }
         public virtual ICollection<Chat> Chats { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Family> Families { get; set; }
@@ -61,6 +72,9 @@ namespace PersonsInfoV2Api.Entities
         public virtual ICollection<UserCourse> UserCourses { get; set; }
         public virtual ICollection<UserEducationDetail> UserEducationDetails { get; set; }
         public virtual ICollection<UserEmail> UserEmails { get; set; }
+        public virtual ICollection<UserExamQuestion> UserExamQuestions { get; set; }
+        public virtual ICollection<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
+        public virtual ICollection<UserExam> UserExams { get; set; }
         public virtual ICollection<UserSkill> UserSkills { get; set; }
         public virtual ICollection<Vacancy> VacancyCreatedByNavigations { get; set; }
         public virtual ICollection<Vacancy> VacancyUpdatedByNavigations { get; set; }
