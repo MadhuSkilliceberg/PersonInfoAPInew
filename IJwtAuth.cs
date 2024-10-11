@@ -8,6 +8,6 @@ namespace PersonsInfoV2Api
 {
    public interface IJwtAuth
     {
-        AuthenticatedResponse Authentication(string username, string password);
+        AuthenticatedResponse Authentication(UserCredential userCredential);
     }
 }

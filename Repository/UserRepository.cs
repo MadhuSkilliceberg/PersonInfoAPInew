@@ -10,21 +10,25 @@ namespace PersonsInfoV2Api.Repository
 {
     public class UserRepository : IUserRepository
     {
+        private readonly PersonsInfoV3NewContext context;
 
 
-        PersonsInfoV3NewContext Context = new PersonsInfoV3NewContext();
-
+        //PersonsInfoV3NewContext context = new PersonsInfoV3NewContext();
+        public UserRepository(PersonsInfoV3NewContext context)
+        {
+            this.context = context;
+        }
 
         public List<User> GetUsers()
         {
-            return Context.Users.ToList();
+            return context.Users.ToList();
 
 
             // List<User> users = new List<User>();
-            //var ravi = Context.Users.ToList();
+            //var ravi = context.Users.ToList();
             //foreach( var a in ravi)
             //{
-            //    var b = Context.Genders.ToList();
+            //    var b = context.Genders.ToList();
             //    foreach( var c in b)
             //    {
             //        User user = new User();
@@ -73,11 +77,11 @@ namespace PersonsInfoV2Api.Repository
         {
             List<string> vs = new List<string>();
 
-            var gender = Context.MarritalStatuses.Where(a => a.Name == status).FirstOrDefault();
-            var names = Context.Users.Where(t => t.MarritalStatusId == gender.Id).ToList();
+            var gender = context.MarritalStatuses.Where(a => a.Name == status).FirstOrDefault();
+            var names = context.Users.Where(t => t.MarritalStatusId == gender.Id).ToList();
             foreach (var data in names)
             {
-                var marry = Context.Genders.Where(a => a.Id == data.GenderId).ToList();
+                var marry = context.Genders.Where(a => a.Id == data.GenderId).ToList();
                 foreach (var sat in marry)
                 {
                     var a = $"{data.FirstName}  {data.LastName}  {data.Dob}  {gender.Name} {data.MobileNumber} " +
@@ -94,12 +98,12 @@ namespace PersonsInfoV2Api.Repository
             List<string> lost = new List<string>();
 
 
-            var skill = Context.Skills.Where(a => a.Name == skillname).FirstOrDefault();
-            var usersk = Context.UserSkills.Where(a => a.SkillId == skill.Id).ToList();
+            var skill = context.Skills.Where(a => a.Name == skillname).FirstOrDefault();
+            var usersk = context.UserSkills.Where(a => a.SkillId == skill.Id).ToList();
 
             foreach (var data in usersk)
             {
-                var skuser = Context.Users.Where(a => data.UserId == a.Id).ToList();
+                var skuser = context.Users.Where(a => data.UserId == a.Id).ToList();
                 foreach (var Bhanu in skuser)
                 {
                     var vamshi = ($"{Bhanu.FirstName} {Bhanu.LastName} {Bhanu.MobileNumber} {Bhanu.AadharNumber}" +
@@ -115,8 +119,8 @@ namespace PersonsInfoV2Api.Repository
         {
             try
             {
-                Context.Users.Add(user);
-                Context.SaveChanges();
+                context.Users.Add(user);
+                context.SaveChanges();
                 return user.Id;
             }catch(Exception ex)
             {
@@ -126,45 +130,44 @@ namespace PersonsInfoV2Api.Repository
 
         public bool UpdateUser(User user)
         {
-            Context.Users.Update(user);
-            Context.SaveChanges();
+            context.Users.Update(user);
+            context.SaveChanges();
             return true;
         }
 
         public int DeleteUser(int id)
         {
-            var k = Context.Users.Where(a => a.Id == id).FirstOrDefault();
-            Context.Users.Remove(k);
-            Context.SaveChanges();
+            var k = context.Users.Where(a => a.Id == id).FirstOrDefault();
+            context.Users.Remove(k);
+            context.SaveChanges();
             return 1;
         }
 
         public User GetByUserId(int id)
         {
-            return Context.Users.Where(a => a.Id == id).FirstOrDefault();
+            return context.Users.Where(a => a.Id == id).FirstOrDefault();
         }
 
         public List<User> GetByUserRefernceCode(string refferalCode)
         {
-            return Context.Users.Where(a => a.RefferalCode == refferalCode).ToList();
+            return context.Users.Where(a => a.RefferalCode == refferalCode).ToList();
         }
 
        
-
         public List<string> GetUserByPutMedium(string mediumname)
         {
             List<string> Rose = new List<string>();
-            var teddy = Context.Media.Where(a => a.Name == mediumname).FirstOrDefault();
-            var purpose = Context.Institutions.Where(a => a.MediumId == teddy.Id).ToList();
+            var teddy = context.Media.Where(a => a.Name == mediumname).FirstOrDefault();
+            var purpose = context.Institutions.Where(a => a.MediumId == teddy.Id).ToList();
             foreach (var abc in purpose)
             {
-                var def = Context.QulificationTypes.Where(a => a.Id == abc.QulificationTypeId).ToList();
+                var def = context.QulificationTypes.Where(a => a.Id == abc.QulificationTypeId).ToList();
                 foreach (var ghi in def)
                 {
-                    var jkl = Context.UserEducationDetails.Where(a => a.QulificationtypeId == ghi.Id).ToList();
+                    var jkl = context.UserEducationDetails.Where(a => a.QulificationtypeId == ghi.Id).ToList();
                     foreach (var mno in jkl)
                     {
-                        var pqr = Context.Users.Where(a => a.Id == mno.UserId).ToList();
+                        var pqr = context.Users.Where(a => a.Id == mno.UserId).ToList();
                         foreach (var stu in pqr)
                         {
                             var vwx = ($"{stu.FirstName} {stu.LastName} {stu.Dob} {stu.VoterId} {stu.PanCardNumber} {stu.AadharNumber}" +
@@ -181,35 +184,35 @@ namespace PersonsInfoV2Api.Repository
         public List<string> GetUserByPutDesignation(string designationname)
         {
             List<string> Rose = new List<string>();
-            var desig = Context.Designations.Where(a => a.Name == designationname).FirstOrDefault();
-            var usercompany = Context.UserCompanies.Where(a => a.DesignationId == desig.Id).ToList();
+            var desig = context.Designations.Where(a => a.Name == designationname).FirstOrDefault();
+            var usercompany = context.UserCompanies.Where(a => a.DesignationId == desig.Id).ToList();
             foreach (var abc in usercompany)
             {
-                var def = Context.CompanyAddresses.Where(a => abc.CompanyId == a.Id).ToList();
+                var def = context.CompanyAddresses.Where(a => abc.CompanyId == a.Id).ToList();
                 foreach (var ghi in def)
                 {
-                    var jkl = Context.Countries.Where(a => ghi.CountryId == a.Id).ToList();
+                    var jkl = context.Countries.Where(a => ghi.CountryId == a.Id).ToList();
                     foreach (var mno in jkl)
                     {
-                        var pqr = Context.CoutryStates.Where(a => mno.Id == a.CountryId).ToList();
+                        var pqr = context.CoutryStates.Where(a => mno.Id == a.CountryId).ToList();
                         foreach (var stu in pqr)
                         {
-                            var vwx = Context.States.Where(a => stu.StateId == a.Id).ToList();
+                            var vwx = context.States.Where(a => stu.StateId == a.Id).ToList();
                             foreach (var yz in vwx)
                             {
-                                var cba = Context.CompanyAddresses.Where(a => yz.Id == a.StateId).ToList();
+                                var cba = context.CompanyAddresses.Where(a => yz.Id == a.StateId).ToList();
                                 foreach (var fed in cba)
                                 {
-                                    var bhanu = Context.Companies.Where(a => fed.CompanyId == a.Id).ToList();
+                                    var bhanu = context.Companies.Where(a => fed.CompanyId == a.Id).ToList();
                                     foreach (var raju in bhanu)
                                     {
-                                        var chandu = Context.CompanyAddresses.Where(a => raju.Id == a.CompanyId).ToList();
+                                        var chandu = context.CompanyAddresses.Where(a => raju.Id == a.CompanyId).ToList();
                                         foreach (var vamshi in chandu)
                                         {
-                                            var srikanth = Context.UserCompanies.Where(a => vamshi.CompanyId == a.CompanyId).ToList();
+                                            var srikanth = context.UserCompanies.Where(a => vamshi.CompanyId == a.CompanyId).ToList();
                                             foreach (var deepak in srikanth)
                                             {
-                                                var shravan = Context.Users.Where(a => deepak.UserId == a.Id).ToList();
+                                                var shravan = context.Users.Where(a => deepak.UserId == a.Id).ToList();
                                                 foreach (var rahul in shravan)
                                                 {
                                                     var priya = ($"{rahul.FirstName}  {rahul.LastName} {desig.Name}" +
@@ -232,20 +235,20 @@ namespace PersonsInfoV2Api.Repository
         public List<string> GetUserByPutInstitution(string institutionname)
         {
             List<string> Rose = new List<string>();
-            var abc = Context.Institutions.Where(a => a.InstitutionName == institutionname).FirstOrDefault();
-            var def = Context.Media.Where(a => abc.MediumId == a.Id).ToList();
+            var abc = context.Institutions.Where(a => a.InstitutionName == institutionname).FirstOrDefault();
+            var def = context.Media.Where(a => abc.MediumId == a.Id).ToList();
             foreach (var ghi in def)
             {
-                var ijk = Context.Institutions.Where(a => ghi.Id == a.Id).ToList();
+                var ijk = context.Institutions.Where(a => ghi.Id == a.Id).ToList();
                 foreach (var jkl in ijk)
                 {
-                    var lkm = Context.QulificationTypes.Where(a => jkl.QulificationTypeId == a.Id).ToList();
+                    var lkm = context.QulificationTypes.Where(a => jkl.QulificationTypeId == a.Id).ToList();
                     foreach (var mno in lkm)
                     {
-                        var opq = Context.UserEducationDetails.Where(a => mno.Id == a.QulificationtypeId).ToList();
+                        var opq = context.UserEducationDetails.Where(a => mno.Id == a.QulificationtypeId).ToList();
                         foreach (var qrs in opq)
                         {
-                            var stu = Context.Users.Where(a => qrs.UserId == a.Id).ToList();
+                            var stu = context.Users.Where(a => qrs.UserId == a.Id).ToList();
                             foreach (var uvw in stu)
                             {
                                 var wxy = ($"{uvw.FirstName}  {uvw.LastName} {uvw.VoterId} {uvw.Dob} {uvw.MobileNumber} {uvw.PanCardNumber} " +
@@ -264,9 +267,9 @@ namespace PersonsInfoV2Api.Repository
         {
 
 
-            var data = Context.Genders.Where(a => a.Name == gendername).FirstOrDefault();
+            var data = context.Genders.Where(a => a.Name == gendername).FirstOrDefault();
 
-            var aata = Context.Users.Where(a => a.GenderId == data.Id).ToList();
+            var aata = context.Users.Where(a => a.GenderId == data.Id).ToList();
             //foreach(var aa in aata)
             //{
             //    var abc = ($"{aa.GenderId}");
@@ -286,13 +289,13 @@ namespace PersonsInfoV2Api.Repository
         public List<string> GetUserByPutCountry(string countryName)
         {
             List<string> Rose = new List<string>();
-            var abc = Context.Countries.Where(a => a.Name == countryName).FirstOrDefault();
-            //var cde = Context.CoutryStates.Where(a => a.CountryId == abc.Id).ToList(); 
+            var abc = context.Countries.Where(a => a.Name == countryName).FirstOrDefault();
+            //var cde = context.CoutryStates.Where(a => a.CountryId == abc.Id).ToList(); 
 
-            var kjl = Context.UserAddressDetails.Where(a => a.CountryId == abc.Id).ToList();
+            var kjl = context.UserAddressDetails.Where(a => a.CountryId == abc.Id).ToList();
             foreach (var efg in kjl)
             {
-                var mno = Context.Users.Where(a => a.Id == efg.UserId).ToList();
+                var mno = context.Users.Where(a => a.Id == efg.UserId).ToList();
                 foreach (var ijk in mno)
                 {
                     var vinay = ($"{ijk.FirstName}  {ijk.LastName}  {ijk.Dob}  {ijk.MobileNumber} {efg.Address1} ");
@@ -306,11 +309,11 @@ namespace PersonsInfoV2Api.Repository
         public List<string> GetUserByPutState(string statename)
         {
             List<string> Rose = new List<string>();
-            var abc = Context.States.Where(a => a.Name == statename).FirstOrDefault();
-            var kjl = Context.UserAddressDetails.Where(a => a.StateId == abc.Id).ToList();
+            var abc = context.States.Where(a => a.Name == statename).FirstOrDefault();
+            var kjl = context.UserAddressDetails.Where(a => a.StateId == abc.Id).ToList();
             foreach (var efg in kjl)
             {
-                var mno = Context.Users.Where(a => a.Id == efg.UserId).ToList();
+                var mno = context.Users.Where(a => a.Id == efg.UserId).ToList();
                 foreach (var ijk in mno)
                 {
                     var vinay = ($"{ijk.FirstName}  {ijk.LastName}  {ijk.Dob}  {ijk.MobileNumber} {efg.Address1} ");
@@ -325,8 +328,8 @@ namespace PersonsInfoV2Api.Repository
         public List<string> GetUserByputcontact(long contect)
         {
             List<string> bhanu = new List<string>();
-            var s = Context.UserContacts.Where(a => a.MobileNumber == contect).FirstOrDefault();
-            var j = Context.Users.Where(a => a.Id == s.Id).ToList();
+            var s = context.UserContacts.Where(a => a.MobileNumber == contect).FirstOrDefault();
+            var j = context.Users.Where(a => a.Id == s.Id).ToList();
             foreach (var k in j)
             {
                 var nuvvu = ($"{s.MobileNumber}   {k.FirstName}");
@@ -338,11 +341,11 @@ namespace PersonsInfoV2Api.Repository
         public List<string> GetUserByputfamilycontact(long cont)
         {
             List<string> chandhu = new List<string>();
-            var famcontact = Context.FamilyContacts.Where(a => a.MobileNumber == cont).FirstOrDefault();
-            var can = Context.Families.Where(a => a.Id == famcontact.FamilyId).ToList();
+            var famcontact = context.FamilyContacts.Where(a => a.MobileNumber == cont).FirstOrDefault();
+            var can = context.Families.Where(a => a.Id == famcontact.FamilyId).ToList();
             foreach (var h in can)
             {
-                var a = Context.Users.Where(a => a.Id == h.UserId).ToList();
+                var a = context.Users.Where(a => a.Id == h.UserId).ToList();
                 foreach (var g in a)
                 {
                     var bh = ($"{famcontact.MobileNumber}  {h.FirstName}  {h.LastName} {g.MarritalStatus} {g.PanCardNumber}");
@@ -360,9 +363,9 @@ namespace PersonsInfoV2Api.Repository
         //public List<string> GetAllUserdetailesByUser(string UserName)
         //{
         //    List<string> text = new List<string>();
-        //    var Firstname = Context.Users.Where(a => a.FirstName == UserName).FirstOrDefault();
-        //    var gender = Context.Genders.Where(a => a.Id == Firstname.GenderId).FirstOrDefault();
-        //    var mareg = Context.MarritalStatuses.Where(a => a.Id == Firstname.MarritalStatusId).ToList();
+        //    var Firstname = context.Users.Where(a => a.FirstName == UserName).FirstOrDefault();
+        //    var gender = context.Genders.Where(a => a.Id == Firstname.GenderId).FirstOrDefault();
+        //    var mareg = context.MarritalStatuses.Where(a => a.Id == Firstname.MarritalStatusId).ToList();
         //    text.Add ($" {gender} {mareg}");
         //    //text.Add(gender + );
         //  // var a =   "gender" + "mareg";

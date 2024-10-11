@@ -22,7 +22,7 @@ namespace PersonsInfoV2Api.IRepository
         /// </summary>
         /// <param name="adAttendance">The AdAttendance entity to be inserted.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the ID of the newly inserted AdAttendance record.</returns>
-        public Task<int> InsertAdAttendanceAsync(Adattendance adAttendance);
+        public Task<Adattendance> InsertAdAttendanceAsync(Adattendance adAttendance);
 
         /// <summary>
         /// Updates an existing AdAttendance record in the database asynchronously.

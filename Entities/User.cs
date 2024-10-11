@@ -29,6 +29,7 @@ namespace PersonsInfoV2Api.Entities
             UserExamQuestionsAudits = new HashSet<UserExamQuestionsAudit>();
             UserExams = new HashSet<UserExam>();
             UserSkills = new HashSet<UserSkill>();
+            UserTokenSessions = new HashSet<UserTokenSession>();
             VacancyCreatedByNavigations = new HashSet<Vacancy>();
             VacancyUpdatedByNavigations = new HashSet<Vacancy>();
         }
@@ -52,6 +53,7 @@ namespace PersonsInfoV2Api.Entities
         public string Password { get; set; }
         public string Email { get; set; }
         public string RefferalCode { get; set; }
+        public int? ParentId { get; set; }
 
         public virtual Gender Gender { get; set; }
         public virtual MarritalStatus MarritalStatus { get; set; }
@@ -76,6 +78,7 @@ namespace PersonsInfoV2Api.Entities
         public virtual ICollection<UserExamQuestionsAudit> UserExamQuestionsAudits { get; set; }
         public virtual ICollection<UserExam> UserExams { get; set; }
         public virtual ICollection<UserSkill> UserSkills { get; set; }
+        public virtual ICollection<UserTokenSession> UserTokenSessions { get; set; }
         public virtual ICollection<Vacancy> VacancyCreatedByNavigations { get; set; }
         public virtual ICollection<Vacancy> VacancyUpdatedByNavigations { get; set; }
     }

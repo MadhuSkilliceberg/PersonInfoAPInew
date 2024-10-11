@@ -14,12 +14,12 @@ namespace PersonsInfoV2Api.Repository
     public class AdAttendanceRepository : IAdAttendanceRepository
     {
         // Instance of the database context for accessing AdAttendance data.
-        private readonly PersonsInfoV3NewContext _context;
+            private readonly PersonsInfoV3NewContext _context;
 
-        public AdAttendanceRepository(PersonsInfoV3NewContext context)
-        {
-            _context = context;
-        }
+            public AdAttendanceRepository(PersonsInfoV3NewContext context)
+            {
+                _context = context;
+            }
 
         /// <summary>
         /// Asynchronously deletes an AdAttendance record by ID.
@@ -67,11 +67,11 @@ namespace PersonsInfoV2Api.Repository
         /// </summary>
         /// <param name="adAttendance">The AdAttendance entity to be inserted.</param>
         /// <returns>A task representing the asynchronous operation, with the ID of the newly inserted AdAttendance record as the result.</returns>
-        public async Task<int> InsertAdAttendanceAsync(Adattendance adAttendance)
+        public async Task<Adattendance> InsertAdAttendanceAsync(Adattendance adAttendance)
         {
             _context.Adattendances.Add(adAttendance);
             await _context.SaveChangesAsync();
-            return adAttendance.AttendanceId;
+            return adAttendance;
         }
 
         /// <summary>

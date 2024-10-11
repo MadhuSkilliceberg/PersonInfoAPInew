@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using PersonsInfoV2Api.CoustumModels;
 using PersonsInfoV2Api.Entities;
 using System;
@@ -21,9 +23,9 @@ namespace PersonsInfoV2Api
             this.context = context;
             this.key = key;
         }
-        public AuthenticatedResponse Authentication(string username, string password)
+        public AuthenticatedResponse Authentication(UserCredential userCredential)
         {
-            var data = context.Users.Where(u => u.Username == username && u.Password == password).FirstOrDefault();
+            var data = context.Users.FirstOrDefault(u => u.Username == userCredential.UserName && u.Password == userCredential.Password);
 
             if (data == null)
                 return null;
@@ -40,15 +42,17 @@ namespace PersonsInfoV2Api
             // 2. Create Private Key to Encrypted
             var tokenKey = Encoding.ASCII.GetBytes(key);
 
+            DateTime expires = DateTime.UtcNow.AddHours(1);
+
             //3. Create JETdescriptor
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(
                     new Claim[]
                     {
-                        new Claim(ClaimTypes.Name, username)
+                        new Claim(ClaimTypes.Name, userCredential.UserName)
                     }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = expires,
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -57,7 +61,23 @@ namespace PersonsInfoV2Api
 
             // 5. Return Token from method
             var tokenString= tokenHandler.WriteToken(token);
-            return new AuthenticatedResponse { Token = tokenString };
+            UserTokenSession userTokenSession = new UserTokenSession()
+            {
+                IsActive = true,
+                AccessToken = tokenString,
+                CreatedOn = DateTime.UtcNow,
+                LoginTime = DateTime.UtcNow,
+                UserId = data.Id,
+                TokenExpires = expires,
+                BrowserInfo = userCredential.userDevice.browser + " " + userCredential.userDevice.browser_version,
+                OperatingSystem = userCredential.userDevice.os + " "+ userCredential.userDevice.os_version,
+                DeviceType = userCredential.userDevice.deviceType,
+                IpAddress = null 
+            };
+
+            context.UserTokenSessions.Add(userTokenSession);
+            context.SaveChanges();
+            return new AuthenticatedResponse { Token = tokenString, Username = userCredential.UserName, UserId= data.Id };
         }
     }
 

@@ -9,7 +9,9 @@ namespace PersonsInfoV2Api.CoustumModels
     public class AuthenticatedResponse
     {
         public string Token { get; set; }
-       
+        public string Username { get; set; }
+        public int UserId { get; set; }
+
     }
 
 

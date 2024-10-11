@@ -26,6 +26,8 @@ using IdentityServer4.Models;
 
 
 using PersonsInfoV2Api.Filters;
+using PersonsInfoV2Api.Models;
+using PersonsInfoV2Api.Controllers;
 
 namespace PersonsInfoV2Api
 {
@@ -35,7 +37,7 @@ namespace PersonsInfoV2Api
 
         //public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IConfiguration configuration)
         //{
-        //    var builder = new ConfigurationBuilder()
+        //    var builder = new ConfigurationBuilder()  
         //        .SetBasePath(env.ContentRootPath)
         //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
@@ -65,6 +67,7 @@ namespace PersonsInfoV2Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+        
 
             var data = Configuration["Key"];
             var data2 = Configuration.GetValue<string>("Key");
@@ -109,6 +112,19 @@ namespace PersonsInfoV2Api
 
             #endregion
 
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddTransient<EmailBusinessLogic>();
+            services.AddHttpClient<CarrierLookupService>();
+
+            #region Session data in memory
+            services.AddDistributedMemoryCache(); // This stores session data in memory.
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(59); // Set session timeout
+                options.Cookie.HttpOnly = true; // For security, set the HttpOnly flag
+                options.Cookie.IsEssential = true; // For GDPR compliance
+            });
+            #endregion
 
             services.AddControllers().AddJsonOptions(o =>
             {
@@ -156,9 +172,9 @@ namespace PersonsInfoV2Api
                 var context = provider.GetRequiredService<PersonsInfoV3NewContext>();
                 return new Auth(context, key);
             });
+            services.AddScoped<UserSessionController>();
 
-
-
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             //services.AddControllers(options =>
             //{
             //    options.Filters.Add<GlobalExceptionFilter>();
@@ -387,6 +403,8 @@ namespace PersonsInfoV2Api
             services.AddScoped<IAdattendanceApprovalRepository, AdattendanceApprovalRepository>();
             services.AddScoped<IAdattendanceApprovalBusinessLogic, AdattendanceApprovalBusinessLogic>();
 
+            services.AddScoped<IUserTokenSessionBussinessLogic, UserTokenSessionBussinessLogic>();
+
 
             #endregion
             services.AddCors(options =>
@@ -397,6 +415,7 @@ namespace PersonsInfoV2Api
                                       .AllowAnyHeader());
             });
 
+            #region Session Service
             //services.AddSession(options =>
             //{
             //    options.IdleTimeout = TimeSpan.FromSeconds(30);
@@ -415,8 +434,8 @@ namespace PersonsInfoV2Api
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
-
+            services.AddMvc();
+            #endregion Session Service
 
             services.AddSwaggerGen(c =>
             {
@@ -438,9 +457,9 @@ namespace PersonsInfoV2Api
 
             app.UseHttpsRedirection();
 
-            app.UseSession();
-
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
@@ -526,15 +545,15 @@ namespace PersonsInfoV2Api
         }
     }
 
-    //    public static class IdentityResources
-    //    {
-    //        public static IEnumerable<IdentityResource> Get()
-    //        {
-    //            return new List<IdentityResource>
-    //        {
-    //            new IdentityResource.OpenId(),
-    //            new IdentityResource.Profile()
-    //        };
-    //        }
-    //    }
+    public static class IdentityResources
+    {
+        public static IEnumerable<IdentityResource> Get()
+        {
+            return new List<IdentityResource>
+        {
+            new IdentityResource("openid", new[] { "sub" }), // OpenID Connect scope
+            new IdentityResource("profile", new[] { "name", "email", "given_name", "family_name" }) // Profile scope
+        };
+        }
+    }
 }

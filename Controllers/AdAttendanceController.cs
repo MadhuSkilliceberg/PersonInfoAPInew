@@ -8,19 +8,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using PersonsInfoV2Api.BussinessLogic;
 
 namespace PersonsInfoV2Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class AdAttendanceController : ControllerBase
     {
         private readonly IAdAttendanceBusinessLogic _adAttendanceBusinessLogic;
-
-        public AdAttendanceController(IAdAttendanceBusinessLogic adAttendanceBusinessLogic)
+        private readonly IUserTokenSessionBussinessLogic _userSession;
+        public AdAttendanceController(IUserTokenSessionBussinessLogic usserSession, IAdAttendanceBusinessLogic adAttendanceBusinessLogic)
         {
+            _userSession = usserSession;
             _adAttendanceBusinessLogic = adAttendanceBusinessLogic;
         }
 
@@ -71,11 +73,29 @@ namespace PersonsInfoV2Api.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertAdAttendanceAsync([FromBody] Adattendance adAttendance)
         {
+            // Example in a controller action
+            //  HttpContext.Session.SetString("Test", "Value");
+            //var testValue = HttpContext.Session.GetString("Test"); // Should return "Value"
+
+            //string userData = HttpContext.Session.GetString("UserId");
+
+            var accessToken = Request.Headers["Authorization"].ToString().Replace("bearer ", "");
+
+
+            Task<IEnumerable<UserTokenSession>> task = _userSession.GeUserTokenSessionsAsync();
+
+            // Await the Task and convert the IEnumerable to a List
+            IEnumerable<UserTokenSession> userTokenSessions = await task;
+            List<UserTokenSession> userTokenSessionList = userTokenSessions.ToList();
+
+            // Retrieve the current session based on the token
+            var tokenSession = userTokenSessionList.FirstOrDefault(x => x.AccessToken == accessToken && x.IsActive == true);
+
             if (adAttendance == null)
             {
                 return BadRequest("AdAttendance cannot be null.");
             }
-
+            adAttendance.UserId = tokenSession.UserId;
             var id = await _adAttendanceBusinessLogic.InsertAdAttendanceAsync(adAttendance);
             return CreatedAtAction(nameof(GetByAdAttendanceIdAsync), new { id = id }, id);
         }
@@ -96,6 +116,15 @@ namespace PersonsInfoV2Api.Controllers
 
             var success = await _adAttendanceBusinessLogic.UpdateAdAttendanceAsync(adAttendance);
             return success ? Ok() : NotFound();
+        }
+
+        
+        [Route("GetUserAttendanceApprovalByUserId/{userid}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserAttendanceApprovalByUserId(int userid)
+        {
+            var adAttendance = await _adAttendanceBusinessLogic.GetUserAttendanceApprovalByUserId(userid);
+            return adAttendance != null ? Ok(adAttendance) : NotFound();
         }
     }
 }

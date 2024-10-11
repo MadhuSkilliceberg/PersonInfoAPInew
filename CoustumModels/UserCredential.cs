@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PersonsInfoV2Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,5 +10,6 @@ namespace PersonsInfoV2Api.CoustumModels
     {
         public string UserName { get; set; }
         public string Password { get; set; }
+        public UserDevice userDevice { get; set; } = new UserDevice();
     }
 }

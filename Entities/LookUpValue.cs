@@ -9,6 +9,7 @@ namespace PersonsInfoV2Api.Entities
     {
         public LookUpValue()
         {
+            AdattendanceApprovals = new HashSet<AdattendanceApproval>();
             CompanyBenefits = new HashSet<CompanyBenefit>();
             CompanyJobTypes = new HashSet<CompanyJobType>();
             JobJobTypes = new HashSet<JobJobType>();
@@ -29,6 +30,7 @@ namespace PersonsInfoV2Api.Entities
         public int? UpdatedBy { get; set; }
         public int? ParentId { get; set; }
 
+        public virtual ICollection<AdattendanceApproval> AdattendanceApprovals { get; set; }
         public virtual ICollection<CompanyBenefit> CompanyBenefits { get; set; }
         public virtual ICollection<CompanyJobType> CompanyJobTypes { get; set; }
         public virtual ICollection<JobJobType> JobJobTypes { get; set; }

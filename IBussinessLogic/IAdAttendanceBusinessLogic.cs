@@ -39,6 +39,14 @@ namespace PersonsInfoV2Api.IBussinessLogic
         /// <param name="id">The ID of the AdAttendance record to retrieve.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the AdAttendance entity that matches the given ID.</returns>
         public Task<Adattendance> GetByAdAttendanceIdAsync(int id);
+
+        /// <summary>
+        /// Retrieves a single User record by its userId asynchronously.
+        /// </summary>
+        /// <param name="loggedUserId">The ID of the AdAttendance record to retrieve.</param>
+
+        public Task<User> GetUserAttendanceApprovalByUserId(int loggedUserId);
+
     }
 }
 

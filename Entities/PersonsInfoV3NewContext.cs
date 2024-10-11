@@ -181,6 +181,11 @@ namespace PersonsInfoV2Api.Entities
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.AdattendanceApprovals)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK__ADAttenda__Statu__703EA55A");
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AdattendanceApprovals)
                     .HasForeignKey(d => d.UserId)
@@ -2229,6 +2234,10 @@ namespace PersonsInfoV2Api.Entities
 
                 entity.Property(e => e.BrowserInfo).HasMaxLength(250);
 
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.DeviceType).HasMaxLength(50);
 
                 entity.Property(e => e.IpAddress).HasMaxLength(50);
@@ -2245,7 +2254,12 @@ namespace PersonsInfoV2Api.Entities
 
                 entity.Property(e => e.TokenExpires).HasColumnType("datetime");
 
-                entity.Property(e => e.UserId).HasMaxLength(450);
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserTokenSessions)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__UserToken__UserI__78D3EB5B");
             });
 
             modelBuilder.Entity<UserType>(entity =>
